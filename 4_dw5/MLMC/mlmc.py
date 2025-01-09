@@ -26,67 +26,88 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
       Cl: cost of samples at each level
     """
 
-    alpha = max(0, alpha0); beta = max(0, beta0); gamma = max(0, gamma0); theta = 0.5; L = Lmin;
+    # Convergence rates
+    alpha = max(0, alpha0)
+    beta  = max(0, beta0)
+    gamma = max(0, gamma0)
 
-    Nl = np.zeros(L+1); costl = np.zeros(L+1); dNl = np.ones(L+1) * N0;
+    theta = 0.5     # coefficient for weak convergence inequalities
+    
+    L = Lmin        # initial maximum refinement level
 
-    cellsom1P = [None] * (L+1); cellsom2P = [None] * (L+1);
-    cellsom1N = [None] * (L+1); cellsom2N = [None] * (L+1);
-    cellsom1O = [None] * (L+1); cellsom2O = [None] * (L+1);       
-    cellsom1NO = [None] * (L+1); cellsom2NO = [None] * (L+1);
-    cellsom1N2 = [None] * (L+1); cellsom2N2 = [None] * (L+1);
-    cellsom1O2 = [None] * (L+1); cellsom2O2 = [None] * (L+1);      
-    cellsom1Ttr = [None] * (L+1); cellsom2Ttr = [None] * (L+1);
-    cellsom1Tve = [None] * (L+1); cellsom2Tve = [None] * (L+1);
-    cellsom1M = [None] * (L+1); cellsom2M = [None] * (L+1);
-    cellnodes = [None] * (L+1);
-            
+
+    Nl = np.zeros(L+1)          # number of samples per level (initially set to zero, at the first iteration the number of samples N0 is represented by dNl) 
+    costl = np.zeros(L+1)       # cost for each level
+    dNl = np.ones(L+1) * N0     # delta samples at each level, at the first iteration of the while cycle it is equal to N0, then it becomes a difference
+
+    # Initialization of lists for each aleatoric uncertainty at each level
+    cellsom1P   = [None] * (L+1);   cellsom2P   = [None] * (L+1)
+    cellsom1N   = [None] * (L+1);   cellsom2N   = [None] * (L+1)
+    cellsom1O   = [None] * (L+1);   cellsom2O   = [None] * (L+1)       
+    cellsom1NO  = [None] * (L+1);   cellsom2NO  = [None] * (L+1)
+    cellsom1N2  = [None] * (L+1);   cellsom2N2  = [None] * (L+1)
+    cellsom1O2  = [None] * (L+1);   cellsom2O2  = [None] * (L+1)      
+    cellsom1Ttr = [None] * (L+1);   cellsom2Ttr = [None] * (L+1)
+    cellsom1Tve = [None] * (L+1);   cellsom2Tve = [None] * (L+1)
+    cellsom1M   = [None] * (L+1);   cellsom2M   = [None] * (L+1)
+
+    cellnodes   = [None] * (L+1)    # list representing number of wall nodes at each level
+    
+    # MLMC loop
+    # the loop is exited when the algorithm does not need any more sample (from weak convergence conditions)
     while np.sum(dNl) > 0:
+
        # Update sample sums
 
         for l in range(L+1):
+
             if dNl[l] > 0:
+
+                # Monte Carlo at level l
                 x2, sums1, sums2, _, _, sums1N, sums2N, sums1O, sums2O, sums1NO, sums2NO, sums1N2, sums2N2, sums1O2, sums2O2, sums1Ttr, sums2Ttr, sums1Tve, sums2Tve, sums1M, sums2M, cost = mlmc_l(l, int(dNl[l]), *args)
-                Nl[l] += dNl[l]
-                costl[l] += cost
+                
+                Nl[l]    += dNl[l]      # updating the total number of samples at level l
+                costl[l] += cost        # updating the cost at level l
+
                 if cellsom1P[l] is None:
-                    cellsom1P[l] = sums1; cellsom2P[l] = sums2;
-                    cellsom1N[l] = sums1N; cellsom2N[l] = sums2N;
-                    cellsom1O[l] = sums1O; cellsom2O[l] = sums2O;
-                    cellsom1NO[l] = sums1NO; cellsom2NO[l] = sums2NO;
-                    cellsom1N2[l] = sums1N2; cellsom2N2[l] = sums2N2;
-                    cellsom1O2[l] = sums1O2; cellsom2O2[l] = sums2O2;
-                    cellsom1Ttr[l] = sums1Ttr; cellsom2Ttr[l] = sums2Ttr;
-                    cellsom1Tve[l] = sums1Tve; cellsom2Tve[l] = sums2Tve;
-                    cellsom1M[l] = sums1M; cellsom2M[l] = sums2M;
+                    cellsom1P[l]   = sums1;     cellsom2P[l]   = sums2
+                    cellsom1N[l]   = sums1N;    cellsom2N[l]   = sums2N
+                    cellsom1O[l]   = sums1O;    cellsom2O[l]   = sums2O
+                    cellsom1NO[l]  = sums1NO;   cellsom2NO[l]  = sums2NO
+                    cellsom1N2[l]  = sums1N2;   cellsom2N2[l]  = sums2N2
+                    cellsom1O2[l]  = sums1O2;   cellsom2O2[l]  = sums2O2
+                    cellsom1Ttr[l] = sums1Ttr;  cellsom2Ttr[l] = sums2Ttr
+                    cellsom1Tve[l] = sums1Tve;  cellsom2Tve[l] = sums2Tve
+                    cellsom1M[l]   = sums1M;    cellsom2M[l]   = sums2M
                     
                 else:
-                    cellsom1P[l] += sums1; cellsom2P[l] += sums2;
-                    cellsom1N[l] += sums1N; cellsom2N[l] += sums2N;
-                    cellsom1O[l] += sums1O; cellsom2O[l] += sums2O;
-                    cellsom1NO[l] += sums1NO; cellsom2NO[l] += sums2NO;
-                    cellsom1N2[l] += sums1N2; cellsom2N2[l] += sums2N2;
-                    cellsom1O2[l] += sums1O2; cellsom2O2[l] += sums2O2;
-                    cellsom1Ttr[l] += sums1Ttr; cellsom2Ttr[l] += sums2Ttr;
-                    cellsom1Tve[l] += sums1Tve; cellsom2Tve[l] += sums2Tve;
-                    cellsom1M[l] += sums1M; cellsom2M[l] += sums2M;                    
+                    cellsom1P[l]   += sums1;     cellsom2P[l]   += sums2
+                    cellsom1N[l]   += sums1N;    cellsom2N[l]   += sums2N
+                    cellsom1O[l]   += sums1O;    cellsom2O[l]   += sums2O
+                    cellsom1NO[l]  += sums1NO;   cellsom2NO[l]  += sums2NO
+                    cellsom1N2[l]  += sums1N2;   cellsom2N2[l]  += sums2N2
+                    cellsom1O2[l]  += sums1O2;   cellsom2O2[l]  += sums2O2
+                    cellsom1Ttr[l] += sums1Ttr;  cellsom2Ttr[l] += sums2Ttr
+                    cellsom1Tve[l] += sums1Tve;  cellsom2Tve[l] += sums2Tve
+                    cellsom1M[l]   += sums1M;    cellsom2M[l]   += sums2M                    
                        
                 cellnodes[l] = x2
         
-        # Interpolation on coarsest grid
+        # Interpolation on coarsest grid (at each iteration of the while cycle it is performed from scratch)
         coarsest_grid = cellnodes[0]
 
-        interpolated_cellsom1P = []; interpolated_cellsom2P = [];
-        interpolated_cellsom1N = []; interpolated_cellsom2N = [];
-        interpolated_cellsom1O = []; interpolated_cellsom2O = [];
-        interpolated_cellsom1NO = []; interpolated_cellsom2NO = [];
-        interpolated_cellsom1N2 = []; interpolated_cellsom2N2 = [];
-        interpolated_cellsom1O2 = []; interpolated_cellsom2O2 = [];
-        interpolated_cellsom1Ttr = []; interpolated_cellsom2Ttr = [];
-        interpolated_cellsom1Tve = []; interpolated_cellsom2Tve = [];
-        interpolated_cellsom1M = []; interpolated_cellsom2M = [];
+        interpolated_cellsom1P   = []; interpolated_cellsom2P   = []
+        interpolated_cellsom1N   = []; interpolated_cellsom2N   = []
+        interpolated_cellsom1O   = []; interpolated_cellsom2O   = []
+        interpolated_cellsom1NO  = []; interpolated_cellsom2NO  = []
+        interpolated_cellsom1N2  = []; interpolated_cellsom2N2  = []
+        interpolated_cellsom1O2  = []; interpolated_cellsom2O2  = []
+        interpolated_cellsom1Ttr = []; interpolated_cellsom2Ttr = []
+        interpolated_cellsom1Tve = []; interpolated_cellsom2Tve = []
+        interpolated_cellsom1M   = []; interpolated_cellsom2M   = []
 
         for i in range(len(cellsom1P)):
+
             current_arrayCS1P = cellsom1P[i]
             interpolated_cellsom1P.append(interp1d(cellnodes[i], current_arrayCS1P, kind='linear', fill_value='extrapolate')(coarsest_grid))
             current_arrayCS2P = cellsom2P[i]
@@ -132,18 +153,19 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
             current_arrayCS2M = cellsom2M[i]
             interpolated_cellsom2M.append(interp1d(cellnodes[i], current_arrayCS2M, kind='linear', fill_value='extrapolate')(coarsest_grid))     
                         
-        CS1P_matrix = np.transpose(np.array(interpolated_cellsom1P)); CS2P_matrix = np.transpose(np.array(interpolated_cellsom2P));
-        CS1N_matrix = np.transpose(np.array(interpolated_cellsom1N)); CS2N_matrix = np.transpose(np.array(interpolated_cellsom2N));
-        CS1O_matrix = np.transpose(np.array(interpolated_cellsom1O)); CS2O_matrix = np.transpose(np.array(interpolated_cellsom2O));
-        CS1NO_matrix = np.transpose(np.array(interpolated_cellsom1NO)); CS2NO_matrix = np.transpose(np.array(interpolated_cellsom2NO));
-        CS1N2_matrix = np.transpose(np.array(interpolated_cellsom1N2)); CS2N2_matrix = np.transpose(np.array(interpolated_cellsom2N2));
-        CS1O2_matrix = np.transpose(np.array(interpolated_cellsom1O2)); CS2O2_matrix = np.transpose(np.array(interpolated_cellsom2O2));
-        CS1Ttr_matrix = np.transpose(np.array(interpolated_cellsom1Ttr)); CS2Ttr_matrix = np.transpose(np.array(interpolated_cellsom2Ttr));
-        CS1Tve_matrix = np.transpose(np.array(interpolated_cellsom1Tve)); CS2Tve_matrix = np.transpose(np.array(interpolated_cellsom2Tve));
-        CS1M_matrix = np.transpose(np.array(interpolated_cellsom1M)); CS2M_matrix = np.transpose(np.array(interpolated_cellsom2M));
+        # Storing the lists of interpolated values as matrices
+        CS1P_matrix   = np.transpose(np.array(interpolated_cellsom1P));     CS2P_matrix   = np.transpose(np.array(interpolated_cellsom2P))
+        CS1N_matrix   = np.transpose(np.array(interpolated_cellsom1N));     CS2N_matrix   = np.transpose(np.array(interpolated_cellsom2N))
+        CS1O_matrix   = np.transpose(np.array(interpolated_cellsom1O));     CS2O_matrix   = np.transpose(np.array(interpolated_cellsom2O))
+        CS1NO_matrix  = np.transpose(np.array(interpolated_cellsom1NO));    CS2NO_matrix  = np.transpose(np.array(interpolated_cellsom2NO))
+        CS1N2_matrix  = np.transpose(np.array(interpolated_cellsom1N2));    CS2N2_matrix  = np.transpose(np.array(interpolated_cellsom2N2))
+        CS1O2_matrix  = np.transpose(np.array(interpolated_cellsom1O2));    CS2O2_matrix  = np.transpose(np.array(interpolated_cellsom2O2))
+        CS1Ttr_matrix = np.transpose(np.array(interpolated_cellsom1Ttr));   CS2Ttr_matrix = np.transpose(np.array(interpolated_cellsom2Ttr))
+        CS1Tve_matrix = np.transpose(np.array(interpolated_cellsom1Tve));   CS2Tve_matrix = np.transpose(np.array(interpolated_cellsom2Tve))
+        CS1M_matrix   = np.transpose(np.array(interpolated_cellsom1M));     CS2M_matrix   = np.transpose(np.array(interpolated_cellsom2M))
 
-        # Compute absolute average, variance and cost
-        ml = np.abs(np.max(CS1P_matrix / Nl, axis=0)) # L-infinity norm of the average of each level
+        # Compute absolute average, variance and cost (weak convergence is checked on Pressure)
+        ml = np.abs(np.max(CS1P_matrix / Nl, axis=0))       # L-infinity norm of the average of each level
         Vl = np.maximum(0, np.max(CS2P_matrix / Nl - (CS1P_matrix / Nl)**2, axis=0))
         Cl = costl / Nl
 
@@ -185,39 +207,52 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
         VlM_vec[VlM_vec < 0] = 0
 
         # Set optimal number of additional samples
-        Ns = np.ceil(np.sqrt(Vl / Cl) * np.sum(np.sqrt(Vl * Cl)) / ((1 - theta) * eps**2))
+        Ns  = np.ceil(np.sqrt(Vl / Cl) * np.sum(np.sqrt(Vl * Cl)) / ((1 - theta) * eps**2))
         dNl = np.maximum(0, Ns - Nl)
+
         dNl_str = str(dNl)
         write(Nlfile, f"dNl = {dNl_str}\n")
 
         # If (almost) converged, estimate remaining error and decide whether a new level is required
         if np.sum(dNl > 0.01 * Nl) == 0:
+
             rem = ml[L] / (2**alpha - 1)
 
             if rem > np.sqrt(theta) * eps:
+
                 if L == Lmax:
+                    # we are already at the highest level
                     write(Nlfile, "*** failed to achieve weak convergence ***\n")
+
                 else:
+                    # add another level
                     L += 1
+
+                    # appending asymptotic estimates of Vl, Cl from weak convergence conditions to compute a preliminar Ns
                     Vl = np.append(Vl, Vl[-1] / 2**beta)
                     Vl_vec = np.append(Vl_vec, (Vl_vec[:, L-1] / (2 ** beta)).reshape(-1, 1), axis=1)
                     Cl = np.append(Cl, Cl[-1] * 2**gamma)
+
                     Nl = np.append(Nl, 0.0)
                     
-                    cellsom1P.append(None); cellsom2P.append(None);
-                    cellsom1N.append(None); cellsom2N.append(None);
-                    cellsom1O.append(None); cellsom2O.append(None);
-                    cellsom1NO.append(None); cellsom2NO.append(None);
-                    cellsom1N2.append(None); cellsom2N2.append(None);
-                    cellsom1O2.append(None); cellsom2O2.append(None);
-                    cellsom1Ttr.append(None); cellsom2Ttr.append(None);
-                    cellsom1Tve.append(None); cellsom2Tve.append(None);
-                    cellsom1M.append(None); cellsom2M.append(None);
+                    # adding elements to list for new level quantities
+                    cellsom1P.append(None);     cellsom2P.append(None)
+                    cellsom1N.append(None);     cellsom2N.append(None)
+                    cellsom1O.append(None);     cellsom2O.append(None)
+                    cellsom1NO.append(None);    cellsom2NO.append(None)
+                    cellsom1N2.append(None);    cellsom2N2.append(None)
+                    cellsom1O2.append(None);    cellsom2O2.append(None)
+                    cellsom1Ttr.append(None);   cellsom2Ttr.append(None)
+                    cellsom1Tve.append(None);   cellsom2Tve.append(None)
+                    cellsom1M.append(None);     cellsom2M.append(None)
                        
                     cellnodes.append(None)
-                    costl = np.append(costl, 0)
 
+                    costl = np.append(costl, 0)
+                    
+                    # computing initial optimal samples number for new level
                     Ns = np.ceil(np.sqrt(Vl / Cl) * np.sum(np.sqrt(Vl * Cl)) / ((1 - theta) * eps**2))
+
                     dNl = np.maximum(0, Ns - Nl)
 
     # Evaluate multilevel estimator
