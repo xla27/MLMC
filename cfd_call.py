@@ -72,27 +72,6 @@ def cfd_call(type, valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, l, i, *
         # Read file to get qois
         csv_path_surf = os.path.join(destinationFolder, stringIter, 'surface_flow.csv')
         if os.path.isfile(csv_path_surf):
-            print(csv_path_surf)
-            # data_surf = csv.reader(csv_path_surf, header=None)
-            # data_surf = data_surf.apply(pd.to_numeric, errors='coerce').dropna() # any non-numeric values are coerced into NaN, and then rows with any NaN values are dropped
-            # data_surf.columns = [f'Var{j}' for j in range(1, len(data_surf.columns) + 1)] # renames the columns of the DataFrame to 'Var1', 'Var2', 'Var3', ..., 'VarN'
-            # data_surf = data_surf.sort_values(by='Var2')
-            
-            # # Save gas composition at the wall
-            # beta_n  = data_surf['Var13'].tolist()
-            # beta_o  = data_surf['Var14'].tolist()
-            # beta_no = data_surf['Var15'].tolist()
-            # beta_n2 = data_surf['Var16'].tolist()
-            # beta_o2 = data_surf['Var17'].tolist()
-            
-            # # Save wall flow quantities
-            # p_i   = (data_surf['Var18'] / 390).tolist() # pressure normalized w.r.t asymptotic pressure
-            # Ttr_i = (data_surf['Var19'] / 1000).tolist() # rototranslational temperature normalized w.r.t asymptotic rototranslational temperature
-            # Tve_i = (data_surf['Var20'] / 1000).tolist() # vibrational temperature normalized w.r.t asymptotic vibrational temperature
-            # M_i   = (data_surf['Var23'] / 9).tolist() # mach normalized w.r.t asymptotic mach
-
-            # # Save grid
-            # xnodesf = data_surf['Var2'].tolist()
 
             data_surf = csv2dict(csv_path_surf, fieldnames)
 
