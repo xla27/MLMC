@@ -20,7 +20,7 @@ def main(nproc, workingFolder):
     """
 
     # folder for with MLMC code
-    baseFolder = '/home/xla27/FAR-ESA/MLMC/4_dw5/MLMC'
+    baseFolder = '/home/xla27/FAR-ESA/MLMC'
 
     varargin = (nproc, baseFolder, workingFolder) 
 
