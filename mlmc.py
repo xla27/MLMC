@@ -1,3 +1,4 @@
+import os, shutil
 import numpy as np
 from scipy.interpolate import interp1d
 import matplotlib.pyplot as plt
@@ -303,6 +304,16 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
     sum_VlM = np.sum(VlM_vec, axis=1)
     upper_boundM = sum_mlM + np.sqrt(np.abs(sum_VlM))
     lower_boundM = sum_mlM - np.sqrt(np.abs(sum_VlM))    
+
+    # Plot saving
+    (_, _, workingFolder) = args
+    plotFolder = os.path.join(workingFolder, 'Plots')
+
+    if not os.path.exists(plotFolder):
+        os.mkdir(plotFolder)
+    else:
+        shutil.rmtree(plotFolder)
+        os.mkdir(plotFolder)
     
     # Plot 1: normalized mean pressure, 1sigma uncertainty region
     shaded_color = [0.6, 0.8, 1]
@@ -312,14 +323,13 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
     ax.set_title(r'P with $\varepsilon_r$ = {:.3f}'.format(eps), fontsize=14)
 
     eps_str = str(eps).replace('.', '_')  # Convert eps array to string and replace dots with underscore
-    ax.figure.savefig(f'1_Pepsilon_{eps_str}.svg', format='svg', dpi=1200)
+    ax.figure.savefig(f'{plotFolder}/1_Pepsilon_{eps_str}.svg', format='svg', dpi=1200)
     plt.tight_layout()
-    plot_filename = f'1_Pepsilon_{eps_str}.pkl'
+    plot_filename = f'{plotFolder}/1_Pepsilon_{eps_str}.pkl'
     
-    with open(plot_filename, 'wb') as f:
-    	pickle.dump((ax, coarsest_grid, upper_bound, lower_bound, sum_ml), f)
+    with open(plot_filename, 'wb') as file:
+    	pickle.dump((ax, coarsest_grid, upper_bound, lower_bound, sum_ml), file)
 
-    f.close()
     plt.close("all")
     plt.cla()
     plt.clf()
@@ -332,14 +342,13 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
     ax2.set_title(r'N with $\varepsilon_r$ = {:.3f}'.format(eps), fontsize=14)
 
     eps_str = str(eps).replace('.', '_')  
-    ax2.figure.savefig(f'2_Nepsilon_{eps_str}.svg', format='svg', dpi=1200)
+    ax2.figure.savefig(f'{plotFolder}/2_Nepsilon_{eps_str}.svg', format='svg', dpi=1200)
     plt.tight_layout()
-    plot_filename = f'2_Nepsilon_{eps_str}.pkl'
+    plot_filename = f'{plotFolder}/2_Nepsilon_{eps_str}.pkl'
        
-    with open(plot_filename, 'wb') as f:
-    	pickle.dump((ax, coarsest_grid, upper_boundN, lower_boundN, sum_mlN), f)
+    with open(plot_filename, 'wb') as file:
+    	pickle.dump((ax, coarsest_grid, upper_boundN, lower_boundN, sum_mlN), file)
 
-    f.close()
     plt.close("all")
     plt.cla()
     plt.clf()    
@@ -352,14 +361,13 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
     ax3.set_title(r'O with $\varepsilon_r$ = {:.3f}'.format(eps), fontsize=14)
 
     eps_str = str(eps).replace('.', '_')  
-    ax3.figure.savefig(f'3_Oepsilon_{eps_str}.svg', format='svg', dpi=1200)
+    ax3.figure.savefig(f'{plotFolder}/3_Oepsilon_{eps_str}.svg', format='svg', dpi=1200)
     plt.tight_layout()
-    plot_filename = f'3_Oepsilon_{eps_str}.pkl'
+    plot_filename = f'{plotFolder}/3_Oepsilon_{eps_str}.pkl'
         
-    with open(plot_filename, 'wb') as f:
-    	pickle.dump((ax, coarsest_grid, upper_boundO, lower_boundO, sum_mlO), f)
+    with open(plot_filename, 'wb') as file:
+    	pickle.dump((ax, coarsest_grid, upper_boundO, lower_boundO, sum_mlO), file)
 
-    f.close()
     plt.close("all")
     plt.cla()
     plt.clf()    
@@ -372,14 +380,13 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
     ax4.set_title(r'NO with $\varepsilon_r$ = {:.3f}'.format(eps), fontsize=14)
 
     eps_str = str(eps).replace('.', '_')  
-    ax4.figure.savefig(f'4_NOepsilon_{eps_str}.svg', format='svg', dpi=1200)
+    ax4.figure.savefig(f'{plotFolder}/4_NOepsilon_{eps_str}.svg', format='svg', dpi=1200)
     plt.tight_layout()
-    plot_filename = f'4_NOepsilon_{eps_str}.pkl'
+    plot_filename = f'{plotFolder}/4_NOepsilon_{eps_str}.pkl'
         
-    with open(plot_filename, 'wb') as f:
-    	pickle.dump((ax, coarsest_grid, upper_boundNO, lower_boundNO, sum_mlNO), f)
+    with open(plot_filename, 'wb') as file:
+    	pickle.dump((ax, coarsest_grid, upper_boundNO, lower_boundNO, sum_mlNO), file)
 
-    f.close()
     plt.close("all")
     plt.cla()
     plt.clf()      
@@ -392,14 +399,13 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
     ax5.set_title(r'N2 with $\varepsilon_r$ = {:.3f}'.format(eps), fontsize=14)
 
     eps_str = str(eps).replace('.', '_')  
-    ax5.figure.savefig(f'5_N2epsilon_{eps_str}.svg', format='svg', dpi=1200)
+    ax5.figure.savefig(f'{plotFolder}/5_N2epsilon_{eps_str}.svg', format='svg', dpi=1200)
     plt.tight_layout()
-    plot_filename = f'5_N2epsilon_{eps_str}.pkl'
+    plot_filename = f'{plotFolder}/5_N2epsilon_{eps_str}.pkl'
         
-    with open(plot_filename, 'wb') as f:
-    	pickle.dump((ax, coarsest_grid, upper_boundN2, lower_boundN2, sum_mlN2), f)
+    with open(plot_filename, 'wb') as file:
+    	pickle.dump((ax, coarsest_grid, upper_boundN2, lower_boundN2, sum_mlN2), file)
 
-    f.close()
     plt.close("all")
     plt.cla()
     plt.clf()      
@@ -412,14 +418,13 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
     ax6.set_title(r'O2 with $\varepsilon_r$ = {:.3f}'.format(eps), fontsize=14)
 
     eps_str = str(eps).replace('.', '_')  
-    ax6.figure.savefig(f'6_O2epsilon_{eps_str}.svg', format='svg', dpi=1200)
+    ax6.figure.savefig(f'{plotFolder}/6_O2epsilon_{eps_str}.svg', format='svg', dpi=1200)
     plt.tight_layout()
-    plot_filename = f'6_O2epsilon_{eps_str}.pkl'
+    plot_filename = f'{plotFolder}/6_O2epsilon_{eps_str}.pkl'
         
-    with open(plot_filename, 'wb') as f:
-    	pickle.dump((ax, coarsest_grid, upper_boundO2, lower_boundO2, sum_mlO2), f)
+    with open(plot_filename, 'wb') as file:
+    	pickle.dump((ax, coarsest_grid, upper_boundO2, lower_boundO2, sum_mlO2), file)
 
-    f.close()
     plt.close("all")
     plt.cla()
     plt.clf()      
@@ -432,14 +437,13 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
     ax7.set_title(r'Ttr with $\varepsilon_r$ = {:.3f}'.format(eps), fontsize=14)
 
     eps_str = str(eps).replace('.', '_')  
-    ax7.figure.savefig(f'7_Ttrepsilon_{eps_str}.svg', format='svg', dpi=1200)
+    ax7.figure.savefig(f'{plotFolder}/7_Ttrepsilon_{eps_str}.svg', format='svg', dpi=1200)
     plt.tight_layout()
-    plot_filename = f'7_Ttrepsilon_{eps_str}.pkl'
+    plot_filename = f'{plotFolder}/7_Ttrepsilon_{eps_str}.pkl'
         
-    with open(plot_filename, 'wb') as f:
-    	pickle.dump((ax, coarsest_grid, upper_boundTtr, lower_boundTtr, sum_mlTtr), f)
+    with open(plot_filename, 'wb') as file:
+    	pickle.dump((ax, coarsest_grid, upper_boundTtr, lower_boundTtr, sum_mlTtr), file)
 
-    f.close()
     plt.close("all")
     plt.cla()
     plt.clf()               
@@ -452,14 +456,13 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
     ax8.set_title(r'Tve with $\varepsilon_r$ = {:.3f}'.format(eps), fontsize=14)
 
     eps_str = str(eps).replace('.', '_')  
-    ax8.figure.savefig(f'8_Tveepsilon_{eps_str}.svg', format='svg', dpi=1200)
+    ax8.figure.savefig(f'{plotFolder}/8_Tveepsilon_{eps_str}.svg', format='svg', dpi=1200)
     plt.tight_layout()
-    plot_filename = f'8_Tveepsilon_{eps_str}.pkl'
+    plot_filename = f'{plotFolder}/8_Tveepsilon_{eps_str}.pkl'
         
-    with open(plot_filename, 'wb') as f:
-    	pickle.dump((ax, coarsest_grid, upper_boundTve, lower_boundTve, sum_mlTve), f)
+    with open(plot_filename, 'wb') as file:
+    	pickle.dump((ax, coarsest_grid, upper_boundTve, lower_boundTve, sum_mlTve), file)
 
-    f.close()
     plt.close("all")
     plt.cla()
     plt.clf()           
@@ -472,16 +475,69 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
     ax9.set_title(r'M with $\varepsilon_r$ = {:.3f}'.format(eps), fontsize=14)
 
     eps_str = str(eps).replace('.', '_')  
-    ax9.figure.savefig(f'9_Mepsilon_{eps_str}.svg', format='svg', dpi=1200)
+    ax9.figure.savefig(f'{plotFolder}/9_Mepsilon_{eps_str}.svg', format='svg', dpi=1200)
     plt.tight_layout()
-    plot_filename = f'9_Mepsilon_{eps_str}.pkl'
+    plot_filename = f'{plotFolder}/9_Mepsilon_{eps_str}.pkl'
         
-    with open(plot_filename, 'wb') as f:
-    	pickle.dump((ax, coarsest_grid, upper_boundM, lower_boundM, sum_mlM), f)
+    with open(plot_filename, 'wb') as file:
+    	pickle.dump((ax, coarsest_grid, upper_boundM, lower_boundM, sum_mlM), file)
 
-    f.close()
     plt.close("all")
     plt.cla()
     plt.clf()       
     
     return P, Nl, Cl
+
+
+def screening(mlmc_l, L, N, logfile):
+    '''
+    Function to perform the MLMC screening to estimate alpha, beta, gamma (weak convergence rates)
+
+    Inputs:
+    - mlmc_l function to perform the MC simulation at a given level
+    - L total number of levels
+    - N number of samples at each level for the screening
+    - logfile
+
+    Outputs:
+    - alpha
+    - beta 
+    - gamma
+    '''
+
+    del1 = []
+    del2 = []
+    var1 = []
+    var2 = []
+    cost = []
+
+    for l in range(L + 1):
+        sums1 = 0; sums2 = 0; sums5 = 0; sums6 = 0
+        cst = 0
+        
+        _, sums1_j, sums2_j, sums5_j, sums6_j, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, cst_j = mlmc_l(l, int(N / 1))
+
+        sums1 += sums1_j / N
+        sums2 += sums2_j / N
+        sums5 += sums5_j / N
+        sums6 += sums6_j / N
+        cst += cst_j / N
+
+        cost.append(cst)
+        del1.append(np.linalg.norm(sums1, np.inf))  # Ave(Pf-Pc)
+        del2.append(np.linalg.norm(sums5, np.inf))  # Ave(Pf)
+        var1.append(np.linalg.norm((sums2 - sums1 ** 2), np.inf))  # Var(Pf-Pc)
+        var2.append(np.linalg.norm((sums6 - sums5 ** 2), np.inf))  # Var(Pf)
+        var2[-1] = max(var2[-1], 1e-10)  
+
+        write(logfile, "%2d  %11.4e %11.4e  %.3e  %.3e %.2e \n" % \
+                      (l, del1[l], del2[l], var1[l], var2[l], cst))
+
+    # Linear regression to estimate alpha, beta and gamma
+    L1 = 1
+    L2 = L + 1
+    pa    = np.polyfit(range(L1, L2), np.log2(np.abs(del1[L1:L2])), 1);  alpha = -pa[0]
+    pb    = np.polyfit(range(L1, L2), np.log2(np.abs(var1[L1:L2])), 1);  beta  = -pb[0]
+    pg    = np.polyfit(range(L1, L2), np.log2(np.abs(cost[L1:L2])), 1);  gamma =  pg[0]
+
+    return del1, del2, var1, var2, cost, alpha, beta, gamma
