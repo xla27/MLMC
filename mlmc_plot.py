@@ -117,29 +117,32 @@ def mlmc_plot(filename, nvert):
 
     # Alto sx: Var[P_l - P_{l-1}] per level
     plt.subplot(3, 2, 1)
-    plt.plot(l,     numpy.log2(var2),     label=r'$P_\ell$', clip_on=False)
+    plt.plot(l,     numpy.log2(var2),     label=r'$P_\ell$',              clip_on=False)
     plt.plot(l[1:], numpy.log2(var1[1:]), label=r'$P_\ell - P_{\ell-1}$', clip_on=False)
     plt.xlabel('level $\ell$')
     plt.ylabel(r'$\mathrm{log}_2(\mathrm{variance})$')
     plt.legend(loc='lower left', fontsize='medium')
-    axis = plt.axis(); plt.axis([0, max(l), axis[2], axis[3]])
+    axis = plt.axis()
+    plt.axis([0, max(l), axis[2], axis[3]])
 
 
     # Alto dx: E[|P_l - P_{l-1}|] per level
     plt.subplot(3, 2, 2)
-    plt.plot(l,     numpy.log2(numpy.abs(del2)),     label=r'$P_\ell$', clip_on=False)
+    plt.plot(l,     numpy.log2(numpy.abs(del2)),     label=r'$P_\ell$',              clip_on=False)
     plt.plot(l[1:], numpy.log2(numpy.abs(del1[1:])), label=r'$P_\ell - P_{\ell-1}$', clip_on=False)
     plt.xlabel('level $\ell$')
     plt.ylabel(r'$\mathrm{log}_2(|\mathrm{mean}|)$')
     plt.legend(loc='lower left', fontsize='medium')
-    axis = plt.axis(); plt.axis([0, max(l), axis[2], axis[3]])
+    axis = plt.axis()
+    plt.axis([0, max(l), axis[2], axis[3]])
 
     # Centro sx: cost per level
     plt.subplot(3, 2, 3)
     plt.plot(l, numpy.log2(cost), '*--', clip_on=False)
     plt.xlabel('level $\ell$')
     plt.ylabel(r'$\log_2$ cost per sample')
-    axis = plt.axis(); plt.axis([0, max(l), axis[2], axis[3]])  
+    axis = plt.axis()
+    plt.axis([0, max(l), axis[2], axis[3]])  
 
 
 
@@ -154,17 +157,17 @@ def mlmc_plot(filename, nvert):
 
     # Regular expressions patterns
     alpha_pattern = r'alpha\s*=\s*([\d.]+)'
-    beta_pattern = r'beta\s*=\s*([\d.]+)'
+    beta_pattern  = r'beta\s*=\s*([\d.]+)'
     gamma_pattern = r'gamma\s*=\s*([\d.]+)'
 
     # Extract matches using regular expressions
     alpha_match = re.search(alpha_pattern, file_content)
-    beta_match = re.search(beta_pattern, file_content)
+    beta_match  = re.search(beta_pattern, file_content)
     gamma_match = re.search(gamma_pattern, file_content)
 
     # Extract values from matches
     alpha = float(alpha_match.group(1))
-    beta = float(beta_match.group(1))
+    beta  = float(beta_match.group(1))
     gamma = float(gamma_match.group(1))
 
     # Plotting 
@@ -192,7 +195,8 @@ def mlmc_plot(filename, nvert):
     plt.xlabel('level $\ell$')
     plt.ylabel('$N_\ell$')
     plt.legend(loc='upper right', frameon=True, fontsize='medium')
-    axis = plt.axis(); plt.axis([0, max([max(x) for x in ls]), axis[2], axis[3]])
+    axis = plt.axis()
+    plt.axis([0, max([max(x) for x in ls]), axis[2], axis[3]])
 
 
     plt.rc('axes', prop_cycle=(cycler('color', ['k']) *
@@ -205,12 +209,13 @@ def mlmc_plot(filename, nvert):
     mlmc_cost = numpy.array(mlmc_cost)
     I = numpy.argsort(eps)
     plt.subplot(3, 2, 6)
-    plt.loglog(eps[I], eps[I]**2 * std_cost[I],  '*-',  label='MC', clip_on=False)
+    plt.loglog(eps[I], eps[I]**2 * std_cost[I],  '*-',  label='MC',     clip_on=False)
     plt.loglog(eps[I], eps[I]**2 * mlmc_cost[I], '*--', label='MLMC',   clip_on=False)
     plt.xlabel(r'accuracy $\varepsilon$')
     plt.ylabel(r'$\varepsilon^2$ cost')
     plt.legend(fontsize='medium')
-    axis = plt.axis(); plt.axis([min(eps), max(eps), axis[2], axis[3]])
+    axis = plt.axis()
+    plt.axis([min(eps), max(eps), axis[2], axis[3]])
 
     
 
