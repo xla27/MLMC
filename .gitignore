@@ -1,0 +1,9 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+# text files
+*.txt
+
+# pickle and svg files
+*.pkl
+*.svg
