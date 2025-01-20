@@ -320,9 +320,9 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
     ax.set_title(r'P with $\varepsilon_r$ = {:.3f}'.format(eps), fontsize=14)
 
     eps_str = str(eps).replace('.', '_')  # Convert eps array to string and replace dots with underscore
-    ax.figure.savefig(f'{plotFolder}/1_Pepsilon_{eps_str}.svg', format='svg', dpi=1200)
+    ax.figure.savefig(f'{plotFolder}/1_P_epsilon_{eps_str}.svg', format='svg', dpi=1200)
     plt.tight_layout()
-    plot_filename = f'{plotFolder}/1_Pepsilon_{eps_str}.pkl'
+    plot_filename = f'{plotFolder}/1_P_epsilon_{eps_str}.pkl'
     
     with open(plot_filename, 'wb') as file:
     	pickle.dump((ax, coarsest_grid, upper_bound, lower_bound, sum_ml), file)
@@ -339,9 +339,9 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
     ax2.set_title(r'N with $\varepsilon_r$ = {:.3f}'.format(eps), fontsize=14)
 
     eps_str = str(eps).replace('.', '_')  
-    ax2.figure.savefig(f'{plotFolder}/2_Nepsilon_{eps_str}.svg', format='svg', dpi=1200)
+    ax2.figure.savefig(f'{plotFolder}/2_N_epsilon_{eps_str}.svg', format='svg', dpi=1200)
     plt.tight_layout()
-    plot_filename = f'{plotFolder}/2_Nepsilon_{eps_str}.pkl'
+    plot_filename = f'{plotFolder}/2_N_epsilon_{eps_str}.pkl'
        
     with open(plot_filename, 'wb') as file:
     	pickle.dump((ax, coarsest_grid, upper_boundN, lower_boundN, sum_mlN), file)
@@ -358,9 +358,9 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
     ax3.set_title(r'O with $\varepsilon_r$ = {:.3f}'.format(eps), fontsize=14)
 
     eps_str = str(eps).replace('.', '_')  
-    ax3.figure.savefig(f'{plotFolder}/3_Oepsilon_{eps_str}.svg', format='svg', dpi=1200)
+    ax3.figure.savefig(f'{plotFolder}/3_O_epsilon_{eps_str}.svg', format='svg', dpi=1200)
     plt.tight_layout()
-    plot_filename = f'{plotFolder}/3_Oepsilon_{eps_str}.pkl'
+    plot_filename = f'{plotFolder}/3_O_epsilon_{eps_str}.pkl'
         
     with open(plot_filename, 'wb') as file:
     	pickle.dump((ax, coarsest_grid, upper_boundO, lower_boundO, sum_mlO), file)
@@ -377,9 +377,9 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
     ax4.set_title(r'NO with $\varepsilon_r$ = {:.3f}'.format(eps), fontsize=14)
 
     eps_str = str(eps).replace('.', '_')  
-    ax4.figure.savefig(f'{plotFolder}/4_NOepsilon_{eps_str}.svg', format='svg', dpi=1200)
+    ax4.figure.savefig(f'{plotFolder}/4_NO_epsilon_{eps_str}.svg', format='svg', dpi=1200)
     plt.tight_layout()
-    plot_filename = f'{plotFolder}/4_NOepsilon_{eps_str}.pkl'
+    plot_filename = f'{plotFolder}/4_NO_epsilon_{eps_str}.pkl'
         
     with open(plot_filename, 'wb') as file:
     	pickle.dump((ax, coarsest_grid, upper_boundNO, lower_boundNO, sum_mlNO), file)
@@ -396,9 +396,9 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
     ax5.set_title(r'N2 with $\varepsilon_r$ = {:.3f}'.format(eps), fontsize=14)
 
     eps_str = str(eps).replace('.', '_')  
-    ax5.figure.savefig(f'{plotFolder}/5_N2epsilon_{eps_str}.svg', format='svg', dpi=1200)
+    ax5.figure.savefig(f'{plotFolder}/5_N2_epsilon_{eps_str}.svg', format='svg', dpi=1200)
     plt.tight_layout()
-    plot_filename = f'{plotFolder}/5_N2epsilon_{eps_str}.pkl'
+    plot_filename = f'{plotFolder}/5_N2_epsilon_{eps_str}.pkl'
         
     with open(plot_filename, 'wb') as file:
     	pickle.dump((ax, coarsest_grid, upper_boundN2, lower_boundN2, sum_mlN2), file)
@@ -415,9 +415,9 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
     ax6.set_title(r'O2 with $\varepsilon_r$ = {:.3f}'.format(eps), fontsize=14)
 
     eps_str = str(eps).replace('.', '_')  
-    ax6.figure.savefig(f'{plotFolder}/6_O2epsilon_{eps_str}.svg', format='svg', dpi=1200)
+    ax6.figure.savefig(f'{plotFolder}/6_O2_epsilon_{eps_str}.svg', format='svg', dpi=1200)
     plt.tight_layout()
-    plot_filename = f'{plotFolder}/6_O2epsilon_{eps_str}.pkl'
+    plot_filename = f'{plotFolder}/6_O2_epsilon_{eps_str}.pkl'
         
     with open(plot_filename, 'wb') as file:
     	pickle.dump((ax, coarsest_grid, upper_boundO2, lower_boundO2, sum_mlO2), file)
@@ -434,9 +434,9 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
     ax7.set_title(r'Ttr with $\varepsilon_r$ = {:.3f}'.format(eps), fontsize=14)
 
     eps_str = str(eps).replace('.', '_')  
-    ax7.figure.savefig(f'{plotFolder}/7_Ttrepsilon_{eps_str}.svg', format='svg', dpi=1200)
+    ax7.figure.savefig(f'{plotFolder}/7_Ttr_epsilon_{eps_str}.svg', format='svg', dpi=1200)
     plt.tight_layout()
-    plot_filename = f'{plotFolder}/7_Ttrepsilon_{eps_str}.pkl'
+    plot_filename = f'{plotFolder}/7_Ttr_epsilon_{eps_str}.pkl'
         
     with open(plot_filename, 'wb') as file:
     	pickle.dump((ax, coarsest_grid, upper_boundTtr, lower_boundTtr, sum_mlTtr), file)
@@ -453,9 +453,9 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
     ax8.set_title(r'Tve with $\varepsilon_r$ = {:.3f}'.format(eps), fontsize=14)
 
     eps_str = str(eps).replace('.', '_')  
-    ax8.figure.savefig(f'{plotFolder}/8_Tveepsilon_{eps_str}.svg', format='svg', dpi=1200)
+    ax8.figure.savefig(f'{plotFolder}/8_Tve_epsilon_{eps_str}.svg', format='svg', dpi=1200)
     plt.tight_layout()
-    plot_filename = f'{plotFolder}/8_Tveepsilon_{eps_str}.pkl'
+    plot_filename = f'{plotFolder}/8_Tve_epsilon_{eps_str}.pkl'
         
     with open(plot_filename, 'wb') as file:
     	pickle.dump((ax, coarsest_grid, upper_boundTve, lower_boundTve, sum_mlTve), file)
@@ -472,9 +472,9 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
     ax9.set_title(r'M with $\varepsilon_r$ = {:.3f}'.format(eps), fontsize=14)
 
     eps_str = str(eps).replace('.', '_')  
-    ax9.figure.savefig(f'{plotFolder}/9_Mepsilon_{eps_str}.svg', format='svg', dpi=1200)
+    ax9.figure.savefig(f'{plotFolder}/9_M_epsilon_{eps_str}.svg', format='svg', dpi=1200)
     plt.tight_layout()
-    plot_filename = f'{plotFolder}/9_Mepsilon_{eps_str}.pkl'
+    plot_filename = f'{plotFolder}/9_M_epsilon_{eps_str}.pkl'
         
     with open(plot_filename, 'wb') as file:
     	pickle.dump((ax, coarsest_grid, upper_boundM, lower_boundM, sum_mlM), file)
