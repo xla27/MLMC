@@ -18,40 +18,40 @@ def dw_l(l, N_samples, *args):
     start = time.time()
 
     # P
-    sums1 = 0;  # sum of difference between static Pressure at fine and coarse
-    sums2 = 0;  # sum of square of difference between static Pressure at fine and coarse
-    sums5 = 0;  # sum of static Pressure at fine 
-    sums6 = 0;  # sum of square of static Pressure at fine 
+    sums1 = 0  # sum of difference between static Pressure at fine and coarse
+    sums2 = 0  # sum of square of difference between static Pressure at fine and coarse
+    sums5 = 0  # sum of static Pressure at fine 
+    sums6 = 0  # sum of square of static Pressure at fine 
 
     # N
-    sums1N = 0; # sum of difference between atomic Nitrogen mass fraction at fine and coarse
-    sums2N = 0; # sum of square of difference between atomic Nitrogen mass fraction at fine and coarse
+    sums1N = 0 # sum of difference between atomic Nitrogen mass fraction at fine and coarse
+    sums2N = 0 # sum of square of difference between atomic Nitrogen mass fraction at fine and coarse
 
     # O
-    sums1O = 0; # sum of difference between atomic Oxygen mass fraction at fine and coarse
-    sums2O = 0; # sum of square of difference between atomic Oxygen mass fraction at fine and coarse
+    sums1O = 0 # sum of difference between atomic Oxygen mass fraction at fine and coarse
+    sums2O = 0 # sum of square of difference between atomic Oxygen mass fraction at fine and coarse
 
     # NO
-    sums1NO = 0; # sum of difference between Nitric Oxide mass fraction at fine and coarse
-    sums2NO = 0; # sum of square of difference between Nitric Oxide mass fraction at fine and coarse
+    sums1NO = 0 # sum of difference between Nitric Oxide mass fraction at fine and coarse
+    sums2NO = 0 # sum of square of difference between Nitric Oxide mass fraction at fine and coarse
 
     # N2
-    sums1N2 = 0; # sum of difference between diatomic Nitrogen mass fraction at fine and coarse
-    sums2N2 = 0; # # sum of square of difference between diatomic Nitrogen mass fraction at fine and coarse
+    sums1N2 = 0 # sum of difference between diatomic Nitrogen mass fraction at fine and coarse
+    sums2N2 = 0 # # sum of square of difference between diatomic Nitrogen mass fraction at fine and coarse
 
     # O2 
-    sums1O2 = 0; # sum of difference between diatomic Oxygen mass fraction at fine and coarse
-    sums2O2 = 0; # sum of square of difference between diatomic Oxygen mass fraction at fine and coarse
+    sums1O2 = 0 # sum of difference between diatomic Oxygen mass fraction at fine and coarse
+    sums2O2 = 0 # sum of square of difference between diatomic Oxygen mass fraction at fine and coarse
 
     # Temperatures 
-    sums1Ttr = 0; # sum of difference between translational Temperature at fine and coarse
-    sums2Ttr = 0; # sum of squares of difference between translational Temperature at fine and coarse
-    sums1Tve = 0; # sum of difference between vibrational Temperature at fine and coarse
-    sums2Tve = 0; # sum of squares of difference between vibrational Temperature at fine and coarse 
+    sums1Ttr = 0 # sum of difference between translational Temperature at fine and coarse
+    sums2Ttr = 0 # sum of squares of difference between translational Temperature at fine and coarse
+    sums1Tve = 0 # sum of difference between vibrational Temperature at fine and coarse
+    sums2Tve = 0 # sum of squares of difference between vibrational Temperature at fine and coarse 
 
     # Mach
-    sums1M = 0; # sum of difference between Mach at fine and coarse
-    sums2M = 0; # sum of square of difference between Mach at fine and coarse
+    sums1M = 0 # sum of difference between Mach at fine and coarse
+    sums2M = 0 # sum of square of difference between Mach at fine and coarse
 
     # Ranges for aleatoric uncertainties (Freestream values)
     Mmean   = 9.0;   M_max   = 9.5;   M_min   = 8.0 
