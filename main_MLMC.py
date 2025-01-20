@@ -10,9 +10,6 @@ import numpy as np
 import time
 from datetime import datetime
 import matplotlib.pyplot as plt
-from mlmc import mlmc, screening
-from mlmc_plot import mlmc_plot
-from level_dw5 import dw_l
 
 def main(nproc, workingFolder):
     """
@@ -23,7 +20,11 @@ def main(nproc, workingFolder):
     baseFolder = '/home/xla27/FAR-ESA/MLMC'
 
     if testcase == 'AIR5':
+
         baseFolder = baseFolder + '/AIR5'
+
+        from AIR5 import mlmc, screening, mlmc_plot, dw_l
+
 
     varargin = (nproc, baseFolder, workingFolder) 
 

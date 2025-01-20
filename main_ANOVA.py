@@ -1,13 +1,15 @@
 import os, sys
 
-from anova import anova
-from anova_plot import anova_plot
-
-
 def main(nproc, workingFolder):
 
     # folder for with MLMC code
     baseFolder = '/home/xla27/FAR-ESA/MLMC'
+
+    if testcase == 'AIR5':
+
+        baseFolder = baseFolder + '/AIR5'
+
+        from AIR5 import anova, anova_plot
 
     varargin = (nproc, baseFolder, workingFolder) 
 
@@ -37,6 +39,7 @@ def main(nproc, workingFolder):
 if __name__ == '__main__':
 
     nproc = int(sys.argv[1])    # number of processors for CFD
+    testcase = sys.argv[2]
     workingFolder = os.getcwd() # working directory for data saving
 
-    main(nproc, workingFolder)
+    main(nproc, testcase, workingFolder)
