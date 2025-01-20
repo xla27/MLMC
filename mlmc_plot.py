@@ -220,7 +220,7 @@ def mlmc_plot(filename, nvert):
     
 
     save=True
-    plot6 = 'plot6.pkl'
+    summary_plot = 'plot_summary.pkl'
     if save:
         # Save data with pickle
         plot_data = {
@@ -239,5 +239,5 @@ def mlmc_plot(filename, nvert):
             'beta': beta,
             'gamma': gamma
         }
-        with open(plot6, 'wb') as f:
+        with open(summary_plot, 'wb') as f:
             pickle.dump(plot_data, f)    
