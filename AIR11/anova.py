@@ -137,6 +137,13 @@ def anova(problem, lev, sample_sizes, *varargin):
     # SAVING RESULTS
     total_S = {}
 
+    total_S['total_S1nd_elecMinus'] = total_S1nd_elecMinus
+    total_S['total_S1nd_NPlus']     = total_S1nd_NPlus
+    total_S['total_S1nd_OPlus']     = total_S1nd_OPlus
+    total_S['total_S1nd_NOPlus']    = total_S1nd_NOPlus
+    total_S['total_S1nd_N2Plus']    = total_S1nd_N2Plus
+    total_S['total_S1nd_O2Plus']    = total_S1nd_O2Plus
+
     total_S['total_S1beta_elecMinus'] = total_S1beta_elecMinus
     total_S['total_S1beta_NPlus']     = total_S1beta_NPlus
     total_S['total_S1beta_OPlus']     = total_S1beta_OPlus
@@ -148,6 +155,11 @@ def anova(problem, lev, sample_sizes, *varargin):
     total_S['total_S1beta_NO']        = total_S1beta_NO
     total_S['total_S1beta_N2']        = total_S1beta_N2
     total_S['total_S1beta_O2']        = total_S1beta_O2
+
+    total_S['total_S1P']   = total_S1P
+    total_S['total_S1Ttr'] = total_S1Ttr
+    total_S['total_S1Tve'] = total_S1Tve
+    total_S['total_S1M']   = total_S1M
 
     return x_vec0, total_S
 
