@@ -22,6 +22,9 @@ def main(nproc, workingFolder):
     # folder for with MLMC code
     baseFolder = '/home/xla27/FAR-ESA/MLMC'
 
+    if testcase == 'AIR5':
+        baseFolder = baseFolder + '/AIR5'
+
     varargin = (nproc, baseFolder, workingFolder) 
 
     N = 10    # samples for convergence tests
@@ -124,6 +127,7 @@ def write(logfile, msg):
 if __name__ == "__main__":
 
     nproc = int(sys.argv[1])    # number of processors for CFD
+    testcase = sys.argv[2]
     workingFolder = os.getcwd() # working directory for data saving
 
-    main(nproc, workingFolder)
+    main(nproc, testcase, workingFolder)
