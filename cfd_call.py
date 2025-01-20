@@ -19,10 +19,10 @@ def cfd_call(type, valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, l, i, *
 
     if type == 'COARSE':
         stringPart2 = '/Template_prova_coarse'
-        stringIter  = f"Nc{i}"
+        stringIter  = "Nc_" + str(i).zfill(3)
     elif type == 'FINE':
         stringPart2 = '/Template_prova_fine'
-        stringIter  = f"Nf{i}"
+        stringIter  = "Nf_" + str(i).zfill(3)
 
        
     lValue = l 
@@ -67,7 +67,6 @@ def cfd_call(type, valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, l, i, *
         result = subprocess.run(su2Command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
         output = result.stdout
         error = result.stderr
-        print(error)
 
         # Read file to get qois
         csv_path_surf = os.path.join(destinationFolder, stringIter, 'surface_flow.csv')
@@ -90,6 +89,8 @@ def cfd_call(type, valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, l, i, *
        
             # Save grid
             xnodesf = data_surf['x'].tolist()
+
+            os.remove('history.csv')
 
             os.chdir(workingFolder)  # Return to the starting directory
             return beta_n, beta_o, beta_no, beta_n2, beta_o2, p_i, Ttr_i, Tve_i, M_i, xnodesf
