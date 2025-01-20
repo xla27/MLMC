@@ -311,9 +311,6 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
 
     if not os.path.exists(plotFolder):
         os.mkdir(plotFolder)
-    else:
-        shutil.rmtree(plotFolder)
-        os.mkdir(plotFolder)
     
     # Plot 1: normalized mean pressure, 1sigma uncertainty region
     shaded_color = [0.6, 0.8, 1]
