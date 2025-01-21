@@ -17,11 +17,11 @@ def anova(problem, lev, sample_sizes, *varargin):
 
     # level 0 indices 
     total_S1nd_elecMinus = np.array(S1nd_elecMinus_0) 
-    total_S1nd_Nplus     = np.array(S1nd_NPlus_0) 
-    total_S1nd_Oplus     = np.array(S1nd_OPlus_0) 
-    total_S1nd_NOplus    = np.array(S1nd_NOPlus_0) 
-    total_S1nd_N2plus    = np.array(S1nd_N2Plus_0) 
-    total_S1nd_O2plus    = np.array(S1nd_O2Plus_0) 
+    total_S1nd_NPlus     = np.array(S1nd_NPlus_0) 
+    total_S1nd_OPlus     = np.array(S1nd_OPlus_0) 
+    total_S1nd_NOPlus    = np.array(S1nd_NOPlus_0) 
+    total_S1nd_N2Plus    = np.array(S1nd_N2Plus_0) 
+    total_S1nd_O2Plus    = np.array(S1nd_O2Plus_0) 
 
 
     total_S1beta_elecMinus = np.array(S1beta_elecMinus_0)
@@ -107,29 +107,29 @@ def anova(problem, lev, sample_sizes, *varargin):
         S1M_diff   = np.array([np.array(S1M_f[i])   - S1M_interp[i]   for i in range(4)])
 
         # Add the correction to the total Sobol indices 
-        total_S1nd_elecMinus = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1nd_elecMinus[i]) for i in range(3)]);    total_S1nd_elecMinus += S1nd_elecMinus_diff
-        total_S1nd_NPlus     = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1nd_NPlus[i])     for i in range(3)]);    total_S1nd_NPlus     += S1nd_NPlus_diff
-        total_S1nd_OPlus     = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1nd_OPlus[i])     for i in range(3)]);    total_S1nd_OPlus     += S1nd_OPlus_diff
-        total_S1nd_NOPlus    = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1nd_NOPlus[i])    for i in range(3)]);    total_S1nd_NOPlus    += S1nd_NOPlus_diff
-        total_S1nd_N2Plus    = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1nd_N2Plus[i])    for i in range(3)]);    total_S1nd_N2Plus    += S1nd_N2Plus_diff
-        total_S1nd_O2Plus    = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1nd_O2Plus[i])    for i in range(3)]);    total_S1nd_O2Plus    += S1nd_O2Plus_diff
+        total_S1nd_elecMinus = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1nd_elecMinus[i]) for i in range(4)]);    total_S1nd_elecMinus += S1nd_elecMinus_diff
+        total_S1nd_NPlus     = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1nd_NPlus[i])     for i in range(4)]);    total_S1nd_NPlus     += S1nd_NPlus_diff
+        total_S1nd_OPlus     = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1nd_OPlus[i])     for i in range(4)]);    total_S1nd_OPlus     += S1nd_OPlus_diff
+        total_S1nd_NOPlus    = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1nd_NOPlus[i])    for i in range(4)]);    total_S1nd_NOPlus    += S1nd_NOPlus_diff
+        total_S1nd_N2Plus    = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1nd_N2Plus[i])    for i in range(4)]);    total_S1nd_N2Plus    += S1nd_N2Plus_diff
+        total_S1nd_O2Plus    = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1nd_O2Plus[i])    for i in range(4)]);    total_S1nd_O2Plus    += S1nd_O2Plus_diff
 
-        total_S1beta_elecMinus = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1beta_elecMinus[i]) for i in range(3)]);    total_S1beta_elecMinus += S1beta_elecMinus_diff
-        total_S1beta_NPlus     = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1beta_NPlus[i])     for i in range(3)]);    total_S1beta_NPlus     += S1beta_NPlus_diff
-        total_S1beta_OPlus     = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1beta_OPlus[i])     for i in range(3)]);    total_S1beta_OPlus     += S1beta_OPlus_diff
-        total_S1beta_NOPlus    = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1beta_NOPlus[i])    for i in range(3)]);    total_S1beta_NOPlus    += S1beta_NOPlus_diff
-        total_S1beta_N2Plus    = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1beta_N2Plus[i])    for i in range(3)]);    total_S1beta_N2Plus    += S1beta_N2Plus_diff
-        total_S1beta_O2Plus    = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1beta_O2Plus[i])    for i in range(3)]);    total_S1beta_O2Plus    += S1beta_O2Plus_diff
-        total_S1beta_N         = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1beta_N[i])         for i in range(3)]);    total_S1beta_N         += S1beta_N_diff
-        total_S1beta_O         = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1beta_O[i])         for i in range(3)]);    total_S1beta_O         += S1beta_O_diff
-        total_S1beta_NO        = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1beta_NO[i])        for i in range(3)]);    total_S1beta_NO        += S1beta_NO_diff
-        total_S1beta_N2        = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1beta_N2[i])        for i in range(3)]);    total_S1beta_N2        += S1beta_N2_diff
-        total_S1beta_O2        = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1beta_O2[i])        for i in range(3)]);    total_S1beta_O2        += S1beta_O2_diff
+        total_S1beta_elecMinus = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1beta_elecMinus[i]) for i in range(4)]);    total_S1beta_elecMinus += S1beta_elecMinus_diff
+        total_S1beta_NPlus     = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1beta_NPlus[i])     for i in range(4)]);    total_S1beta_NPlus     += S1beta_NPlus_diff
+        total_S1beta_OPlus     = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1beta_OPlus[i])     for i in range(4)]);    total_S1beta_OPlus     += S1beta_OPlus_diff
+        total_S1beta_NOPlus    = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1beta_NOPlus[i])    for i in range(4)]);    total_S1beta_NOPlus    += S1beta_NOPlus_diff
+        total_S1beta_N2Plus    = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1beta_N2Plus[i])    for i in range(4)]);    total_S1beta_N2Plus    += S1beta_N2Plus_diff
+        total_S1beta_O2Plus    = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1beta_O2Plus[i])    for i in range(4)]);    total_S1beta_O2Plus    += S1beta_O2Plus_diff
+        total_S1beta_N         = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1beta_N[i])         for i in range(4)]);    total_S1beta_N         += S1beta_N_diff
+        total_S1beta_O         = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1beta_O[i])         for i in range(4)]);    total_S1beta_O         += S1beta_O_diff
+        total_S1beta_NO        = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1beta_NO[i])        for i in range(4)]);    total_S1beta_NO        += S1beta_NO_diff
+        total_S1beta_N2        = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1beta_N2[i])        for i in range(4)]);    total_S1beta_N2        += S1beta_N2_diff
+        total_S1beta_O2        = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1beta_O2[i])        for i in range(4)]);    total_S1beta_O2        += S1beta_O2_diff
 
-        total_S1P   = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1P[i])   for i in range(3)]);    total_S1P   += S1P_diff
-        total_S1Ttr = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1Ttr[i]) for i in range(3)]);    total_S1Ttr += S1Ttr_diff
-        total_S1Tve = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1Tve[i]) for i in range(3)]);    total_S1Tve += S1Tve_diff
-        total_S1M   = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1M[i])   for i in range(3)]);    total_S1M   += S1M_diff
+        total_S1P   = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1P[i])   for i in range(4)]);    total_S1P   += S1P_diff
+        total_S1Ttr = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1Ttr[i]) for i in range(4)]);    total_S1Ttr += S1Ttr_diff
+        total_S1Tve = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1Tve[i]) for i in range(4)]);    total_S1Tve += S1Tve_diff
+        total_S1M   = np.array([interpolate_to_fine(x_vecf, x_vec0, total_S1M[i])   for i in range(4)]);    total_S1M   += S1M_diff
 
         # Update xnode_vec0 to be the finer grid for the next iteration
         x_vec0 = x_vecf
