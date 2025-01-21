@@ -4,7 +4,7 @@ os.environ["NUMEXPR_NUM_THREADS"] = "1"
 os.environ["OMP_NUM_THREADS"] = "1" 
 os.environ['OPENBLAS_NUM_THREADS'] = "1"
 
-def main(nproc, workingFolder):
+def main(nproc, testcase, workingFolder):
 
     # folder for with MLMC code
     baseFolder = '/home/xla27/FAR-ESA/MLMC'

@@ -11,7 +11,7 @@ import time
 from datetime import datetime
 import matplotlib.pyplot as plt
 
-def main(nproc, workingFolder):
+def main(nproc, testcase, workingFolder):
     """
     Main script for MLMC UQ on hypersonic double wedge.
     """
