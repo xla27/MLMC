@@ -450,7 +450,7 @@ def anova_plot(x_vec0, total_S):
     plt.grid(True)
     plt.tight_layout()
 
-    plot_filename = '13_N_sobol_indices'
+    plot_filename = '13_S1beta_N_sobol_indices'
     plt.savefig(plot_filename, format='svg')
 
     plot_data = {
@@ -458,7 +458,7 @@ def anova_plot(x_vec0, total_S):
         'total_S1beta_N': total_S1beta_N_filtered,
     }
 
-    pickle_filename = '13_N_sobol_indices.pkl'
+    pickle_filename = '13_S1beta_N_sobol_indices.pkl'
     with open(pickle_filename, 'wb') as f:
         pickle.dump((plt.gcf(), plot_data), f)
 
@@ -483,7 +483,7 @@ def anova_plot(x_vec0, total_S):
     plt.grid(True)
     plt.tight_layout()
 
-    plot_filename = '14_O_sobol_indices'
+    plot_filename = '14_S1beta_O_sobol_indices'
     plt.savefig(plot_filename, format='svg')
 
     plot_data = {
@@ -491,7 +491,7 @@ def anova_plot(x_vec0, total_S):
         'total_S1beta_O': total_S1beta_O_filtered,
     }
 
-    pickle_filename = '14_O_sobol_indices.pkl'
+    pickle_filename = '14_S1beta_O_sobol_indices.pkl'
     with open(pickle_filename, 'wb') as f:
         pickle.dump((plt.gcf(), plot_data), f)
 
@@ -516,7 +516,7 @@ def anova_plot(x_vec0, total_S):
     plt.grid(True)
     plt.tight_layout()
 
-    plot_filename = '15_NO_sobol_indices'
+    plot_filename = '15_S1beta_NO_sobol_indices'
     plt.savefig(plot_filename, format='svg')
 
     plot_data = {
@@ -524,7 +524,7 @@ def anova_plot(x_vec0, total_S):
         'total_S1beta_NO': total_S1beta_NO_filtered,
     }
 
-    pickle_filename = '15_NO_sobol_indices.pkl'
+    pickle_filename = '15_S1beta_NO_sobol_indices.pkl'
     with open(pickle_filename, 'wb') as f:
         pickle.dump((plt.gcf(), plot_data), f)
 
@@ -547,7 +547,7 @@ def anova_plot(x_vec0, total_S):
     plt.grid(True)
     plt.tight_layout()
 
-    plot_filename = '16_N2_sobol_indices'
+    plot_filename = '16_S1beta_N2_sobol_indices'
     plt.savefig(plot_filename, format='svg')
 
     plot_data = {
@@ -555,7 +555,7 @@ def anova_plot(x_vec0, total_S):
         'total_S1n2_M': total_S1beta_N2,
     }
 
-    pickle_filename = '16_N2_sobol_indices.pkl'
+    pickle_filename = '16_S1beta_N2_sobol_indices.pkl'
     with open(pickle_filename, 'wb') as f:
         pickle.dump((plt.gcf(), plot_data), f)
 
@@ -578,7 +578,7 @@ def anova_plot(x_vec0, total_S):
     plt.grid(True)
     plt.tight_layout()
 
-    plot_filename = '17_O2_sobol_indices'
+    plot_filename = '17_S1beta_O2_sobol_indices'
     plt.savefig(plot_filename, format='svg')
 
     plot_data = {
@@ -586,7 +586,7 @@ def anova_plot(x_vec0, total_S):
         'total_S1beta_O2': total_S1beta_O2,
     }
 
-    pickle_filename = '17_O2_sobol_indices.pkl'
+    pickle_filename = '17_S1beta_O2_sobol_indices.pkl'
     with open(pickle_filename, 'wb') as f:
         pickle.dump((plt.gcf(), plot_data), f)
 
@@ -609,7 +609,7 @@ def anova_plot(x_vec0, total_S):
     plt.grid(True)
     plt.tight_layout()
 
-    plot_filename = '18_P_sobol_indices'
+    plot_filename = '18_S1beta_P_sobol_indices'
     plt.savefig(plot_filename, format='svg')
 
     plot_data = {
@@ -617,7 +617,7 @@ def anova_plot(x_vec0, total_S):
         'total_S1P': total_S1P,
     }
 
-    pickle_filename = '18_P_sobol_indices.pkl'
+    pickle_filename = '18_S1beta_P_sobol_indices.pkl'
     with open(pickle_filename, 'wb') as f:
         pickle.dump((plt.gcf(), plot_data), f)
 
@@ -640,7 +640,7 @@ def anova_plot(x_vec0, total_S):
     plt.grid(True)
     plt.tight_layout()
 
-    plot_filename = '19_Ttr_sobol_indices'
+    plot_filename = '19_S1Ttr_sobol_indices'
     plt.savefig(plot_filename, format='svg')
 
     plot_data = {
@@ -648,7 +648,7 @@ def anova_plot(x_vec0, total_S):
         'total_S1Ttr': total_S1Ttr,
     }
 
-    pickle_filename = '19_Ttr_sobol_indices.pkl'
+    pickle_filename = '19_S1Ttr_sobol_indices.pkl'
     with open(pickle_filename, 'wb') as f:
         pickle.dump((plt.gcf(), plot_data), f)
 
@@ -671,7 +671,7 @@ def anova_plot(x_vec0, total_S):
     plt.grid(True)
     plt.tight_layout()
 
-    plot_filename = '20_Tve_sobol_indices'
+    plot_filename = '20_S1Tve_sobol_indices'
     plt.savefig(plot_filename, format='svg')
 
     plot_data = {
@@ -679,7 +679,7 @@ def anova_plot(x_vec0, total_S):
         'total_S1Tve': total_S1Tve,
     }
 
-    pickle_filename = '20_Tve_sobol_indices.pkl'
+    pickle_filename = '20_S1Tve_sobol_indices.pkl'
     with open(pickle_filename, 'wb') as f:
         pickle.dump((plt.gcf(), plot_data), f)
 
@@ -702,7 +702,7 @@ def anova_plot(x_vec0, total_S):
     plt.grid(True)
     plt.tight_layout()
 
-    plot_filename = '21_Mf_sobol_indices'
+    plot_filename = '21_S1M_sobol_indices'
     plt.savefig(plot_filename, format='svg')
 
     plot_data = {
@@ -710,7 +710,7 @@ def anova_plot(x_vec0, total_S):
         'total_S1M': total_S1M,
     }
 
-    pickle_filename = '21_M_sobol_indices.pkl'
+    pickle_filename = '21_S1M_sobol_indices.pkl'
     with open(pickle_filename, 'wb') as f:
         pickle.dump((plt.gcf(), plot_data), f)
 
