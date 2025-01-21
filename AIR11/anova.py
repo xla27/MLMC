@@ -3,7 +3,7 @@ import numpy as np
 from scipy.interpolate import interp1d
 from SALib.sample import saltelli
 
-from AIR5.sobol import compute_sobol_indices
+from AIR11.sobol import compute_sobol_indices
 
 def anova(problem, lev, sample_sizes, *varargin):
 
