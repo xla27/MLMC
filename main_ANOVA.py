@@ -11,6 +11,12 @@ def main(nproc, workingFolder):
 
         from AIR5 import anova, anova_plot
 
+    if testcase == 'AIR11':
+
+        basefolder = basefolder + '/AIR11'
+
+        from AIR11 import anova, anova_plot
+
     varargin = (nproc, baseFolder, workingFolder) 
 
     # Set up the problem for SALib

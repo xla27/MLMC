@@ -17,13 +17,19 @@ def main(nproc, workingFolder):
     """
 
     # folder for with MLMC code
-    baseFolder = '/home/xla27/FAR-ESA/MLMC'
+    baseFolder = '/home/xla27/Softwares/MLMC'
 
     if testcase == 'AIR5':
 
         baseFolder = baseFolder + '/AIR5'
 
         from AIR5 import mlmc, screening, mlmc_plot, dw_l
+
+    if testcase == 'AIR11':
+
+        basefolder = basefolder + '/AIR11'
+
+        from AIR11 import mlmc, screening, mlmc_plot, dw_l
 
 
     varargin = (nproc, baseFolder, workingFolder) 
