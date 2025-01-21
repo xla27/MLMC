@@ -25,6 +25,12 @@ def main(nproc, workingFolder):
 
         from AIR5 import mlmc, screening, mlmc_plot, dw_l
 
+    if testcase == 'AIR5_AMG':
+
+        basefolder = basefolder + '/AIR5_AMG'
+
+        from AIR5_AMG import mlmc, screening, mlmc_plot, dw_l
+
     if testcase == 'AIR11':
 
         basefolder = basefolder + '/AIR11'
