@@ -2,7 +2,8 @@ import os, sys
 import numpy as np
 from SALib.analyze import sobol
 
-from cfd_call import cfd_call
+from AIR5_AMG import cfd_call_amg
+from AIR5     import cfd_call
 
 
 # Function to perform Sobol analysis on a given level (fine or coarse)
@@ -37,6 +38,12 @@ def compute_sobol_indices(type, param_values, l, problem, *args):
     xnode_vec = None
     i = 0
 
+    # if l = 0 cfd_call does not need to be called as mesh adaptation
+    if l == 0:
+        cfd = cfd_call
+    else:
+        cfd = cfd_call_amg
+
     # cycling on UQ variables samples
     for X in param_values:
         
@@ -54,7 +61,7 @@ def compute_sobol_indices(type, param_values, l, problem, *args):
 
         [xnodes, nd_elecMinus, nd_NPlus, nd_OPlus, nd_NOPlus, nd_N2Plus, nd_O2Plus, beta_elecMinus,
          beta_NPlus, beta_OPlus, beta_NOPlus, beta_N2Plus, beta_O2Plus, beta_N, beta_O, beta_NO, 
-         beta_N2, beta_O2, P_i, Ttr_i, Tve_i, M_i] = cfd_call(type, valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, l, i, *args)
+         beta_N2, beta_O2, P_i, Ttr_i, Tve_i, M_i] = cfd(type, valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, l, i, *args)
         
         i = i + 1
         if xnode_vec is None:
