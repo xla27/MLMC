@@ -2,7 +2,7 @@ import os, sys
 import numpy as np
 from SALib.analyze import sobol
 
-from cfd_call import cfd_call
+from AIR11 import cfd_call
 
 
 # Function to perform Sobol analysis on a given level (fine or coarse)
