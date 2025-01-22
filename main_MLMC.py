@@ -27,19 +27,20 @@ def main(nproc, testcase, workingFolder):
 
     if testcase == 'AIR5_AMG':
 
-        basefolder = basefolder + '/AIR5_AMG'
+        baseFolder = baseFolder + '/AIR5_AMG'
 
-        from AIR5_AMG import mlmc, screening, mlmc_plot, dw_l
+        from AIR5     import mlmc, screening, mlmc_plot
+        from AIR5_AMG import dw_l
 
     if testcase == 'AIR11':
 
-        basefolder = basefolder + '/AIR11'
+        baseFolder = baseFolder + '/AIR11'
 
         from AIR11 import mlmc, screening, mlmc_plot, dw_l
 
     if testcase == 'AIR11_AMG':
 
-        basefolder = basefolder + '/AIR11_AMG'
+        baseFolder = baseFolder + '/AIR11_AMG'
 
         from AIR11_AMG import mlmc, screening, mlmc_plot, dw_l
 
@@ -78,7 +79,7 @@ def main(nproc, testcase, workingFolder):
     write(logfile, "  cost\n-------------------------")
     write(logfile, "------------------------------------------------------\n")
 
-    del1, del2, var1, var2, cost, alpha, beta, gamma = screening(dw_l, L, N, logfile)
+    del1, del2, var1, var2, cost, alpha, beta, gamma = screening(dw_l, L, N, logfile, *varargin)
 
     write(logfile, "\n******************************************************\n")
     write(logfile, "*** Linear regression estimates of MLMC parameters ***\n")
