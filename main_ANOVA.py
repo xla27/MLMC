@@ -7,7 +7,7 @@ os.environ['OPENBLAS_NUM_THREADS'] = "1"
 def main(nproc, testcase, workingFolder):
 
     # folder for with MLMC code
-    baseFolder = '/home/xla27/FAR-ESA/MLMC'
+    baseFolder = '/home/xla27/Softwares/MLMC'
 
     if testcase == 'AIR5':
 
@@ -17,19 +17,20 @@ def main(nproc, testcase, workingFolder):
 
     if testcase == 'AIR5_AMG':
 
-        basefolder = basefolder + '/AIR5_AMG'
+        baseFolder = baseFolder + '/AIR5_AMG'
 
-        from AIR5_AMG import anova, anova_plot
+        from AIR5     import anova_plot
+        from AIR5_AMG import anova
 
     if testcase == 'AIR11':
 
-        basefolder = basefolder + '/AIR11'
+        baseFolder = baseFolder + '/AIR11'
 
         from AIR11 import anova, anova_plot
 
     if testcase == 'AIR11_AMG':
 
-        basefolder = basefolder + '/AIR11_AMG'
+        baseFolder = baseFolder + '/AIR11_AMG'
 
         from AIR11_AMG import anova, anova_plot
 
