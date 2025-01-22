@@ -1,7 +1,9 @@
 import numpy as np
 from scipy.interpolate import interp1d
 import time
-from cfd_call import cfd_call
+
+from AIR5_AMG import cfd_call_amg
+from AIR5     import cfd_call
 
 def dw_l(l, N_samples, *args):
     """
@@ -97,8 +99,12 @@ def dw_l(l, N_samples, *args):
             Tve_ic   = 0
             M_ic     = 0
 
-            # Call to CFD with fine mesh
-            beta_Nf, beta_Of, beta_NOf, beta_N2f, beta_O2f, P_if, Ttr_if, Tve_if, M_if, xnodesf = cfd_call('FINE', valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, l, i, *args)
+            # Call to CFD with fine mesh (no adaptation)
+            (_, baseFolder, workingFolder) = args
+            baseFolder2 = baseFolder.replace('AIR5_AMG','AIR5')
+            args2 = (nproc, baseFolder2, workingFolder)
+            beta_Nf, beta_Of, beta_NOf, beta_N2f, beta_O2f, P_if, Ttr_if, Tve_if, M_if, xnodesf = cfd_call('FINE', valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, l, i, *args2)
+
             
             xnodesc = xnodesf    # No need for interpolation on coarse, xnodes put equal
 
@@ -117,28 +123,16 @@ def dw_l(l, N_samples, *args):
             M_if     = moving_average(M_if,     ws)   
 
         else:
+            # Call to CFD with fine mesh
+            beta_Nf, beta_Of, beta_NOf, beta_N2f, beta_O2f, P_if, Ttr_if, Tve_if, M_if, xnodesf = cfd_call_amg('FINE',valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, l, i, *args)
+
+            Pf = P_if
+
             # Call to CFD with coarse mesh
-            beta_Nc, beta_Oc, beta_NOc, beta_N2c, beta_O2c, p_ic, Ttr_ic, Tve_ic, M_ic, xnodesc = cfd_call('COARSE', valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, l, i, *args)
+            beta_Nc, beta_Oc, beta_NOc, beta_N2c, beta_O2c, p_ic, Ttr_ic, Tve_ic, M_ic, xnodesc = cfd_call_amg('COARSE', valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, l, i, *args)
 
             Pc = p_ic
             ws = max(int(len(Pc) * SF), 1) 
-
-            # Moving average on wall quantities
-            Pc       = moving_average(Pc,       ws)
-            beta_Nc  = moving_average(beta_Nc,  ws)
-            beta_Oc  = moving_average(beta_Oc,  ws)
-            beta_NOc = moving_average(beta_NOc, ws)
-            beta_N2c = moving_average(beta_N2c, ws)
-            beta_O2c = moving_average(beta_O2c, ws)
-            Ttr_ic   = moving_average(Ttr_ic,   ws)
-            Tve_ic   = moving_average(Tve_ic,   ws)
-            M_ic     = moving_average(M_ic,     ws)
-    
-
-            # Call to CFD with fine mesh
-            beta_Nf, beta_Of, beta_NOf, beta_N2f, beta_O2f, P_if, Ttr_if, Tve_if, M_if, xnodesf = cfd_call('FINE',valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, l, i, *args)
-
-            Pf = P_if
 
             # Results interpolation on the coarser grid            
             Pf       = interp1d(xnodesf, Pf,       kind='linear', fill_value='extrapolate')(xnodesc) 
@@ -151,7 +145,7 @@ def dw_l(l, N_samples, *args):
             Tve_if   = interp1d(xnodesf, Tve_if,   kind='linear', fill_value='extrapolate')(xnodesc) 
             M_if     = interp1d(xnodesf, M_if,     kind='linear', fill_value='extrapolate')(xnodesc) 
 
-            # Moving average on wall quantities
+            # Moving average on fine wall quantities
             Pf       = moving_average(Pf,       ws)
             beta_Nf  = moving_average(beta_Nf,  ws)
             beta_Of  = moving_average(beta_Of,  ws)
@@ -162,6 +156,16 @@ def dw_l(l, N_samples, *args):
             Tve_if   = moving_average(Tve_if,   ws)
             M_if     = moving_average(M_if,     ws) 
 
+            # Moving average on coearse wall quantities
+            Pc       = moving_average(Pc,       ws)
+            beta_Nc  = moving_average(beta_Nc,  ws)
+            beta_Oc  = moving_average(beta_Oc,  ws)
+            beta_NOc = moving_average(beta_NOc, ws)
+            beta_N2c = moving_average(beta_N2c, ws)
+            beta_O2c = moving_average(beta_O2c, ws)
+            Ttr_ic   = moving_average(Ttr_ic,   ws)
+            Tve_ic   = moving_average(Tve_ic,   ws)
+            M_ic     = moving_average(M_ic,     ws)
         
         # RESULTS UPDATE
 

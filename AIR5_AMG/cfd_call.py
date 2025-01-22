@@ -35,6 +35,7 @@ def cfd_call(type, valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, l, i, *
         shutil.rmtree(destinationSubfolder) # Remove existing folder
     os.mkdir(destinationSubfolder)
     shutil.copy(f'{baseFolder}/config.cfg', destinationSubfolder)
+    shutil.copy(f'{baseFolder}/mesh.su2',   destinationSubfolder)
     filePath = os.path.join(destinationFolder, stringIter, 'config.cfg') # percorso del file .cfg da modificare
 
     if os.path.isfile(filePath): # controlla se il file esiste
@@ -52,9 +53,7 @@ def cfd_call(type, valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, l, i, *
             fileContents = re.sub(r'FREESTREAM_PRESSURE= 390.0', f'FREESTREAM_PRESSURE= {valIns_P}', fileContents)
             fileContents = re.sub(r'GAS_COMPOSITION= \(\d+\.\d+, \d+\.\d+, \d+\.\d+, \d+\.\d+, \d+\.\d+\)', 
                             f'GAS_COMPOSITION= (0.0, 0.0, 0.0, {valIns_Bn2}, {valIns_Bo2})', fileContents)
-            fileContents = re.sub(r'ADAP_SUBITER= (0)', f'ADAP_SUBITER= ({l})', fileContents)
-            
-            fileContents = re.sub(r'MESH_FILENAME= ', f'MESH_FILENAME= {meshFolder}/mesh.su2', fileContents)
+            fileContents = re.sub(r'ADAP_SUBITER= \(0\)', f'ADAP_SUBITER= ({l})', fileContents)
 
             with open(filePath, 'w') as file:
                 file.write(fileContents)
@@ -65,15 +64,16 @@ def cfd_call(type, valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, l, i, *
             result = subprocess.run(su2Command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
             output = result.stdout
             error = result.stderr
+            print(error)
 
         # Read file to get qois
         if type == 'FINE':
 
-            csv_path_surf = os.path.join(destinationFolder, stringIter, 'adap', f'ite{i}', 'surface_flow.csv')
+            csv_path_surf = os.path.join(destinationFolder, stringIter, 'adap', f'ite{l}', 'surface_flow.csv')
 
         elif type == 'COARSE':
 
-            csv_path_surf = os.path.join(destinationFolder, stringIter, 'adap', f'ite{i-1}', 'surface_flow.csv')
+            csv_path_surf = os.path.join(destinationFolder, stringIter, 'adap', f'ite{l-1}', 'surface_flow.csv')
 
         if os.path.isfile(csv_path_surf):
 
