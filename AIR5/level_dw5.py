@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.interpolate import interp1d
 import time
-from cfd_call import cfd_call
+from AIR5 import cfd_call
 
 def dw_l(l, N_samples, *args):
     """

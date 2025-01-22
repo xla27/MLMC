@@ -486,7 +486,7 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
     return P, Nl, Cl
 
 
-def screening(mlmc_l, L, N, logfile):
+def screening(mlmc_l, L, N, logfile, *args):
     '''
     Function to perform the MLMC screening to estimate alpha, beta, gamma (weak convergence rates)
 
@@ -512,7 +512,7 @@ def screening(mlmc_l, L, N, logfile):
         sums1 = 0; sums2 = 0; sums5 = 0; sums6 = 0
         cst = 0
         
-        _, sums1_j, sums2_j, sums5_j, sums6_j, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, cst_j = mlmc_l(l, int(N / 1))
+        _, sums1_j, sums2_j, sums5_j, sums6_j, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, cst_j = mlmc_l(l, int(N / 1), *args)
 
         sums1 += sums1_j / N
         sums2 += sums2_j / N
