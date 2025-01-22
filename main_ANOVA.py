@@ -32,7 +32,8 @@ def main(nproc, testcase, workingFolder):
 
         baseFolder = baseFolder + '/AIR11_AMG'
 
-        from AIR11_AMG import anova, anova_plot
+        from AIR11     import anova_plot
+        from AIR11_AMG import anova
 
     varargin = (nproc, baseFolder, workingFolder) 
 

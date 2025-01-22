@@ -42,7 +42,8 @@ def main(nproc, testcase, workingFolder):
 
         baseFolder = baseFolder + '/AIR11_AMG'
 
-        from AIR11_AMG import mlmc, screening, mlmc_plot, dw_l
+        from AIR11     import mlmc, screening, mlmc_plot
+        from AIR11_AMG import dw_l
 
 
     varargin = (nproc, baseFolder, workingFolder) 
