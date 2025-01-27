@@ -8,7 +8,7 @@ import numpy as np
 fieldnames = ["PointID","x","y","Density_0","Density_1","Density_2","Density_3","Density_4",
               "Momentum_x","Momentum_y","Energy","Energy_ve","MassFrac_0","MassFrac_1","MassFrac_2",
               "MassFrac_3","MassFrac_4","Pressure","Temperature_tr","Temperature_ve","Velocity_x",
-              "Velocity_y","Mach","Pressure_Coefficient"]
+              "Velocity_y","Mach","Pressure_Coefficient","Metric_xx","Metric_xy","Metric_yy"]
 
 
 def cfd_call(type, valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, l, i, *args):
