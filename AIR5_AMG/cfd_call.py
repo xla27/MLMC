@@ -30,7 +30,7 @@ def cfd_call(type, valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, l, i, *
 
     # Creating the Destination subfolder (or removing if already existent)
     destinationSubfolder = os.path.join(destinationFolder, stringIter) # nome cartella + iterazione i-esima
-    if os.path.exists(destinationSubfolder):
+    if os.path.exists(destinationSubfolder) and type == 'FINE':
         #print(os.path.exists(destinationSubfolder))
         shutil.rmtree(destinationSubfolder) # Remove existing folder
     os.mkdir(destinationSubfolder)
