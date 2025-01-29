@@ -95,8 +95,6 @@ def cfd_call(type, valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, l, i, *
             # Save grid
             xnodesf = data_surf['x'].tolist()
 
-            os.remove('history.csv')
-
             os.chdir(workingFolder)  # Return to the starting directory
             return beta_n, beta_o, beta_no, beta_n2, beta_o2, p_i, Ttr_i, Tve_i, M_i, xnodesf
 
