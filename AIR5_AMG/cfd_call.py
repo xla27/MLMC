@@ -33,7 +33,12 @@ def cfd_call(type, valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, l, i, *
     if os.path.exists(destinationSubfolder) and type == 'FINE':
         #print(os.path.exists(destinationSubfolder))
         shutil.rmtree(destinationSubfolder) # Remove existing folder
-    os.mkdir(destinationSubfolder)
+
+    if not os.path.exists(destinationSubfolder) and type == 'FINE':
+        os.mkdir(destinationSubfolder)
+    elif os.path.exists(destinationSubfolder) and type == 'COARSE':
+        pass
+    
     shutil.copy(f'{baseFolder}/config.cfg', destinationSubfolder)
     shutil.copy(f'{baseFolder}/mesh.su2',   destinationSubfolder)
     filePath = os.path.join(destinationFolder, stringIter, 'config.cfg') # percorso del file .cfg da modificare
