@@ -82,7 +82,7 @@ def anova_plot(x_vec0, total_S):
     plt.grid(True)
     plt.tight_layout()
 
-    plot_filename = '1_Nfirst_order_sobol_indices'
+    plot_filename = '1_Nfirst_order_sobol_indices.svg'
     plt.savefig(plot_filename, format='svg')
 
     plot_data = {
@@ -126,7 +126,7 @@ def anova_plot(x_vec0, total_S):
     plt.grid(True)
     plt.tight_layout()
 
-    plot_filename = '2_Ofirst_order_sobol_indices'
+    plot_filename = '2_Ofirst_order_sobol_indices.svg'
     plt.savefig(plot_filename, format='svg')
 
     plot_data = {
@@ -170,7 +170,7 @@ def anova_plot(x_vec0, total_S):
     plt.grid(True)
     plt.tight_layout()
 
-    plot_filename = '3_NOfirst_order_sobol_indices'
+    plot_filename = '3_NOfirst_order_sobol_indices.svg'
     plt.savefig(plot_filename, format='svg')
 
     plot_data = {
@@ -204,7 +204,7 @@ def anova_plot(x_vec0, total_S):
     plt.grid(True)
     plt.tight_layout()
 
-    plot_filename = '4_N2first_order_sobol_indices'
+    plot_filename = '4_N2first_order_sobol_indices.svg'
     plt.savefig(plot_filename, format='svg')
 
     plot_data = {
@@ -238,7 +238,7 @@ def anova_plot(x_vec0, total_S):
     plt.grid(True)
     plt.tight_layout()
 
-    plot_filename = '5_O2first_order_sobol_indices'
+    plot_filename = '5_O2first_order_sobol_indices.svg'
     plt.savefig(plot_filename, format='svg')
 
     plot_data = {
@@ -272,7 +272,7 @@ def anova_plot(x_vec0, total_S):
     plt.grid(True)
     plt.tight_layout()
 
-    plot_filename = '6_Pfirst_order_sobol_indices'
+    plot_filename = '6_Pfirst_order_sobol_indices.svg'
     plt.savefig(plot_filename, format='svg')
 
     plot_data = {
@@ -306,7 +306,7 @@ def anova_plot(x_vec0, total_S):
     plt.grid(True)
     plt.tight_layout()
 
-    plot_filename = '7_Ttrfirst_order_sobol_indices'
+    plot_filename = '7_Ttrfirst_order_sobol_indices.svg'
     plt.savefig(plot_filename, format='svg')
 
     plot_data = {
@@ -340,7 +340,7 @@ def anova_plot(x_vec0, total_S):
     plt.grid(True)
     plt.tight_layout()
 
-    plot_filename = '8_Tvefirst_order_sobol_indices'
+    plot_filename = '8_Tvefirst_order_sobol_indices.svg'
     plt.savefig(plot_filename, format='svg')
 
     plot_data = {
@@ -374,7 +374,7 @@ def anova_plot(x_vec0, total_S):
     plt.grid(True)
     plt.tight_layout()
 
-    plot_filename = '9_Mfirst_order_sobol_indices'
+    plot_filename = '9_Mfirst_order_sobol_indices.svg'
     plt.savefig(plot_filename, format='svg')
 
     plot_data = {
