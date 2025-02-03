@@ -29,8 +29,8 @@ def main(nproc, testcase, workingFolder):
 
         baseFolder = baseFolder + '/AIR5_AMG'
 
-        from AIR5     import mlmc, screening, mlmc_plot
-        from AIR5_AMG import dw_l
+        from AIR5     import mlmc_plot
+        from AIR5_AMG import dw_l, mlmc, screening
 
     if testcase == 'AIR11':
 
