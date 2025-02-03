@@ -153,40 +153,40 @@ def dw_l(level, N_samples, *args):
     # [beta_n, beta_o, beta_no, beta_n2, beta_o2, P, Ttr, Tve, M, xnodes]
 
     # P
-    sums1 = np.sum(QoI_fine_interp[:,5,:]    - QoI_coarse_interp[:,5,:], axis=0)
-    sums2 = np.sum(QoI_fine_interp[:,5,:]**2 - QoI_coarse_interp[:,5,:]**2, axis=0)
-    sums5 = np.sum(QoI_fine_interp[:,5,:], axis=0)
+    sums1 = np.sum( QoI_fine_interp[:,5,:] - QoI_coarse_interp[:,5,:], axis=0)
+    sums2 = np.sum((QoI_fine_interp[:,5,:] - QoI_coarse_interp[:,5,:])**2, axis=0)
+    sums5 = np.sum( QoI_fine_interp[:,5,:], axis=0)
     sums6 = np.sum(QoI_fine_interp[:,5,:]**2, axis=0)
 
     # N
-    sums1N = np.sum(QoI_fine_interp[:,0,:]    - QoI_coarse_interp[:,0,:], axis=0)
-    sums2N = np.sum(QoI_fine_interp[:,0,:]**2 - QoI_coarse_interp[:,0,:]**2, axis=0)
+    sums1N = np.sum( QoI_fine_interp[:,0,:] - QoI_coarse_interp[:,0,:], axis=0)
+    sums2N = np.sum((QoI_fine_interp[:,0,:] - QoI_coarse_interp[:,0,:])**2, axis=0)
 
     # O
-    sums1O = np.sum(QoI_fine_interp[:,1,:]    - QoI_coarse_interp[:,1,:], axis=0)
-    sums2O = np.sum(QoI_fine_interp[:,1,:]**2 - QoI_coarse_interp[:,1,:]**2, axis=0)
+    sums1O = np.sum( QoI_fine_interp[:,1,:] - QoI_coarse_interp[:,1,:], axis=0)
+    sums2O = np.sum((QoI_fine_interp[:,1,:] - QoI_coarse_interp[:,1,:])**2, axis=0)
 
     # NO
-    sums1NO = np.sum(QoI_fine_interp[:,2,:]    - QoI_coarse_interp[:,2,:], axis=0)
-    sums2NO = np.sum(QoI_fine_interp[:,2,:]**2 - QoI_coarse_interp[:,2,:]**2, axis=0)
+    sums1NO = np.sum( QoI_fine_interp[:,2,:] - QoI_coarse_interp[:,2,:], axis=0)
+    sums2NO = np.sum((QoI_fine_interp[:,2,:] - QoI_coarse_interp[:,2,:])**2, axis=0)
 
     # N2
-    sums1N2 = np.sum(QoI_fine_interp[:,3,:]    - QoI_coarse_interp[:,3,:], axis=0)
-    sums2N2 = np.sum(QoI_fine_interp[:,3,:]**2 - QoI_coarse_interp[:,3,:]**2, axis=0)
+    sums1N2 = np.sum( QoI_fine_interp[:,3,:] - QoI_coarse_interp[:,3,:], axis=0)
+    sums2N2 = np.sum((QoI_fine_interp[:,3,:] - QoI_coarse_interp[:,3,:])**2, axis=0)
 
     # O2
-    sums1O2 = np.sum(QoI_fine_interp[:,4,:]    - QoI_coarse_interp[:,4,:], axis=0)
-    sums2O2 = np.sum(QoI_fine_interp[:,4,:]**2 - QoI_coarse_interp[:,4,:]**2, axis=0)
+    sums1O2 = np.sum( QoI_fine_interp[:,4,:] - QoI_coarse_interp[:,4,:], axis=0)
+    sums2O2 = np.sum((QoI_fine_interp[:,4,:] - QoI_coarse_interp[:,4,:])**2, axis=0)
     
     # Temperatures
-    sums1Ttr = np.sum(QoI_fine_interp[:,6,:]    - QoI_coarse_interp[:,6,:], axis=0)
-    sums2Ttr = np.sum(QoI_fine_interp[:,6,:]**2 - QoI_coarse_interp[:,6,:]**2, axis=0)
-    sums1Tve = np.sum(QoI_fine_interp[:,7,:]    - QoI_coarse_interp[:,7,:], axis=0)
-    sums2Tve = np.sum(QoI_fine_interp[:,7,:]**2 - QoI_coarse_interp[:,7,:]**2, axis=0)
+    sums1Ttr = np.sum( QoI_fine_interp[:,6,:] - QoI_coarse_interp[:,6,:], axis=0)
+    sums2Ttr = np.sum((QoI_fine_interp[:,6,:] - QoI_coarse_interp[:,6,:])**2, axis=0)
+    sums1Tve = np.sum( QoI_fine_interp[:,7,:] - QoI_coarse_interp[:,7,:], axis=0)
+    sums2Tve = np.sum((QoI_fine_interp[:,7,:] - QoI_coarse_interp[:,7,:])**2, axis=0)
 
     # M
-    sums1M = np.sum(QoI_fine_interp[:,8,:]    - QoI_coarse_interp[:,8,:], axis=0)
-    sums2M = np.sum(QoI_fine_interp[:,8,:]**2 - QoI_coarse_interp[:,8,:]**2, axis=0)
+    sums1M = np.sum( QoI_fine_interp[:,8,:] - QoI_coarse_interp[:,8,:], axis=0)
+    sums2M = np.sum((QoI_fine_interp[:,8,:] - QoI_coarse_interp[:,8,:])**2, axis=0)
     
     # End of recording time
     end   = time.time() 
