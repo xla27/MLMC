@@ -9,222 +9,144 @@ def anova(problem, lev, sample_sizes, *varargin):
 
     # First level computations (l = 0)
     param_values0 = saltelli.sample(problem, sample_sizes[0], calc_second_order=False)
-    x_vec0, S1n_M0, S1n_T0, S1n_P0, S1n_beta0, S1o_M0, S1o_T0, S1o_P0, S1o_beta0, S1no_M0, S1no_T0, S1no_P0, S1no_beta0, S1n2_M0, S1n2_T0, S1n2_P0, S1n2_beta0, S1o2_M0, S1o2_T0, S1o2_P0, S1o2_beta0, S1p_M0, S1p_T0, S1p_P0, S1p_beta0, S1ttr_M0, S1ttr_T0, S1ttr_P0, S1ttr_beta0, S1tve_M0, S1tve_T0, S1tve_P0, S1tve_beta0, S1m_M0, S1m_T0, S1m_P0, S1m_beta0 = compute_sobol_indices('FINE', param_values0, lev[0], problem, *varargin)
+    x_vec0, total_S1N, total_S1O, total_S1NO, total_S1N2, total_S1O2, total_S1P, total_S1Ttr, total_S1Tve, total_S1M = compute_sobol_indices('FINE', param_values0, 0, problem, *varargin)
 
     # Finer grids corrections (l>0)
     Lmax = len(sample_sizes) - 1
-    total_S1n_M   = np.array(S1n_M0);   total_S1n_T   = np.array(S1n_T0);   total_S1n_P   = np.array(S1n_P0);   total_S1n_beta   = np.array(S1n_beta0);   # level 0 indices for N
-    total_S1o_M   = np.array(S1o_M0);   total_S1o_T   = np.array(S1o_T0);   total_S1o_P   = np.array(S1o_P0);   total_S1o_beta   = np.array(S1o_beta0);   # level 0 indices for O
-    total_S1no_M  = np.array(S1no_M0);  total_S1no_T  = np.array(S1no_T0);  total_S1no_P  = np.array(S1no_P0);  total_S1no_beta  = np.array(S1no_beta0);  # level 0 indices for NO
-    total_S1n2_M  = np.array(S1n2_M0);  total_S1n2_T  = np.array(S1n2_T0);  total_S1n2_P  = np.array(S1n2_P0);  total_S1n2_beta  = np.array(S1n2_beta0);  # level 0 indices for N2
-    total_S1o2_M  = np.array(S1o2_M0);  total_S1o2_T  = np.array(S1o2_T0);  total_S1o2_P  = np.array(S1o2_P0);  total_S1o2_beta  = np.array(S1o2_beta0);  # level 0 indices for O2
-    total_S1p_M   = np.array(S1p_M0);   total_S1p_T   = np.array(S1p_T0);   total_S1p_P   = np.array(S1p_P0);   total_S1p_beta   = np.array(S1p_beta0);   # level 0 indices for P
-    total_S1ttr_M = np.array(S1ttr_M0); total_S1ttr_T = np.array(S1ttr_T0); total_S1ttr_P = np.array(S1ttr_P0); total_S1ttr_beta = np.array(S1ttr_beta0); # level 0 indices for Ttr
-    total_S1tve_M = np.array(S1tve_M0); total_S1tve_T = np.array(S1tve_T0); total_S1tve_P = np.array(S1tve_P0); total_S1tve_beta = np.array(S1tve_beta0); # level 0 indices for Tve
-    total_S1m_M   = np.array(S1m_M0);   total_S1m_T   = np.array(S1m_T0);   total_S1m_P   = np.array(S1m_P0);   total_S1m_beta   = np.array(S1m_beta0);   # level 0 indices for M
 
-    for l in range(1, Lmax + 1):
+    for level in range(1, Lmax + 1):
         
         # Finer grid computations
-        param_valuesf = saltelli.sample(problem, sample_sizes[l], calc_second_order=False)
-        x_vecf, S1n_Mf, S1n_Tf, S1n_Pf, S1n_betaf, S1o_Mf, S1o_Tf, S1o_Pf, S1o_betaf, S1no_Mf, S1no_Tf, S1no_Pf, S1no_betaf, S1n2_Mf, S1n2_Tf, S1n2_Pf, S1n2_betaf, S1o2_Mf, S1o2_Tf, S1o2_Pf, S1o2_betaf, S1p_Mf, S1p_Tf, S1p_Pf, S1p_betaf, S1ttr_Mf, S1ttr_Tf, S1ttr_Pf, S1ttr_betaf, S1tve_Mf, S1tve_Tf, S1tve_Pf, S1tve_betaf, S1m_Mf, S1m_Tf, S1m_Pf, S1m_betaf = compute_sobol_indices('FINE', param_valuesf, lev[l], problem, *varargin)
+        param_valuesf = saltelli.sample(problem, sample_sizes[level], calc_second_order=False)
+        x_vecf, S1N_f, S1O_f, S1NO_f, S1N2_f, S1O2_f, S1P_f, S1Ttr_f, S1Tve_f, S1M_f = compute_sobol_indices('FINE', param_valuesf, level, problem, *varargin)
         
         
         # Coarser grid computations
-        param_valuesc = saltelli.sample(problem, sample_sizes[l], calc_second_order=False)
-        x_vecc, S1n_Mc, S1n_Tc, S1n_Pc, S1n_betac, S1o_Mc, S1o_Tc, S1o_Pc, S1o_betac, S1no_Mc, S1no_Tc, S1no_Pc, S1no_betac, S1n2_Mc, S1n2_Tc, S1n2_Pc, S1n2_betac, S1o2_Mc, S1o2_Tc, S1o2_Pc, S1o2_betac, S1p_Mc, S1p_Tc, S1p_Pc, S1p_betac, S1ttr_Mc, S1ttr_Tc, S1ttr_Pc, S1ttr_betac, S1tve_Mc, S1tve_Tc, S1tve_Pc, S1tve_betac, S1m_Mc, S1m_Tc, S1m_Pc, S1m_betac = compute_sobol_indices('COARSE', param_valuesc, lev[l], problem, *varargin)
+        param_valuesc = saltelli.sample(problem, sample_sizes[level], calc_second_order=False)
+        x_vecc, S1N_c, S1O_c, S1NO_c, S1N2_c, S1O2_c, S1P_c, S1Ttr_c, S1Tve_c, S1M_c = compute_sobol_indices('FINE', param_valuesc, level-1, problem, *varargin)
+        # Note that imposing 'FINE' with level-1 makes the cfd_call perform a new simulation from scratch instead of reading the results as if 'COARSE' with lev.
+        # This is due to the fact that the COARSE call happens with different parameters than the 'FINE' call, leading to different freestream conditions
         
         
-        # Interpolate Sobol indices of the coarser grid to the finer grid
-        S1n_Mc_interp    = interpolate_to_fine(x_vecf, x_vecc, S1n_Mc) 
-        S1n_Tc_interp    = interpolate_to_fine(x_vecf, x_vecc, S1n_Tc)
-        S1n_Pc_interp    = interpolate_to_fine(x_vecf, x_vecc, S1n_Pc)
-        S1n_betac_interp = interpolate_to_fine(x_vecf, x_vecc, S1n_betac)
-        
-        S1o_Mc_interp    = interpolate_to_fine(x_vecf, x_vecc, S1o_Mc)
-        S1o_Tc_interp    = interpolate_to_fine(x_vecf, x_vecc, S1o_Tc)
-        S1o_Pc_interp    = interpolate_to_fine(x_vecf, x_vecc, S1o_Pc)
-        S1o_betac_interp = interpolate_to_fine(x_vecf, x_vecc, S1o_betac)
-        
-        S1no_Mc_interp    = interpolate_to_fine(x_vecf, x_vecc, S1no_Mc)
-        S1no_Tc_interp    = interpolate_to_fine(x_vecf, x_vecc, S1no_Tc)
-        S1no_Pc_interp    = interpolate_to_fine(x_vecf, x_vecc, S1no_Pc)
-        S1no_betac_interp = interpolate_to_fine(x_vecf, x_vecc, S1no_betac)
-        
-        S1n2_Mc_interp    = interpolate_to_fine(x_vecf, x_vecc, S1n2_Mc)
-        S1n2_Tc_interp    = interpolate_to_fine(x_vecf, x_vecc, S1n2_Tc)
-        S1n2_Pc_interp    = interpolate_to_fine(x_vecf, x_vecc, S1n2_Pc)
-        S1n2_betac_interp = interpolate_to_fine(x_vecf, x_vecc, S1n2_betac)
+        S1N_c_interp   = np.zeros((4, len(x_vecf))); S1N_diff   = np.zeros((4, len(x_vecf)))
+        S1O_c_interp   = np.zeros((4, len(x_vecf))); S1O_diff   = np.zeros((4, len(x_vecf)))
+        S1NO_c_interp  = np.zeros((4, len(x_vecf))); S1NO_diff  = np.zeros((4, len(x_vecf)))
+        S1N2_c_interp  = np.zeros((4, len(x_vecf))); S1N2_diff  = np.zeros((4, len(x_vecf)))
+        S1O2_c_interp  = np.zeros((4, len(x_vecf))); S1O2_diff  = np.zeros((4, len(x_vecf)))
+        S1P_c_interp   = np.zeros((4, len(x_vecf))); S1P_diff   = np.zeros((4, len(x_vecf)))
+        S1Ttr_c_interp = np.zeros((4, len(x_vecf))); S1Ttr_diff = np.zeros((4, len(x_vecf)))
+        S1Tve_c_interp = np.zeros((4, len(x_vecf))); S1Tve_diff = np.zeros((4, len(x_vecf)))
+        S1M_c_interp   = np.zeros((4, len(x_vecf))); S1M_diff   = np.zeros((4, len(x_vecf)))
 
-        S1o2_Mc_interp    = interpolate_to_fine(x_vecf, x_vecc, S1o2_Mc)
-        S1o2_Tc_interp    = interpolate_to_fine(x_vecf, x_vecc, S1o2_Tc)
-        S1o2_Pc_interp    = interpolate_to_fine(x_vecf, x_vecc, S1o2_Pc)
-        S1o2_betac_interp = interpolate_to_fine(x_vecf, x_vecc, S1o2_betac)
-        
-        S1p_Mc_interp    = interpolate_to_fine(x_vecf, x_vecc, S1p_Mc)
-        S1p_Tc_interp    = interpolate_to_fine(x_vecf, x_vecc, S1p_Tc)
-        S1p_Pc_interp    = interpolate_to_fine(x_vecf, x_vecc, S1p_Pc)
-        S1p_betac_interp = interpolate_to_fine(x_vecf, x_vecc, S1p_betac)
-        
-        S1ttr_Mc_interp    = interpolate_to_fine(x_vecf, x_vecc, S1ttr_Mc)
-        S1ttr_Tc_interp    = interpolate_to_fine(x_vecf, x_vecc, S1ttr_Tc)
-        S1ttr_Pc_interp    = interpolate_to_fine(x_vecf, x_vecc, S1ttr_Pc)
-        S1ttr_betac_interp = interpolate_to_fine(x_vecf, x_vecc, S1ttr_betac)
-        
-        S1tve_Mc_interp    = interpolate_to_fine(x_vecf, x_vecc, S1tve_Mc)
-        S1tve_Tc_interp    = interpolate_to_fine(x_vecf, x_vecc, S1tve_Tc)
-        S1tve_Pc_interp    = interpolate_to_fine(x_vecf, x_vecc, S1tve_Pc)
-        S1tve_betac_interp = interpolate_to_fine(x_vecf, x_vecc, S1tve_betac)
-        
-        S1m_Mc_interp    = interpolate_to_fine(x_vecf, x_vecc, S1m_Mc)
-        S1m_Tc_interp    = interpolate_to_fine(x_vecf, x_vecc, S1m_Tc)
-        S1m_Pc_interp    = interpolate_to_fine(x_vecf, x_vecc, S1m_Pc)
-        S1m_betac_interp = interpolate_to_fine(x_vecf, x_vecc, S1m_betac)
+        for var in range(4):
 
-        # Compute the difference between finer and coarser grid
-        S1n_M_diff    = np.array(S1n_Mf) - np.array(S1n_Mc_interp)
-        S1n_T_diff    = np.array(S1n_Tf) - np.array(S1n_Tc_interp)
-        S1n_P_diff    = np.array(S1n_Pf) - np.array(S1n_Pc_interp)
-        S1n_beta_diff = np.array(S1n_betaf) - np.array(S1n_betac_interp)
-        
-        S1o_M_diff    = np.array(S1o_Mf) - np.array(S1o_Mc_interp)
-        S1o_T_diff    = np.array(S1o_Tf) - np.array(S1o_Tc_interp)
-        S1o_P_diff    = np.array(S1o_Pf) - np.array(S1o_Pc_interp)
-        S1o_beta_diff = np.array(S1o_betaf) - np.array(S1o_betac_interp)
-        
-        S1no_M_diff    = np.array(S1no_Mf) - np.array(S1no_Mc_interp)
-        S1no_T_diff    = np.array(S1no_Tf) - np.array(S1no_Tc_interp)
-        S1no_P_diff    = np.array(S1no_Pf) - np.array(S1no_Pc_interp)
-        S1no_beta_diff = np.array(S1no_betaf) - np.array(S1no_betac_interp)
-        
-        S1n2_M_diff    = np.array(S1n2_Mf) - np.array(S1n2_Mc_interp)
-        S1n2_T_diff    = np.array(S1n2_Tf) - np.array(S1n2_Tc_interp)
-        S1n2_P_diff    = np.array(S1n2_Pf) - np.array(S1n2_Pc_interp)
-        S1n2_beta_diff = np.array(S1n2_betaf) - np.array(S1n2_betac_interp)
-        
-        S1o2_M_diff    = np.array(S1o2_Mf) - np.array(S1o2_Mc_interp)
-        S1o2_T_diff    = np.array(S1o2_Tf) - np.array(S1o2_Tc_interp)
-        S1o2_P_diff    = np.array(S1o2_Pf) - np.array(S1o2_Pc_interp)
-        S1o2_beta_diff = np.array(S1o2_betaf) - np.array(S1o2_betac_interp)
-        
-        S1p_M_diff    = np.array(S1p_Mf) - np.array(S1p_Mc_interp)
-        S1p_T_diff    = np.array(S1p_Tf) - np.array(S1p_Tc_interp)
-        S1p_P_diff    = np.array(S1p_Pf) - np.array(S1p_Pc_interp)
-        S1p_beta_diff = np.array(S1p_betaf) - np.array(S1p_betac_interp)
-        
-        S1ttr_M_diff    = np.array(S1ttr_Mf) - np.array(S1ttr_Mc_interp)
-        S1ttr_T_diff    = np.array(S1ttr_Tf) - np.array(S1ttr_Tc_interp)
-        S1ttr_P_diff    = np.array(S1ttr_Pf) - np.array(S1ttr_Pc_interp)
-        S1ttr_beta_diff = np.array(S1ttr_betaf) - np.array(S1ttr_betac_interp)
-        
-        S1tve_M_diff    = np.array(S1tve_Mf) - np.array(S1tve_Mc_interp)
-        S1tve_T_diff    = np.array(S1tve_Tf) - np.array(S1tve_Tc_interp)
-        S1tve_P_diff    = np.array(S1tve_Pf) - np.array(S1tve_Pc_interp)
-        S1tve_beta_diff = np.array(S1tve_betaf) - np.array(S1tve_betac_interp)
-        
-        S1m_M_diff    = np.array(S1m_Mf) - np.array(S1m_Mc_interp)
-        S1m_T_diff    = np.array(S1m_Tf) - np.array(S1m_Tc_interp)
-        S1m_P_diff    = np.array(S1m_Pf) - np.array(S1m_Pc_interp)
-        S1m_beta_diff = np.array(S1m_betaf) - np.array(S1m_betac_interp)
+            # Interpolate Sobol indices of the coarser grid to the finer grid
+            S1N_c_interp[var,:]   = interpolate_to_fine(x_vecf, x_vecc, S1N_c[var,:])
+            S1O_c_interp[var,:]   = interpolate_to_fine(x_vecf, x_vecc, S1O_c[var,:])
+            S1NO_c_interp[var,:]  = interpolate_to_fine(x_vecf, x_vecc, S1NO_c[var,:])
+            S1N2_c_interp[var,:]  = interpolate_to_fine(x_vecf, x_vecc, S1N2_c[var,:])
+            S1O2_c_interp[var,:]  = interpolate_to_fine(x_vecf, x_vecc, S1O2_c[var,:])
+            S1P_c_interp[var,:]   = interpolate_to_fine(x_vecf, x_vecc, S1P_c[var,:])
+            S1Ttr_c_interp[var,:] = interpolate_to_fine(x_vecf, x_vecc, S1Ttr_c[var,:])
+            S1Tve_c_interp[var,:] = interpolate_to_fine(x_vecf, x_vecc, S1Tve_c[var,:])
+            S1M_c_interp[var,:]   = interpolate_to_fine(x_vecf, x_vecc, S1M_c[var,:])
+
+            # Compute the difference between finer and coarser grid
+            S1N_diff[var,:]   = S1N_f[var,:]   - S1N_c_interp[var,:]
+            S1O_diff[var,:]   = S1O_f[var,:]   - S1O_c_interp[var,:]
+            S1NO_diff[var,:]  = S1NO_f[var,:]  - S1NO_c_interp[var,:]
+            S1N2_diff[var,:]  = S1N2_f[var,:]  - S1N2_c_interp[var,:]
+            S1O2_diff[var,:]  = S1O2_f[var,:]  - S1O2_c_interp[var,:]
+            S1P_diff[var,:]   = S1P_f[var,:]   - S1P_c_interp[var,:]
+            S1Ttr_diff[var,:] = S1Ttr_f[var,:] - S1Ttr_c_interp[var,:]
+            S1Tve_diff[var,:] = S1Tve_f[var,:] - S1Tve_c_interp[var,:]
+            S1M_diff[var,:]   = S1M_f[var,:]   - S1M_c_interp[var,:]
 
         
-        # Add the correction to the total Sobol indices 
-        total_S1n_M    = interpolate_to_fine(x_vecf, x_vec0, total_S1n_M);    total_S1n_M += S1n_M_diff
-        total_S1n_T    = interpolate_to_fine(x_vecf, x_vec0, total_S1n_T);    total_S1n_T += S1n_T_diff
-        total_S1n_P    = interpolate_to_fine(x_vecf, x_vec0, total_S1n_P);    total_S1n_P += S1n_P_diff
-        total_S1n_beta = interpolate_to_fine(x_vecf, x_vec0, total_S1n_beta); total_S1n_beta += S1n_beta_diff
+        # Add the correction to the total Sobol indices
+        total_S1N_interp   = np.zeros((4, len(x_vecf)))
+        total_S1O_interp   = np.zeros((4, len(x_vecf)))
+        total_S1NO_interp  = np.zeros((4, len(x_vecf)))
+        total_S1N2_interp  = np.zeros((4, len(x_vecf)))
+        total_S1O2_interp  = np.zeros((4, len(x_vecf)))
+        total_S1P_interp   = np.zeros((4, len(x_vecf)))
+        total_S1Ttr_interp = np.zeros((4, len(x_vecf)))
+        total_S1Tve_interp = np.zeros((4, len(x_vecf)))
+        total_S1M_interp   = np.zeros((4, len(x_vecf)))
 
-        total_S1o_M    = interpolate_to_fine(x_vecf, x_vec0, total_S1o_M);    total_S1o_M += S1o_M_diff
-        total_S1o_T    = interpolate_to_fine(x_vecf, x_vec0, total_S1o_T);    total_S1o_T += S1o_T_diff
-        total_S1o_P    = interpolate_to_fine(x_vecf, x_vec0, total_S1o_P);    total_S1o_P += S1o_P_diff
-        total_S1o_beta = interpolate_to_fine(x_vecf, x_vec0, total_S1o_beta); total_S1o_beta += S1o_beta_diff
+        for var in range(4):
 
-        total_S1no_M    = interpolate_to_fine(x_vecf, x_vec0, total_S1no_M);    total_S1no_M += S1no_M_diff
-        total_S1no_T    = interpolate_to_fine(x_vecf, x_vec0, total_S1no_T);    total_S1no_T += S1no_T_diff
-        total_S1no_P    = interpolate_to_fine(x_vecf, x_vec0, total_S1no_P);    total_S1no_P += S1no_P_diff
-        total_S1no_beta = interpolate_to_fine(x_vecf, x_vec0, total_S1no_beta); total_S1no_beta += S1no_beta_diff
+            total_S1N_interp[var,:]   = interpolate_to_fine(x_vecf, x_vec0, total_S1N[var,:]);   total_S1N_interp[var,:]   += S1N_diff[var,:]
+            total_S1O_interp[var,:]   = interpolate_to_fine(x_vecf, x_vec0, total_S1O[var,:]);   total_S1O_interp[var,:]   += S1O_diff[var,:]
+            total_S1NO_interp[var,:]  = interpolate_to_fine(x_vecf, x_vec0, total_S1NO[var,:]);  total_S1NO_interp[var,:]  += S1NO_diff[var,:]
+            total_S1N2_interp[var,:]  = interpolate_to_fine(x_vecf, x_vec0, total_S1N2[var,:]);  total_S1N2_interp[var,:]  += S1N2_diff[var,:]
+            total_S1O2_interp[var,:]  = interpolate_to_fine(x_vecf, x_vec0, total_S1O2[var,:]);  total_S1O2_interp[var,:]  += S1O2_diff[var,:]
+            total_S1P_interp[var,:]   = interpolate_to_fine(x_vecf, x_vec0, total_S1P[var,:]);   total_S1P_interp[var,:]   += S1P_diff[var,:]
+            total_S1Ttr_interp[var,:] = interpolate_to_fine(x_vecf, x_vec0, total_S1Ttr[var,:]); total_S1Ttr_interp[var,:] += S1Ttr_diff[var,:]
+            total_S1Tve_interp[var,:] = interpolate_to_fine(x_vecf, x_vec0, total_S1Tve[var,:]); total_S1Tve_interp[var,:] += S1Tve_diff[var,:]
+            total_S1M_interp[var,:]   = interpolate_to_fine(x_vecf, x_vec0, total_S1M[var,:]);   total_S1M_interp[var,:]   += S1M_diff[var,:]
 
-        total_S1n2_M    = interpolate_to_fine(x_vecf, x_vec0, total_S1n2_M);    total_S1n2_M += S1n2_M_diff
-        total_S1n2_T    = interpolate_to_fine(x_vecf, x_vec0, total_S1n2_T);    total_S1n2_T += S1n2_T_diff
-        total_S1n2_P    = interpolate_to_fine(x_vecf, x_vec0, total_S1n2_P);    total_S1n2_P += S1n2_P_diff
-        total_S1n2_beta = interpolate_to_fine(x_vecf, x_vec0, total_S1n2_beta); total_S1n2_beta += S1n2_beta_diff
+        total_S1N   = total_S1N_interp
+        total_S1O   = total_S1O_interp
+        total_S1NO  = total_S1NO_interp
+        total_S1N2  = total_S1N2_interp
+        total_S1O2  = total_S1O2_interp
+        total_S1P   = total_S1P_interp
+        total_S1Ttr = total_S1Ttr_interp
+        total_S1Tve = total_S1Tve_interp
+        total_S1M   = total_S1M_interp
 
-        total_S1o2_M    = interpolate_to_fine(x_vecf, x_vec0, total_S1o2_M);    total_S1o2_M += S1o2_M_diff
-        total_S1o2_T    = interpolate_to_fine(x_vecf, x_vec0, total_S1o2_T);    total_S1o2_T += S1o2_T_diff
-        total_S1o2_P    = interpolate_to_fine(x_vecf, x_vec0, total_S1o2_P);    total_S1o2_P += S1o2_P_diff
-        total_S1o2_beta = interpolate_to_fine(x_vecf, x_vec0, total_S1o2_beta); total_S1o2_beta += S1o2_beta_diff
-
-        total_S1p_M    = interpolate_to_fine(x_vecf, x_vec0, total_S1p_M);    total_S1p_M += S1p_M_diff
-        total_S1p_T    = interpolate_to_fine(x_vecf, x_vec0, total_S1p_T);    total_S1p_T += S1p_T_diff
-        total_S1p_P    = interpolate_to_fine(x_vecf, x_vec0, total_S1p_P);    total_S1p_P += S1p_P_diff
-        total_S1p_beta = interpolate_to_fine(x_vecf, x_vec0, total_S1p_beta); total_S1p_beta += S1p_beta_diff
-
-        total_S1ttr_M    = interpolate_to_fine(x_vecf, x_vec0, total_S1ttr_M);    total_S1ttr_M += S1ttr_M_diff
-        total_S1ttr_T    = interpolate_to_fine(x_vecf, x_vec0, total_S1ttr_T);    total_S1ttr_T += S1ttr_T_diff
-        total_S1ttr_P    = interpolate_to_fine(x_vecf, x_vec0, total_S1ttr_P);    total_S1ttr_P += S1ttr_P_diff
-        total_S1ttr_beta = interpolate_to_fine(x_vecf, x_vec0, total_S1ttr_beta); total_S1ttr_beta += S1ttr_beta_diff
-
-        total_S1tve_M    = interpolate_to_fine(x_vecf, x_vec0, total_S1tve_M);    total_S1tve_M += S1tve_M_diff
-        total_S1tve_T    = interpolate_to_fine(x_vecf, x_vec0, total_S1tve_T);    total_S1tve_T += S1tve_T_diff
-        total_S1tve_P    = interpolate_to_fine(x_vecf, x_vec0, total_S1tve_P);    total_S1tve_P += S1tve_P_diff
-        total_S1tve_beta = interpolate_to_fine(x_vecf, x_vec0, total_S1tve_beta); total_S1tve_beta += S1tve_beta_diff
-
-        total_S1m_M    = interpolate_to_fine(x_vecf, x_vec0, total_S1m_M);    total_S1m_M += S1m_M_diff
-        total_S1m_T    = interpolate_to_fine(x_vecf, x_vec0, total_S1m_T);    total_S1m_T += S1m_T_diff
-        total_S1m_P    = interpolate_to_fine(x_vecf, x_vec0, total_S1m_P);    total_S1m_P += S1m_P_diff
-        total_S1m_beta = interpolate_to_fine(x_vecf, x_vec0, total_S1m_beta); total_S1m_beta += S1m_beta_diff
-
-        # Update xnode_vec0 to be the finer grid for the next iteration
+        # Update the finer grid to be x_vec0 for the next iteration
         x_vec0 = x_vecf
 
     # SAVING RESULTS
 
     total_S = {}
 
-    total_S['total_S1n_M']    = total_S1n_M
-    total_S['total_S1n_T']    = total_S1n_T
-    total_S['total_S1n_P']    = total_S1n_P
-    total_S['total_S1n_beta'] = total_S1n_beta
+    total_S['total_S1n_M']    = total_S1N[0,:]
+    total_S['total_S1n_T']    = total_S1N[1,:]
+    total_S['total_S1n_P']    = total_S1N[2,:]
+    total_S['total_S1n_beta'] = total_S1N[3,:]
 
-    total_S['total_S1o_M']    = total_S1o_M
-    total_S['total_S1o_T']    = total_S1o_T
-    total_S['total_S1o_P']    = total_S1o_P
-    total_S['total_S1o_beta'] = total_S1o_beta
+    total_S['total_S1o_M']    = total_S1O[0,:]
+    total_S['total_S1o_T']    = total_S1O[1,:]
+    total_S['total_S1o_P']    = total_S1O[2,:]
+    total_S['total_S1o_beta'] = total_S1O[3,:]
 
-    total_S['total_S1no_M']    = total_S1no_M
-    total_S['total_S1no_T']    = total_S1no_T
-    total_S['total_S1no_P']    = total_S1no_P
-    total_S['total_S1no_beta'] = total_S1no_beta
+    total_S['total_S1no_M']    = total_S1NO[0,:]
+    total_S['total_S1no_T']    = total_S1NO[1,:]
+    total_S['total_S1no_P']    = total_S1NO[2,:]
+    total_S['total_S1no_beta'] = total_S1NO[3,:]
 
-    total_S['total_S1n2_M']    = total_S1n2_M
-    total_S['total_S1n2_T']    = total_S1n2_T
-    total_S['total_S1n2_P']    = total_S1n2_P
-    total_S['total_S1n2_beta'] = total_S1n2_beta
+    total_S['total_S1n2_M']    = total_S1N2[0,:]
+    total_S['total_S1n2_T']    = total_S1N2[1,:]
+    total_S['total_S1n2_P']    = total_S1N2[2,:]
+    total_S['total_S1n2_beta'] = total_S1N2[3,:]
 
-    total_S['total_S1o2_M']    = total_S1o2_M
-    total_S['total_S1o2_T']    = total_S1o2_T
-    total_S['total_S1o2_P']    = total_S1o2_P
-    total_S['total_S1o2_beta'] = total_S1o2_beta
+    total_S['total_S1o2_M']    = total_S1O2[0,:]
+    total_S['total_S1o2_T']    = total_S1O2[1,:]
+    total_S['total_S1o2_P']    = total_S1O2[2,:]
+    total_S['total_S1o2_beta'] = total_S1O2[3,:]
 
-    total_S['total_S1p_M']    = total_S1p_M
-    total_S['total_S1p_T']    = total_S1p_T
-    total_S['total_S1p_P']    = total_S1p_P
-    total_S['total_S1p_beta'] = total_S1p_beta
+    total_S['total_S1p_M']    = total_S1P[0,:]
+    total_S['total_S1p_T']    = total_S1P[1,:]
+    total_S['total_S1p_P']    = total_S1P[2,:]
+    total_S['total_S1p_beta'] = total_S1P[3,:]
 
-    total_S['total_S1ttr_M']    = total_S1ttr_M
-    total_S['total_S1ttr_T']    = total_S1ttr_T
-    total_S['total_S1ttr_P']    = total_S1ttr_P
-    total_S['total_S1ttr_beta'] = total_S1ttr_beta
+    total_S['total_S1ttr_M']    = total_S1Ttr[0,:]
+    total_S['total_S1ttr_T']    = total_S1Ttr[1,:]
+    total_S['total_S1ttr_P']    = total_S1Ttr[2,:]
+    total_S['total_S1ttr_beta'] = total_S1Ttr[3,:]
 
-    total_S['total_S1tve_M']    = total_S1tve_M
-    total_S['total_S1tve_T']    = total_S1tve_T
-    total_S['total_S1tve_P']    = total_S1tve_P
-    total_S['total_S1tve_beta'] = total_S1tve_beta
+    total_S['total_S1tve_M']    = total_S1Tve[0,:]
+    total_S['total_S1tve_T']    = total_S1Tve[1,:]
+    total_S['total_S1tve_P']    = total_S1Tve[2,:]
+    total_S['total_S1tve_beta'] = total_S1Tve[3,:]
 
-    total_S['total_S1m_M']    = total_S1m_M
-    total_S['total_S1m_T']    = total_S1m_T
-    total_S['total_S1m_P']    = total_S1m_P
-    total_S['total_S1m_beta'] = total_S1m_beta
+    total_S['total_S1m_M']    = total_S1M[0,:]
+    total_S['total_S1m_T']    = total_S1M[1,:]
+    total_S['total_S1m_P']    = total_S1M[2,:]
+    total_S['total_S1m_beta'] = total_S1M[3,:]
 
     return x_vec0, total_S
 
