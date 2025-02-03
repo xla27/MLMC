@@ -45,12 +45,8 @@ def main(nproc, testcase, workingFolder):
     }
 
     # Generate samples using Saltelli's sampling
-    Nl  = [2, 2, 2]               # number of samples per level
-    lev = [i for i in range(len(Nl))]
-    d   = problem['num_vars']
-
-    # Computing the number of required samples per level
-    sample_sizes = [(d+2) * N for N in Nl]
+    sample_sizes  = [2, 2, 2]               # number of samples per level
+    lev = [i for i in range(len(sample_sizes))]
 
     # performing the analysis of variance
     x_vec0, total_S = anova(problem, lev, sample_sizes, *varargin)
