@@ -43,7 +43,7 @@ def compute_sobol_indices(type, param_values, l, problem, *args):
     if l == 0:
         cfd = cfd_call
         (nproc, baseFolder, workingFolder) = args
-        baseFolder2 = baseFolder.replace('AIR5_AMG','AIR5')
+        baseFolder2 = baseFolder.replace('AIR11_AMG','AIR11')
         args2 = (nproc, baseFolder2, workingFolder)
     else:
         cfd = cfd_call_amg
