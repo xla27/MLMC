@@ -53,7 +53,7 @@ def anova_plot(x_vec0, total_S):
     plt.grid(True)
     plt.tight_layout()
 
-    plot_filename = '1_S1nd_elecMinus_sobol_indices'
+    plot_filename = '1_S1nd_elecMinus_sobol_indices.svg'
     plt.savefig(plot_filename, format='svg')
 
     plot_data = {
@@ -86,7 +86,7 @@ def anova_plot(x_vec0, total_S):
     plt.grid(True)
     plt.tight_layout()
 
-    plot_filename = '2_S1nd_NPlus_sobol_indices'
+    plot_filename = '2_S1nd_NPlus_sobol_indices.svg'
     plt.savefig(plot_filename, format='svg')
 
     plot_data = {
@@ -119,7 +119,7 @@ def anova_plot(x_vec0, total_S):
     plt.grid(True)
     plt.tight_layout()
 
-    plot_filename = '3_S1nd_OPlus_sobol_indices'
+    plot_filename = '3_S1nd_OPlus_sobol_indices.svg'
     plt.savefig(plot_filename, format='svg')
 
     plot_data = {
@@ -153,7 +153,7 @@ def anova_plot(x_vec0, total_S):
     plt.grid(True)
     plt.tight_layout()
 
-    plot_filename = '4_S1nd_NOPlus_sobol_indices'
+    plot_filename = '4_S1nd_NOPlus_sobol_indices.svg'
     plt.savefig(plot_filename, format='svg')
 
     plot_data = {
@@ -186,7 +186,7 @@ def anova_plot(x_vec0, total_S):
     plt.grid(True)
     plt.tight_layout()
 
-    plot_filename = '5_S1nd_N2Plus_sobol_indices'
+    plot_filename = '5_S1nd_N2Plus_sobol_indices.svg'
     plt.savefig(plot_filename, format='svg')
 
     plot_data = {
@@ -219,7 +219,7 @@ def anova_plot(x_vec0, total_S):
     plt.grid(True)
     plt.tight_layout()
 
-    plot_filename = '6_S1nd_O2Plus_sobol_indices'
+    plot_filename = '6_S1nd_O2Plus_sobol_indices.svg'
     plt.savefig(plot_filename, format='svg')
 
     plot_data = {
@@ -252,7 +252,7 @@ def anova_plot(x_vec0, total_S):
     plt.grid(True)
     plt.tight_layout()
 
-    plot_filename = '7_S1beta_elecMinus_sobol_indices'
+    plot_filename = '7_S1beta_elecMinus_sobol_indices.svg'
     plt.savefig(plot_filename, format='svg')
 
     plot_data = {
@@ -285,7 +285,7 @@ def anova_plot(x_vec0, total_S):
     plt.grid(True)
     plt.tight_layout()
 
-    plot_filename = '8_S1beta_NPlus_sobol_indices'
+    plot_filename = '8_S1beta_NPlus_sobol_indices.svg'
     plt.savefig(plot_filename, format='svg')
 
     plot_data = {
@@ -318,7 +318,7 @@ def anova_plot(x_vec0, total_S):
     plt.grid(True)
     plt.tight_layout()
 
-    plot_filename = '9_S1beta_OPlus_sobol_indices'
+    plot_filename = '9_S1beta_OPlus_sobol_indices.svg'
     plt.savefig(plot_filename, format='svg')
 
     plot_data = {
@@ -351,7 +351,7 @@ def anova_plot(x_vec0, total_S):
     plt.grid(True)
     plt.tight_layout()
 
-    plot_filename = '10_S1beta_NOPlus_sobol_indices'
+    plot_filename = '10_S1beta_NOPlus_sobol_indices.svg'
     plt.savefig(plot_filename, format='svg')
 
     plot_data = {
@@ -384,7 +384,7 @@ def anova_plot(x_vec0, total_S):
     plt.grid(True)
     plt.tight_layout()
 
-    plot_filename = '11_S1beta_N2Plus_sobol_indices'
+    plot_filename = '11_S1beta_N2Plus_sobol_indices.svg'
     plt.savefig(plot_filename, format='svg')
 
     plot_data = {
@@ -417,7 +417,7 @@ def anova_plot(x_vec0, total_S):
     plt.grid(True)
     plt.tight_layout()
 
-    plot_filename = '12_S1beta_O2Plus_sobol_indices'
+    plot_filename = '12_S1beta_O2Plus_sobol_indices.svg'
     plt.savefig(plot_filename, format='svg')
 
     plot_data = {
@@ -450,7 +450,7 @@ def anova_plot(x_vec0, total_S):
     plt.grid(True)
     plt.tight_layout()
 
-    plot_filename = '13_S1beta_N_sobol_indices'
+    plot_filename = '13_S1beta_N_sobol_indices.svg'
     plt.savefig(plot_filename, format='svg')
 
     plot_data = {
@@ -483,7 +483,7 @@ def anova_plot(x_vec0, total_S):
     plt.grid(True)
     plt.tight_layout()
 
-    plot_filename = '14_S1beta_O_sobol_indices'
+    plot_filename = '14_S1beta_O_sobol_indices.svg'
     plt.savefig(plot_filename, format='svg')
 
     plot_data = {
@@ -516,7 +516,7 @@ def anova_plot(x_vec0, total_S):
     plt.grid(True)
     plt.tight_layout()
 
-    plot_filename = '15_S1beta_NO_sobol_indices'
+    plot_filename = '15_S1beta_NO_sobol_indices.svg'
     plt.savefig(plot_filename, format='svg')
 
     plot_data = {
@@ -547,7 +547,7 @@ def anova_plot(x_vec0, total_S):
     plt.grid(True)
     plt.tight_layout()
 
-    plot_filename = '16_S1beta_N2_sobol_indices'
+    plot_filename = '16_S1beta_N2_sobol_indices.svg'
     plt.savefig(plot_filename, format='svg')
 
     plot_data = {
@@ -578,7 +578,7 @@ def anova_plot(x_vec0, total_S):
     plt.grid(True)
     plt.tight_layout()
 
-    plot_filename = '17_S1beta_O2_sobol_indices'
+    plot_filename = '17_S1beta_O2_sobol_indices.svg'
     plt.savefig(plot_filename, format='svg')
 
     plot_data = {
@@ -609,7 +609,7 @@ def anova_plot(x_vec0, total_S):
     plt.grid(True)
     plt.tight_layout()
 
-    plot_filename = '18_S1beta_P_sobol_indices'
+    plot_filename = '18_S1beta_P_sobol_indices.svg'
     plt.savefig(plot_filename, format='svg')
 
     plot_data = {
@@ -640,7 +640,7 @@ def anova_plot(x_vec0, total_S):
     plt.grid(True)
     plt.tight_layout()
 
-    plot_filename = '19_S1Ttr_sobol_indices'
+    plot_filename = '19_S1Ttr_sobol_indices.svg'
     plt.savefig(plot_filename, format='svg')
 
     plot_data = {
@@ -671,7 +671,7 @@ def anova_plot(x_vec0, total_S):
     plt.grid(True)
     plt.tight_layout()
 
-    plot_filename = '20_S1Tve_sobol_indices'
+    plot_filename = '20_S1Tve_sobol_indices.svg'
     plt.savefig(plot_filename, format='svg')
 
     plot_data = {
@@ -702,7 +702,7 @@ def anova_plot(x_vec0, total_S):
     plt.grid(True)
     plt.tight_layout()
 
-    plot_filename = '21_S1M_sobol_indices'
+    plot_filename = '21_S1M_sobol_indices.svg'
     plt.savefig(plot_filename, format='svg')
 
     plot_data = {
