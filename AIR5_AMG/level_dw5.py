@@ -137,7 +137,8 @@ def dw_l(level, N_samples, *args):
 
             elif level == 1: # the interpolation is needed for fine on reference xnodesc
 
-                QoI_fine_interp[i,j,:] = interp1d(QoI_fine[i][-1], QoI_fine[i][j], kind='linear', fill_value='extrapolate')(xnodesc_ref)
+                QoI_coarse_interp[i,j,:] = np.array(QoI_coarse[i][j])
+                QoI_fine_interp[i,j,:]   = interp1d(QoI_fine[i][-1], QoI_fine[i][j], kind='linear', fill_value='extrapolate')(xnodesc_ref)
 
             elif level == 0:
 
@@ -156,7 +157,7 @@ def dw_l(level, N_samples, *args):
     sums1 = np.sum( QoI_fine_interp[:,5,:] - QoI_coarse_interp[:,5,:], axis=0)
     sums2 = np.sum((QoI_fine_interp[:,5,:] - QoI_coarse_interp[:,5,:])**2, axis=0)
     sums5 = np.sum( QoI_fine_interp[:,5,:], axis=0)
-    sums6 = np.sum(QoI_fine_interp[:,5,:]**2, axis=0)
+    sums6 = np.sum( QoI_fine_interp[:,5,:]**2, axis=0)
 
     # N
     sums1N = np.sum( QoI_fine_interp[:,0,:] - QoI_coarse_interp[:,0,:], axis=0)

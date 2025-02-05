@@ -185,7 +185,8 @@ def dw_l(level, N_samples, *args):
 
             elif level == 1: # the interpolation is needed for fine on reference xnodesc
 
-                QoI_fine_interp[i,j,:] = interp1d(QoI_fine[i][-1], QoI_fine[i][j], kind='linear', fill_value='extrapolate')(xnodesc_ref)
+                QoI_coarse_interp[i,j,:] = np.array(QoI_coarse[i][j])
+                QoI_fine_interp[i,j,:]   = interp1d(QoI_fine[i][-1], QoI_fine[i][j], kind='linear', fill_value='extrapolate')(xnodesc_ref)
 
             elif level == 0:
 
