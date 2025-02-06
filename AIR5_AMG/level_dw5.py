@@ -61,7 +61,7 @@ def dw_l(level, N_samples, *args):
     Pmean   = 390;   P_max   = 600;   P_min   = 300
     Bn2mean = 0.79;  Bn2_max = 0.8;   Bn2_min = 0.76
 
-    xnodesc_list
+    xnodesc_list = []
 
     # Looping over the samples
     for i in range(N_samples):
