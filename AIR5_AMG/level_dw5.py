@@ -119,7 +119,7 @@ def dw_l(level, N_samples, *args):
             QoI_coarse = list(cfd_call_amg('COARSE', valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, level, i, *args))
 
             # moving average
-            xnodesc = QoI_fine[-1]
+            xnodesc = QoI_coarse[-1]
             ws = max(int(len(xnodesc) * SF), 1)
 
             QoI_coarse = [moving_average(QoI_coarse[i], ws) for i in range(9)]
