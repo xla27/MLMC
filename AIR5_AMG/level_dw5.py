@@ -161,7 +161,6 @@ def dw_l(level, N_samples, *args):
         sums2M_i[i] = np.array(QoI_fine[8] - QoI_coarse[8])**2
 
     # finding the smallest xnodesc
-    xnodesc_list = [QoI_coarse[i][-1] for i in range(N_samples)]
     lengths      = np.array([len(xnodes) for xnodes in xnodesc_list])
     xnodesc_ref  = xnodesc_list[np.argmin(lengths)]
 
