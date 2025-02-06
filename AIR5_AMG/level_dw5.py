@@ -132,33 +132,33 @@ def dw_l(level, N_samples, *args):
             xnodesc_list.append(xnodesc)
 
         sums1_i[i] = np.array(QoI_fine[5] - QoI_coarse[5])
-        sums2_i[i] = np.array((QoI_fine[5] - QoI_coarse[5])**2)
-        sums5_i[i] = np.array( QoI_fine[5])
-        sums6_i[i] = np.array(QoI_fine[5]**2)
+        sums2_i[i] = np.array(QoI_fine[5] - QoI_coarse[5])**2
+        sums5_i[i] = np.array(QoI_fine[5])
+        sums6_i[i] = np.array(QoI_fine[5])**2
 
         sums1N_i[i] = np.array(QoI_fine[0] - QoI_coarse[0])
-        sums2N_i[i] = np.array((QoI_fine[0] - QoI_coarse[0]**2))
+        sums2N_i[i] = np.array(QoI_fine[0] - QoI_coarse[0])**2
 
         sums1O_i[i] = np.array(QoI_fine[1] - QoI_coarse[1])
-        sums2O_i[i] = np.array((QoI_fine[1] - QoI_coarse[1])**2)
+        sums2O_i[i] = np.array(QoI_fine[1] - QoI_coarse[1])**2
 
         sums1NO_i[i] = np.array(QoI_fine[2] - QoI_coarse[2])
-        sums2NO_i[i] = np.array((QoI_fine[2] - QoI_coarse[2])**2)
+        sums2NO_i[i] = np.array(QoI_fine[2] - QoI_coarse[2])**2
 
         sums1N2_i[i] = np.array(QoI_fine[3] - QoI_coarse[3])
-        sums2N2_i[i] = np.array((QoI_fine[3] - QoI_coarse[3])**2)
+        sums2N2_i[i] = np.array(QoI_fine[3] - QoI_coarse[3])**2
 
         sums1O2_i[i] = np.array(QoI_fine[4] - QoI_coarse[4])
-        sums2O2_i[i] = np.array((QoI_fine[4] - QoI_coarse[4])**2)
+        sums2O2_i[i] = np.array(QoI_fine[4] - QoI_coarse[4])**2
 
         sums1Ttr_i[i] = np.array(QoI_fine[6] - QoI_coarse[6])
-        sums2Ttr_i[i] = np.array((QoI_fine[6] - QoI_coarse[6]**2))
+        sums2Ttr_i[i] = np.array(QoI_fine[6] - QoI_coarse[6])**2
 
         sums1Tve_i[i] = np.array(QoI_fine[7] - QoI_coarse[7])
-        sums2Tve_i[i] = np.array((QoI_fine[7] - QoI_coarse[7])**2)
+        sums2Tve_i[i] = np.array(QoI_fine[7] - QoI_coarse[7])**2
 
         sums1M_i[i] = np.array(QoI_fine[8] - QoI_coarse[8])
-        sums2M_i[i] = np.array((QoI_fine[8] - QoI_coarse[8])**2)
+        sums2M_i[i] = np.array(QoI_fine[8] - QoI_coarse[8])**2
 
     # finding the smallest xnodesc
     xnodesc_list = [QoI_coarse[i][-1] for i in range(N_samples)]
