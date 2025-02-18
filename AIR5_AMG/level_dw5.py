@@ -19,42 +19,6 @@ def dw_l(level, N_samples, *args):
     # Start of time recording
     start = time.time()
 
-    # P
-    sums1_i = [None] * N_samples  # sum of difference between static Pressure at fine and coarse
-    sums2_i = [None] * N_samples # sum of square of difference between static Pressure at fine and coarse
-    sums5_i = [None] * N_samples  # sum of static Pressure at fine 
-    sums6_i = [None] * N_samples  # sum of square of static Pressure at fine 
-
-    # N
-    sums1N_i = [None] * N_samples # sum of difference between atomic Nitrogen mass fraction at fine and coarse
-    sums2N_i = [None] * N_samples # sum of square of difference between atomic Nitrogen mass fraction at fine and coarse
-
-    # O
-    sums1O_i = [None] * N_samples # sum of difference between atomic Oxygen mass fraction at fine and coarse
-    sums2O_i = [None] * N_samples # sum of square of difference between atomic Oxygen mass fraction at fine and coarse
-
-    # NO
-    sums1NO_i = [None] * N_samples # sum of difference between Nitric Oxide mass fraction at fine and coarse
-    sums2NO_i = [None] * N_samples # sum of square of difference between Nitric Oxide mass fraction at fine and coarse
-
-    # N2
-    sums1N2_i = [None] * N_samples # sum of difference between diatomic Nitrogen mass fraction at fine and coarse
-    sums2N2_i = [None] * N_samples # # sum of square of difference between diatomic Nitrogen mass fraction at fine and coarse
-
-    # O2 
-    sums1O2_i = [None] * N_samples # sum of difference between diatomic Oxygen mass fraction at fine and coarse
-    sums2O2_i = [None] * N_samples # sum of square of difference between diatomic Oxygen mass fraction at fine and coarse
-
-    # Temperatures 
-    sums1Ttr_i = [None] * N_samples # sum of difference between translational Temperature at fine and coarse
-    sums2Ttr_i = [None] * N_samples # sum of squares of difference between translational Temperature at fine and coarse
-    sums1Tve_i = [None] * N_samples # sum of difference between vibrational Temperature at fine and coarse
-    sums2Tve_i = [None] * N_samples # sum of squares of difference between vibrational Temperature at fine and coarse 
-
-    # Mach
-    sums1M_i = [None] * N_samples # sum of difference between Mach at fine and coarse
-    sums2M_i = [None] * N_samples # sum of square of difference between Mach at fine and coarse
-
     # Ranges for aleatoric uncertainties (Freestream values)
     Mmean   = 9.0;   M_max   = 9.5;   M_min   = 8.0 
     Tmean   = 1000;  T_max   = 1050;  T_min   = 850 
@@ -62,6 +26,11 @@ def dw_l(level, N_samples, *args):
     Bn2mean = 0.79;  Bn2_max = 0.8;   Bn2_min = 0.76
 
     xnodesc_list = []
+    xnodesf_list = []
+    QoI_fine   = [None] * N_samples; QoI_fine_avg   = [None] * N_samples; QoI_fine_interp   = [None] * N_samples
+    QoI_coarse = [None] * N_samples; QoI_coarse_avg = [None] * N_samples; QoI_coarse_interp = [None] * N_samples
+
+    SF = 0.0075
 
     # Looping over the samples
     for i in range(N_samples):
@@ -87,8 +56,6 @@ def dw_l(level, N_samples, *args):
         valIns_Bn2 = str(Bn2_inf)
         valIns_Bo2 = str(Bo2_inf)
 
-        SF = 0.0075 
-
         # return of CFD calls [beta_n, beta_o, beta_no, beta_n2, beta_o2, P, Ttr, Tve, M, xnodes]
 
         if level == 0:
@@ -97,152 +64,97 @@ def dw_l(level, N_samples, *args):
             (_, baseFolder, workingFolder) = args
             baseFolder2 = baseFolder.replace('AIR5_AMG','AIR5')
             args2 = (nproc, baseFolder2, workingFolder)
-            QoI_fine = list(cfd_call('FINE', valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, level, i, *args2))
+            QoI_fine[i] = list(cfd_call('FINE', valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, level, i, *args2))
+            xnodesf = QoI_fine[i][-1]
 
             # No call to CFD with coearse mesh, coarse results set to zero as it is the starting level
             xnodesc = QoI_fine[-1]
-            QoI_coarse = [[0.] * len(xnodesc) for i in range(9)]
-            QoI_coarse.append(xnodesc)
-
-            # moving average for FINE results
-            ws = max(int(len(xnodesc) * SF), 1)
-            QoI_fine = [moving_average(QoI_fine[i], ws) for i in range(9)]
-
-            xnodesc_list.append(xnodesc)
+            QoI_coarse[i] = [[0.] * len(xnodesc) for i in range(9)]
+            QoI_coarse[i].append(xnodesc)
 
         else:
 
             # Call to CFD with fine mesh
-            QoI_fine = list(cfd_call_amg('FINE',valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, level, i, *args))
+            QoI_fine[i] = list(cfd_call_amg('FINE',valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, level, i, *args))
+            xnodesf = QoI_fine[i][-1]
 
             # Call to CFD with coarse mesh
-            QoI_coarse = list(cfd_call_amg('COARSE', valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, level, i, *args))
+            QoI_coarse[i] = list(cfd_call_amg('COARSE', valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, level, i, *args))
+            xnodesc = QoI_coarse[i][-1]
 
-            # moving average
-            xnodesc = QoI_coarse[-1]
-            ws = max(int(len(xnodesc) * SF), 1)
-
-            QoI_coarse = [moving_average(QoI_coarse[i], ws) for i in range(9)]
-            QoI_fine   = [moving_average(QoI_fine[i],   ws) for i in range(9)]
-
-            # interpolating on FINE on COARSE
-            QoI_fine = [interp1d(QoI_fine[-1], QoI_fine[i], kind='linear', fill_value='extrapolate')(xnodesc) for i in range(9)]
-            QoI_fine.append(xnodesc)
-
-            xnodesc_list.append(xnodesc)
-
-        sums1_i[i] = np.array(QoI_fine[5] - QoI_coarse[5])
-        sums2_i[i] = np.array(QoI_fine[5] - QoI_coarse[5])**2
-        sums5_i[i] = np.array(QoI_fine[5])
-        sums6_i[i] = np.array(QoI_fine[5])**2
-
-        sums1N_i[i] = np.array(QoI_fine[0] - QoI_coarse[0])
-        sums2N_i[i] = np.array(QoI_fine[0] - QoI_coarse[0])**2
-
-        sums1O_i[i] = np.array(QoI_fine[1] - QoI_coarse[1])
-        sums2O_i[i] = np.array(QoI_fine[1] - QoI_coarse[1])**2
-
-        sums1NO_i[i] = np.array(QoI_fine[2] - QoI_coarse[2])
-        sums2NO_i[i] = np.array(QoI_fine[2] - QoI_coarse[2])**2
-
-        sums1N2_i[i] = np.array(QoI_fine[3] - QoI_coarse[3])
-        sums2N2_i[i] = np.array(QoI_fine[3] - QoI_coarse[3])**2
-
-        sums1O2_i[i] = np.array(QoI_fine[4] - QoI_coarse[4])
-        sums2O2_i[i] = np.array(QoI_fine[4] - QoI_coarse[4])**2
-
-        sums1Ttr_i[i] = np.array(QoI_fine[6] - QoI_coarse[6])
-        sums2Ttr_i[i] = np.array(QoI_fine[6] - QoI_coarse[6])**2
-
-        sums1Tve_i[i] = np.array(QoI_fine[7] - QoI_coarse[7])
-        sums2Tve_i[i] = np.array(QoI_fine[7] - QoI_coarse[7])**2
-
-        sums1M_i[i] = np.array(QoI_fine[8] - QoI_coarse[8])
-        sums2M_i[i] = np.array(QoI_fine[8] - QoI_coarse[8])**2
+        xnodesc_list.append(xnodesc)
+        xnodesf_list.append(xnodesf)
 
     # finding the smallest xnodesc
     lengths      = np.array([len(xnodes) for xnodes in xnodesc_list])
     xnodesc_ref  = xnodesc_list[np.argmin(lengths)]
 
-    # interpolating "finer" coarses on the coarsest COARSE if level is larger than 1
-    if level >= 2:
-        for i in range(N_samples):
+    # moving average and interpolation
+    ws = max(int(len(xnodesc_ref) * SF), 1)
 
-            sums1_i[i] = interp1d(xnodesc_list[i], sums1_i[i], kind='linear', fill_value='extrapolate')(xnodesc_ref)
-            sums2_i[i] = interp1d(xnodesc_list[i], sums2_i[i], kind='linear', fill_value='extrapolate')(xnodesc_ref)
-            sums5_i[i] = interp1d(xnodesc_list[i], sums5_i[i], kind='linear', fill_value='extrapolate')(xnodesc_ref)
-            sums6_i[i] = interp1d(xnodesc_list[i], sums6_i[i], kind='linear', fill_value='extrapolate')(xnodesc_ref)
+    for i in range(N_samples):
+        QoI_coarse_avg[i] = [moving_average(QoI_coarse[i][qoi], ws) for qoi in range(9)]
+        QoI_fine_avg[i]   = [moving_average(QoI_fine[i][qoi],   ws) for qoi in range(9)]
 
-            sums1N_i[i] = interp1d(xnodesc_list[i], sums1N_i[i], kind='linear', fill_value='extrapolate')(xnodesc_ref)
-            sums2N_i[i] = interp1d(xnodesc_list[i], sums2N_i[i], kind='linear', fill_value='extrapolate')(xnodesc_ref)
+        if level == 0:
+            QoI_coarse_interp[i] = QoI_coarse_avg[i]
+            QoI_fine_interp[i]   = QoI_fine_avg[i]
 
-            sums1O_i[i] = interp1d(xnodesc_list[i], sums1O_i[i], kind='linear', fill_value='extrapolate')(xnodesc_ref)
-            sums2O_i[i] = interp1d(xnodesc_list[i], sums2O_i[i], kind='linear', fill_value='extrapolate')(xnodesc_ref)
-
-            sums1NO_i[i] = interp1d(xnodesc_list[i], sums1NO_i[i], kind='linear', fill_value='extrapolate')(xnodesc_ref)
-            sums2NO_i[i] = interp1d(xnodesc_list[i], sums2NO_i[i], kind='linear', fill_value='extrapolate')(xnodesc_ref)
-
-            sums1N2_i[i] = interp1d(xnodesc_list[i], sums1N2_i[i], kind='linear', fill_value='extrapolate')(xnodesc_ref)
-            sums2N2_i[i] = interp1d(xnodesc_list[i], sums2N2_i[i], kind='linear', fill_value='extrapolate')(xnodesc_ref)
-
-            sums1O2_i[i] = interp1d(xnodesc_list[i], sums1O2_i[i], kind='linear', fill_value='extrapolate')(xnodesc_ref)
-            sums2O2_i[i] = interp1d(xnodesc_list[i], sums2O2_i[i], kind='linear', fill_value='extrapolate')(xnodesc_ref)
-
-            sums1Ttr_i[i] = interp1d(xnodesc_list[i], sums1Ttr_i[i], kind='linear', fill_value='extrapolate')(xnodesc_ref)
-            sums2Ttr_i[i] = interp1d(xnodesc_list[i], sums2Ttr_i[i], kind='linear', fill_value='extrapolate')(xnodesc_ref)
-
-            sums1Tve_i[i] = interp1d(xnodesc_list[i], sums1Tve_i[i], kind='linear', fill_value='extrapolate')(xnodesc_ref)
-            sums2Tve_i[i] = interp1d(xnodesc_list[i], sums2Tve_i[i], kind='linear', fill_value='extrapolate')(xnodesc_ref)
-
-            sums1M_i[i] = interp1d(xnodesc_list[i], sums1M_i[i], kind='linear', fill_value='extrapolate')(xnodesc_ref)
-            sums2M_i[i] = interp1d(xnodesc_list[i], sums2M_i[i], kind='linear', fill_value='extrapolate')(xnodesc_ref)
+        if level == 1:
+            QoI_coarse_interp[i] = QoI_coarse_avg[i]
+            QoI_fine_interp[i]   = [interp1d(xnodesf_list[i], QoI_fine_avg[i][qoi], kind='linear', )(xnodesc_ref) for qoi in range(9)]
+        else:
+            QoI_coarse_interp[i] = [interp1d(xnodesc_list[i], QoI_coarse_avg[i][qoi], kind='linear', )(xnodesc_ref) for qoi in range(9)]
+            QoI_fine_interp[i]   = [interp1d(xnodesf_list[i], QoI_fine_avg[i][qoi],   kind='linear', )(xnodesc_ref) for qoi in range(9)]
 
         
     # RESULTS UPDATE
+    QoI_coarse_interp = np.array(QoI_coarse_interp)
+    QoI_fine_interp   = np.array(QoI_fine_interp)
 
     # [beta_n, beta_o, beta_no, beta_n2, beta_o2, P, Ttr, Tve, M, xnodes]
 
     # P
-    sums1 = np.sum(np.array(sums1_i), axis=0)
-    sums2 = np.sum(np.array(sums2_i), axis=0)
-    sums5 = np.sum(np.array(sums5_i), axis=0)
-    sums6 = np.sum(np.array(sums6_i), axis=0)
+    sums1P = np.sum( QoI_fine_interp[:,5,:] - QoI_coarse_interp[:,5,:], axis=0)
+    sums2P = np.sum((QoI_fine_interp[:,5,:] - QoI_coarse_interp[:,5,:])**2, axis=0)
+    sums5P = np.sum( QoI_fine_interp[:,5,:], axis=0)
+    sums6P = np.sum((QoI_fine_interp[:,5,:])**2, axis=0)
 
     # N
-    sums1N = np.sum(np.array(sums1N_i), axis=0)
-    sums2N = np.sum(np.array(sums2N_i), axis=0)
+    sums1N = np.sum( QoI_fine_interp[:,0,:] - QoI_coarse_interp[:,0,:], axis=0)
+    sums2N = np.sum((QoI_fine_interp[:,0,:] - QoI_coarse_interp[:,0,:])**2, axis=0)
 
     # O
-    sums1O = np.sum(np.array(sums1O_i), axis=0)
-    sums2O = np.sum(np.array(sums2O_i), axis=0)
+    sums1O = np.sum( QoI_fine_interp[:,1,:] - QoI_coarse_interp[:,1,:], axis=0)
+    sums2O = np.sum((QoI_fine_interp[:,1,:] - QoI_coarse_interp[:,1,:])**2, axis=0)
 
     # NO
-    sums1NO = np.sum(np.array(sums1NO_i), axis=0)
-    sums2NO = np.sum(np.array(sums2NO_i), axis=0)
+    sums1NO = np.sum( QoI_fine_interp[:,2,:] - QoI_coarse_interp[:,2,:], axis=0)
+    sums2NO = np.sum((QoI_fine_interp[:,2,:] - QoI_coarse_interp[:,2,:])**2, axis=0)
 
     # N2
-    sums1N2 = np.sum(np.array(sums1N2_i), axis=0)
-    sums2N2 = np.sum(np.array(sums2N2_i), axis=0)
+    sums1N2 = np.sum( QoI_fine_interp[:,3,:] - QoI_coarse_interp[:,3,:], axis=0)
+    sums2N2 = np.sum((QoI_fine_interp[:,3,:] - QoI_coarse_interp[:,3,:])**2, axis=0)
 
     # O2
-    sums1O2 = np.sum(np.array(sums1O2_i), axis=0)
-    sums2O2 = np.sum(np.array(sums2O2_i), axis=0)
+    sums1O2 = np.sum( QoI_fine_interp[:,4,:] - QoI_coarse_interp[:,4,:], axis=0)
+    sums2O2 = np.sum((QoI_fine_interp[:,4,:] - QoI_coarse_interp[:,4,:])**2, axis=0)
     
     # Temperatures
-    sums1Ttr = np.sum(np.array(sums1Ttr_i), axis=0)
-    sums2Ttr = np.sum(np.array(sums2Ttr_i), axis=0)
-    sums1Tve = np.sum(np.array(sums1Tve_i), axis=0)
-    sums2Tve = np.sum(np.array(sums2Tve_i), axis=0)
+    sums1Ttr = np.sum( QoI_fine_interp[:,6,:] - QoI_coarse_interp[:,6,:], axis=0)
+    sums2Ttr = np.sum((QoI_fine_interp[:,6,:] - QoI_coarse_interp[:,6,:])**2, axis=0)
+    sums1Tve = np.sum( QoI_fine_interp[:,7,:] - QoI_coarse_interp[:,7,:], axis=0)
+    sums2Tve = np.sum((QoI_fine_interp[:,7,:] - QoI_coarse_interp[:,7,:])**2, axis=0)
 
     # M
-    sums1M = np.sum(np.array(sums1M_i), axis=0)
-    sums2M = np.sum(np.array(sums2M_i), axis=0)
+    sums1M = np.sum( QoI_fine_interp[:,8,:] - QoI_coarse_interp[:,8,:], axis=0)
+    sums2M = np.sum((QoI_fine_interp[:,8,:] - QoI_coarse_interp[:,8,:])**2, axis=0)
     
     # End of recording time
     end   = time.time() 
     cost  = nproc*(end-start)    # Cost computation
         
-    return xnodesc_ref, sums1, sums2, sums5, sums6, sums1N, sums2N, sums1O, sums2O, sums1NO, sums2NO, sums1N2, sums2N2, sums1O2, sums2O2, sums1Ttr, sums2Ttr, sums1Tve, sums2Tve, sums1M, sums2M, cost
+    return xnodesc_ref, sums1P, sums2P, sums5P, sums6P, sums1N, sums2N, sums1O, sums2O, sums1NO, sums2NO, sums1N2, sums2N2, sums1O2, sums2O2, sums1Ttr, sums2Ttr, sums1Tve, sums2Tve, sums1M, sums2M, cost
 
 
 def moving_average(data, window_size):
