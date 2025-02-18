@@ -68,7 +68,7 @@ def dw_l(level, N_samples, *args):
             xnodesf = QoI_fine[i][-1]
 
             # No call to CFD with coearse mesh, coarse results set to zero as it is the starting level
-            xnodesc = QoI_fine[-1]
+            xnodesc = QoI_fine[i][-1]
             QoI_coarse[i] = [[0.] * len(xnodesc) for i in range(9)]
             QoI_coarse[i].append(xnodesc)
 
