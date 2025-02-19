@@ -27,6 +27,8 @@ def dw_l(level, N_samples, *args):
 
     xnodesc_list = []
     xnodesf_list = []
+    CD_coarse_list = []
+    CD_fine_list   = []
     QoI_fine   = [None] * N_samples; QoI_fine_avg   = [None] * N_samples; QoI_fine_interp   = [None] * N_samples
     QoI_coarse = [None] * N_samples; QoI_coarse_avg = [None] * N_samples; QoI_coarse_interp = [None] * N_samples
 
@@ -56,7 +58,7 @@ def dw_l(level, N_samples, *args):
         valIns_Bn2 = str(Bn2_inf)
         valIns_Bo2 = str(Bo2_inf)
 
-        # return of CFD calls [beta_n, beta_o, beta_no, beta_n2, beta_o2, P, Ttr, Tve, M, xnodes]
+        # return of CFD calls [beta_n, beta_o, beta_no, beta_n2, beta_o2, P, Ttr, Tve, M, Cd, xnodes]
 
         if level == 0:
 
@@ -66,21 +68,25 @@ def dw_l(level, N_samples, *args):
             args2 = (nproc, baseFolder2, workingFolder)
             QoI_fine[i] = list(cfd_call('FINE', valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, level, i, *args2))
             xnodesf = QoI_fine[i][-1]
+            CD_fine_list.append(QoI_fine[i][-2])
 
             # No call to CFD with coearse mesh, coarse results set to zero as it is the starting level
             xnodesc = QoI_fine[i][-1]
             QoI_coarse[i] = [[0.] * len(xnodesc) for i in range(9)]
             QoI_coarse[i].append(xnodesc)
+            CD_coarse_list.append(0.0)
 
         else:
 
             # Call to CFD with fine mesh
             QoI_fine[i] = list(cfd_call_amg('FINE',valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, level, i, *args))
             xnodesf = QoI_fine[i][-1]
+            CD_fine_list.append(QoI_fine[i][-2])
 
             # Call to CFD with coarse mesh
             QoI_coarse[i] = list(cfd_call_amg('COARSE', valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, level, i, *args))
             xnodesc = QoI_coarse[i][-1]
+            CD_coarse_list.append(QoI_coarse[i][-2])
 
         xnodesc_list.append(xnodesc)
         xnodesf_list.append(xnodesf)
@@ -112,13 +118,21 @@ def dw_l(level, N_samples, *args):
     QoI_coarse_interp = np.array(QoI_coarse_interp)
     QoI_fine_interp   = np.array(QoI_fine_interp)
 
-    # [beta_n, beta_o, beta_no, beta_n2, beta_o2, P, Ttr, Tve, M, xnodes]
+    CD_coarse = np.array(CD_coarse_list)
+    CD_fine   = np.array(CD_fine_list)
+
+    # [beta_n, beta_o, beta_no, beta_n2, beta_o2, P, Ttr, Tve, M, Cd, xnodes]
+    
+    sums1CD = np.sum(CD_fine - CD_coarse) 
+    sums2CD = np.sum((CD_fine - CD_coarse)**2)
+    sums5CD = np.sum(CD_fine)
+    sums6CD = np.sum(CD_fine**2)
 
     # P
     sums1P = np.sum( QoI_fine_interp[:,5,:] - QoI_coarse_interp[:,5,:], axis=0)
     sums2P = np.sum((QoI_fine_interp[:,5,:] - QoI_coarse_interp[:,5,:])**2, axis=0)
-    sums5P = np.sum( QoI_fine_interp[:,5,:], axis=0)
-    sums6P = np.sum((QoI_fine_interp[:,5,:])**2, axis=0)
+    # sums5P = np.sum( QoI_fine_interp[:,5,:], axis=0)
+    # sums6P = np.sum((QoI_fine_interp[:,5,:])**2, axis=0)
 
     # N
     sums1N = np.sum( QoI_fine_interp[:,0,:] - QoI_coarse_interp[:,0,:], axis=0)
@@ -154,7 +168,7 @@ def dw_l(level, N_samples, *args):
     end   = time.time() 
     cost  = nproc*(end-start)    # Cost computation
         
-    return xnodesc_ref, sums1P, sums2P, sums5P, sums6P, sums1N, sums2N, sums1O, sums2O, sums1NO, sums2NO, sums1N2, sums2N2, sums1O2, sums2O2, sums1Ttr, sums2Ttr, sums1Tve, sums2Tve, sums1M, sums2M, cost
+    return xnodesc_ref, sums1CD, sums2CD, sums5CD, sums6CD, sums1P, sums2P, sums1N, sums2N, sums1O, sums2O, sums1NO, sums2NO, sums1N2, sums2N2, sums1O2, sums2O2, sums1Ttr, sums2Ttr, sums1Tve, sums2Tve, sums1M, sums2M, cost
 
 
 def moving_average(data, window_size):

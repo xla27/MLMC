@@ -5,11 +5,19 @@ import subprocess
 import csv
 import numpy as np
 
-fieldnames = ["PointID","x","y","Density_0","Density_1","Density_2","Density_3","Density_4",
+fieldnames_surf = ["PointID","x","y","Density_0","Density_1","Density_2","Density_3","Density_4",
               "Momentum_x","Momentum_y","Energy","Energy_ve","MassFrac_0","MassFrac_1","MassFrac_2",
               "MassFrac_3","MassFrac_4","Pressure","Temperature_tr","Temperature_ve","Velocity_x",
               "Velocity_y","Mach","Pressure_Coefficient","Metric_xx","Metric_xy","Metric_yy"]
 
+
+fieldnames_hist = ["Time_Iter","Outer_Iter","Inner_Iter", "rms[Rho_0]","rms[Rho_1]",   
+                   "rms[Rho_2]","rms[Rho_3]","rms[Rho_4]","rms[RhoU]" , "rms[RhoV]" ,  
+                    "rms[RhoE]","rms[RhoEve]","Min CFL","Max CFL","Avg CFL","Avg_Massflow",
+                    "Avg_Mach","Avg_Temp","Avg_Press","Avg_Density",  "Avg_Enthalpy",
+                    "Avg_NormalVel","Uniformity","Secondary_Strength","Momentum_Distortion",
+                    "Secondary_Over_Uniformity","Avg_TotalTemp","Avg_TotalPress","RefForce",       
+                    "CD","CL","CSF","CMx","CMy","CMz","CFx","CFy","CFz","CEff"]
 
 def cfd_call(type, valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, l, i, *args):
     
@@ -75,14 +83,17 @@ def cfd_call(type, valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, l, i, *
         if type == 'FINE':
 
             csv_path_surf = os.path.join(destinationFolder, stringIter, 'adap', f'ite{l}', 'surface_flow.csv')
+            csv_path_hist = os.path.join(destinationFolder, stringIter, 'adap', f'ite{l}', 'history.csv')
 
         elif type == 'COARSE':
 
             csv_path_surf = os.path.join(destinationFolder, stringIter, 'adap', f'ite{l-1}', 'surface_flow.csv')
+            csv_path_hist = os.path.join(destinationFolder, stringIter, 'adap', f'ite{l-1}', 'history.csv')
 
         if os.path.isfile(csv_path_surf):
 
-            data_surf = csv2dict(csv_path_surf, fieldnames)
+            data_surf = csv2dict(csv_path_surf, fieldnames_surf)
+            data_hist = csv2dict(csv_path_hist, fieldnames_hist)
 
             # Save gas composition at the wall
             beta_n  = data_surf['MassFrac_0'].tolist()
@@ -96,6 +107,8 @@ def cfd_call(type, valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, l, i, *
             Ttr_i = (data_surf['Temperature_tr'] / 1000).tolist() # rototranslational temperature normalized w.r.t asymptotic rototranslational temperature
             Tve_i = (data_surf['Temperature_ve'] / 1000).tolist() # vibrational temperature normalized w.r.t asymptotic vibrational temperature
             M_i   = (data_surf['Mach'] / 9).tolist() # mach normalized w.r.t asymptotic mach
+
+            Cd_i = (data_hist['CD']).tolist()[-1]
     
             # Save grid
             xnodesf = data_surf['x'].tolist()
@@ -105,7 +118,7 @@ def cfd_call(type, valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, l, i, *
             # if type == 'COARSE':
             #     shutil.rmtree(os.path.join(destinationSubfolder, 'adap'))
 
-            return beta_n, beta_o, beta_no, beta_n2, beta_o2, p_i, Ttr_i, Tve_i, M_i, xnodesf
+            return beta_n, beta_o, beta_no, beta_n2, beta_o2, p_i, Ttr_i, Tve_i, M_i, Cd_i, xnodesf
 
 
     return None, None

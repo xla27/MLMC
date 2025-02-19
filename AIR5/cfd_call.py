@@ -5,10 +5,12 @@ import subprocess
 import csv
 import numpy as np
 
-fieldnames = ["PointID","x","y","Density_0","Density_1","Density_2","Density_3","Density_4",
+fieldnames_surf = ["PointID","x","y","Density_0","Density_1","Density_2","Density_3","Density_4",
               "Momentum_x","Momentum_y","Energy","Energy_ve","MassFrac_0","MassFrac_1","MassFrac_2",
               "MassFrac_3","MassFrac_4","Pressure","Temperature_tr","Temperature_ve","Velocity_x",
               "Velocity_y","Mach","Pressure_Coefficient"]
+
+fieldnames_hist = ["Inner_Iter","Time(sec)","rms[RhoE]","CD","CL"]
 
 
 def cfd_call(type, valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, l, i, *args):
@@ -70,9 +72,11 @@ def cfd_call(type, valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, l, i, *
 
         # Read file to get qois
         csv_path_surf = os.path.join(destinationFolder, stringIter, 'surface_flow.csv')
+        csv_path_hist = os.path.join(destinationFolder, stringIter, 'history.csv')
         if os.path.isfile(csv_path_surf):
 
-            data_surf = csv2dict(csv_path_surf, fieldnames)
+            data_surf = csv2dict(csv_path_surf, fieldnames_surf)
+            data_hist = csv2dict(csv_path_hist, fieldnames_hist)
 
             # Save gas composition at the wall
             beta_n  = data_surf['MassFrac_0'].tolist()
@@ -86,6 +90,8 @@ def cfd_call(type, valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, l, i, *
             Ttr_i = (data_surf['Temperature_tr'] / 1000).tolist() # rototranslational temperature normalized w.r.t asymptotic rototranslational temperature
             Tve_i = (data_surf['Temperature_ve'] / 1000).tolist() # vibrational temperature normalized w.r.t asymptotic vibrational temperature
             M_i   = (data_surf['Mach'] / 9).tolist() # mach normalized w.r.t asymptotic mach
+
+            Cd_i = (data_hist['CD']).tolist()[-1]
        
             # Save grid
             xnodesf = data_surf['x'].tolist()
@@ -93,7 +99,7 @@ def cfd_call(type, valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, l, i, *
             os.remove('history.csv')
 
             os.chdir(workingFolder)  # Return to the starting directory
-            return beta_n, beta_o, beta_no, beta_n2, beta_o2, p_i, Ttr_i, Tve_i, M_i, xnodesf
+            return beta_n, beta_o, beta_no, beta_n2, beta_o2, p_i, Ttr_i, Tve_i, M_i, Cd_i, xnodesf
         
     return None, None
 
