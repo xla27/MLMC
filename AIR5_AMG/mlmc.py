@@ -1,6 +1,7 @@
 import os, shutil
 import numpy as np
 from scipy.interpolate import interp1d
+from scipy.integrate import trapezoid
 import matplotlib.pyplot as plt
 import pickle
 
@@ -542,7 +543,7 @@ def screening(mlmc_l, L, N, logfile, *args):
         sums1 = 0; sums2 = 0; sums5 = 0; sums6 = 0
         cst = 0
         
-        _, sums1_j, sums2_j, sums5_j, sums6_j, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, cst_j = mlmc_l(l, int(N / 1), *args)
+        xnodes, sums1_j, sums2_j, sums5_j, sums6_j, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, cst_j = mlmc_l(l, int(N / 1), *args)
 
         sums1 += sums1_j / N
         sums2 += sums2_j / N
@@ -551,10 +552,10 @@ def screening(mlmc_l, L, N, logfile, *args):
         cst += cst_j / N
 
         cost.append(cst)
-        del1.append(np.linalg.norm(sums1, np.inf))  # Ave(Pf-Pc)
-        del2.append(np.linalg.norm(sums5, np.inf))  # Ave(Pf)
-        var1.append(np.linalg.norm((sums2 - sums1 ** 2), np.inf))  # Var(Pf-Pc)
-        var2.append(np.linalg.norm((sums6 - sums5 ** 2), np.inf))  # Var(Pf)
+        del1.append(Lpnorm(xnodes, sums1, 1))  # Ave(Pf-Pc)
+        del2.append(Lpnorm(xnodes, sums5, 1))  # Ave(Pf)
+        var1.append(Lpnorm(xnodes, (sums2 - sums1 ** 2), 1))  # Var(Pf-Pc)
+        var2.append(Lpnorm(xnodes, (sums6 - sums5 ** 2), 1))  # Var(Pf)
         var2[-1] = max(var2[-1], 1e-10)  
 
         write(logfile, "%2d  %11.4e %11.4e  %.3e  %.3e %.2e \n" % \
@@ -568,3 +569,7 @@ def screening(mlmc_l, L, N, logfile, *args):
     pg    = np.polyfit(range(L1, L2), np.log2(np.abs(cost[L1:L2])), 1);  gamma =  pg[0]
 
     return del1, del2, var1, var2, cost, alpha, beta, gamma
+
+
+def Lpnorm(x, f, p):
+    return trapezoid(np.abs(f)**p, x)**(1/p)
