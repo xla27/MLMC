@@ -197,9 +197,11 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
         CS1M_matrix   = np.transpose(np.array(interpolated_cellsom1M));     CS2M_matrix   = np.transpose(np.array(interpolated_cellsom2M))
 
         # Compute absolute average, variance and cost (weak convergence is checked on Pressure)
-        ml = np.abs(np.max(CS1P_matrix / Nl, axis=0))       # L-infinity norm of the average of each level
-        Vl = np.maximum(0, np.max(CS2P_matrix / Nl - (CS1P_matrix / Nl)**2, axis=0))
-        Cl = costl / Nl
+        # ml = np.abs(np.max(CS1P_matrix / Nl, axis=0))       # L-infinity norm of the average of each level
+        # Vl = np.maximum(0, np.max(CS2P_matrix / Nl - (CS1P_matrix / Nl)**2, axis=0))
+        ml_check = np.array([Lpnorm(coarsest_grid, CS1P_matrix[:,l]/Nl[l], 1) for l in range(len(Nl))])
+        Vl_check = np.array([Lpnorm(coarsest_grid, (CS2P_matrix[:,l]/Nl[l] - (CS1P_matrix[:,l]**2)/Nl[l]), 1) for l in range(len(Nl))])
+        Cl_check = costl / Nl
 
         ml_vec = CS1P_matrix / Nl
         Vl_vec = CS2P_matrix / Nl - ml_vec**2
@@ -239,7 +241,7 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
         VlM_vec[VlM_vec < 0] = 0
 
         # Set optimal number of additional samples
-        Ns  = np.ceil(np.sqrt(Vl / Cl) * np.sum(np.sqrt(Vl * Cl)) / ((1 - theta) * eps**2))
+        Ns  = np.ceil(np.sqrt(Vl_check / Cl_check) * np.sum(np.sqrt(Vl_check * Cl_check)) / ((1 - theta) * eps**2))
         dNl = np.maximum(0, Ns - Nl)
 
         dNl_str = str(dNl)
@@ -248,7 +250,7 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
         # If (almost) converged, estimate remaining error and decide whether a new level is required
         if np.sum(dNl > 0.01 * Nl) == 0:
 
-            rem = ml[L] / (2**alpha - 1)
+            rem = ml_check[L] / (2**alpha - 1)
 
             if rem > np.sqrt(theta) * eps:
 
@@ -261,9 +263,9 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
                     L += 1
 
                     # appending asymptotic estimates of Vl, Cl from weak convergence conditions to compute a preliminar Ns
-                    Vl = np.append(Vl, Vl[-1] / 2**beta)
+                    Vl_check = np.append(Vl_check, Vl_check[-1] / 2**beta)
                     Vl_vec = np.append(Vl_vec, (Vl_vec[:, L-1] / (2 ** beta)).reshape(-1, 1), axis=1)
-                    Cl = np.append(Cl, Cl[-1] * 2**gamma)
+                    Cl_check = np.append(Cl_check, Cl_check[-1] * 2**gamma)
 
                     Nl = np.append(Nl, 0.0)
                     
@@ -283,7 +285,7 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
                     costl = np.append(costl, 0)
                     
                     # computing initial optimal samples number for new level
-                    Ns = np.ceil(np.sqrt(Vl / Cl) * np.sum(np.sqrt(Vl * Cl)) / ((1 - theta) * eps**2))
+                    Ns = np.ceil(np.sqrt(Vl_check / Cl_check) * np.sum(np.sqrt(Vl_check * Cl_check)) / ((1 - theta) * eps**2))
 
                     dNl = np.maximum(0, Ns - Nl)
 
@@ -514,7 +516,7 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
     plt.cla()
     plt.clf()       
     
-    return P, Nl, Cl
+    return P, Nl, Cl_check
 
 
 def screening(mlmc_l, L, N, logfile, *args):
