@@ -1,7 +1,7 @@
 import os, shutil
 import numpy as np
 from scipy.interpolate import interp1d
-from scipy.integrate import trapezoid
+from scipy.integrate import trapz
 import matplotlib.pyplot as plt
 import pickle
 
@@ -574,4 +574,4 @@ def screening(mlmc_l, L, N, logfile, *args):
 
 
 def Lpnorm(x, f, p):
-    return trapezoid(np.abs(f)**p, x)**(1/p)
+    return trapz(np.abs(f)**p, x)**(1/p)
