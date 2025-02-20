@@ -30,7 +30,7 @@ def dw_l(level, N_samples, *args):
     QoI_fine   = [None] * N_samples; QoI_fine_avg   = [None] * N_samples; QoI_fine_interp   = [None] * N_samples
     QoI_coarse = [None] * N_samples; QoI_coarse_avg = [None] * N_samples; QoI_coarse_interp = [None] * N_samples
 
-    SF = 0.0075
+    SF = 0.015
 
     # Looping over the samples
     for i in range(N_samples):
