@@ -200,7 +200,7 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
         # ml = np.abs(np.max(CS1P_matrix / Nl, axis=0))       # L-infinity norm of the average of each level
         # Vl = np.maximum(0, np.max(CS2P_matrix / Nl - (CS1P_matrix / Nl)**2, axis=0))
         ml_check = np.array([Lpnorm(coarsest_grid, CS1P_matrix[:,l]/Nl[l], 1) for l in range(len(Nl))])
-        Vl_check = np.array([Lpnorm(coarsest_grid, (CS2P_matrix[:,l]/Nl[l] - (CS1P_matrix[:,l]**2)/Nl[l]), 1) for l in range(len(Nl))])
+        Vl_check = np.array([Lpnorm(coarsest_grid, (CS2P_matrix[:,l]/Nl[l] - (CS1P_matrix[:,l]/Nl[l])**2), 1) for l in range(len(Nl))])
         Cl_check = costl / Nl
 
         ml_vec = CS1P_matrix / Nl
