@@ -102,15 +102,15 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
                     # if x_ref is smaller, this x_ref becomes the new reference and I interpolate the previous sums
                     elif len(x_ref) < len(cellnodes[l]):
 
-                        cellsom1P[l]   = interp1d(cellnodes[l], cellsom1P[l],   kind='linear', fill_value='extrapolate')(x_ref); cellsom2P[l]   = interp1d(x_ref, cellsom2P[l],   kind='linear', fill_value='extrapolate')(x_ref)
-                        cellsom1N[l]   = interp1d(cellnodes[l], cellsom1N[l],   kind='linear', fill_value='extrapolate')(x_ref); cellsom2N[l]   = interp1d(x_ref, cellsom2N[l],   kind='linear', fill_value='extrapolate')(x_ref)
-                        cellsom1O[l]   = interp1d(cellnodes[l], cellsom1O[l],   kind='linear', fill_value='extrapolate')(x_ref); cellsom2O[l]   = interp1d(x_ref, cellsom2O[l],   kind='linear', fill_value='extrapolate')(x_ref)
-                        cellsom1NO[l]  = interp1d(cellnodes[l], cellsom1NO[l],  kind='linear', fill_value='extrapolate')(x_ref); cellsom2NO[l]  = interp1d(x_ref, cellsom2NO[l],  kind='linear', fill_value='extrapolate')(x_ref)
-                        cellsom1N2[l]  = interp1d(cellnodes[l], cellsom1N2[l],  kind='linear', fill_value='extrapolate')(x_ref); cellsom2N2[l]  = interp1d(x_ref, cellsom2N2[l],  kind='linear', fill_value='extrapolate')(x_ref)
-                        cellsom1O2[l]  = interp1d(cellnodes[l], cellsom1O2[l],  kind='linear', fill_value='extrapolate')(x_ref); cellsom2O2[l]  = interp1d(x_ref, cellsom2O2[l],  kind='linear', fill_value='extrapolate')(x_ref)
-                        cellsom1Ttr[l] = interp1d(cellnodes[l], cellsom1Ttr[l], kind='linear', fill_value='extrapolate')(x_ref); cellsom2Ttr[l] = interp1d(x_ref, cellsom2Ttr[l], kind='linear', fill_value='extrapolate')(x_ref)
-                        cellsom1Tve[l] = interp1d(cellnodes[l], cellsom1Tve[l], kind='linear', fill_value='extrapolate')(x_ref); cellsom2Tve[l] = interp1d(x_ref, cellsom2Tve[l], kind='linear', fill_value='extrapolate')(x_ref)
-                        cellsom1M[l]   = interp1d(cellnodes[l], cellsom1M[l],   kind='linear', fill_value='extrapolate')(x_ref); cellsom2M[l]   = interp1d(x_ref, cellsom2M[l],   kind='linear', fill_value='extrapolate')(x_ref)
+                        cellsom1P[l]   = interp1d(cellnodes[l], cellsom1P[l],   kind='linear', fill_value='extrapolate')(x_ref); cellsom2P[l]   = interp1d(cellnodes[l], cellsom2P[l],   kind='linear', fill_value='extrapolate')(x_ref)
+                        cellsom1N[l]   = interp1d(cellnodes[l], cellsom1N[l],   kind='linear', fill_value='extrapolate')(x_ref); cellsom2N[l]   = interp1d(cellnodes[l], cellsom2N[l],   kind='linear', fill_value='extrapolate')(x_ref)
+                        cellsom1O[l]   = interp1d(cellnodes[l], cellsom1O[l],   kind='linear', fill_value='extrapolate')(x_ref); cellsom2O[l]   = interp1d(cellnodes[l], cellsom2O[l],   kind='linear', fill_value='extrapolate')(x_ref)
+                        cellsom1NO[l]  = interp1d(cellnodes[l], cellsom1NO[l],  kind='linear', fill_value='extrapolate')(x_ref); cellsom2NO[l]  = interp1d(cellnodes[l], cellsom2NO[l],  kind='linear', fill_value='extrapolate')(x_ref)
+                        cellsom1N2[l]  = interp1d(cellnodes[l], cellsom1N2[l],  kind='linear', fill_value='extrapolate')(x_ref); cellsom2N2[l]  = interp1d(cellnodes[l], cellsom2N2[l],  kind='linear', fill_value='extrapolate')(x_ref)
+                        cellsom1O2[l]  = interp1d(cellnodes[l], cellsom1O2[l],  kind='linear', fill_value='extrapolate')(x_ref); cellsom2O2[l]  = interp1d(cellnodes[l], cellsom2O2[l],  kind='linear', fill_value='extrapolate')(x_ref)
+                        cellsom1Ttr[l] = interp1d(cellnodes[l], cellsom1Ttr[l], kind='linear', fill_value='extrapolate')(x_ref); cellsom2Ttr[l] = interp1d(cellnodes[l], cellsom2Ttr[l], kind='linear', fill_value='extrapolate')(x_ref)
+                        cellsom1Tve[l] = interp1d(cellnodes[l], cellsom1Tve[l], kind='linear', fill_value='extrapolate')(x_ref); cellsom2Tve[l] = interp1d(cellnodes[l], cellsom2Tve[l], kind='linear', fill_value='extrapolate')(x_ref)
+                        cellsom1M[l]   = interp1d(cellnodes[l], cellsom1M[l],   kind='linear', fill_value='extrapolate')(x_ref); cellsom2M[l]   = interp1d(cellnodes[l], cellsom2M[l],   kind='linear', fill_value='extrapolate')(x_ref)
 
                         cellnodes[l] = x_ref # the new coarse x becomes the reference
  
