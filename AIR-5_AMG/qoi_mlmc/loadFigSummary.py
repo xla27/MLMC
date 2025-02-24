@@ -28,7 +28,7 @@ class HandlerLine2D(HandlerTuple):
         return [l1, l2]
 
 # Define the filename of the pickled figure object
-plot_filename = 'plot6.pkl'  
+plot_filename = 'plot_summary.pkl'  
 
 with open(plot_filename, 'rb') as f:
     plot_data = pickle.load(f)
@@ -49,27 +49,20 @@ beta = plot_data['beta']
 gamma = plot_data['gamma'] 
 
 
-eps = [0.02, 0.03, 0.04, 0.05]  # Define epss values
-mlmc_cost = [7.207e+06, 3.2051e+06, 1.85e+06, 1.16546e+06]  # Define mlmc_cost values
-std_cost = [5.896e+07, 2.99e+07, 1.418e+07, 9.53e+06]  # Define std_cost values
-Ns = [[791, 99, 35, 24, 9], [345, 48, 18, 12, 5], [198, 26, 10, 7, 3], [119, 14, 5, 4, 2]]  # Number of samples values
-ls = [[0, 1, 2, 3, 4], [0, 1, 2, 3, 4], [0, 1, 2, 3, 4], [0, 1, 2, 3, 4]]  # List of lists for ls
-
+eps = [0.05]  # Define epss values
+mlmc_cost = [6.543e+05]  # Define mlmc_cost values
+std_cost = [1.588e+06]  # Define std_cost values
+Ns = [[352, 39, 23]]  # Number of samples values
+ls = [[0, 1, 2]]  # List of lists for ls
 
 epss_array = np.array(plot_data['epss']) # Convert 'epss' to a numpy array
 del22 = np.array(del2)
 denominator = abs(del22[-1])
 
-# Set custom font parameters
-font = {'family': 'Arial',
-        'weight': 'normal',
-        'size': 35}
-
-plt.rc('font', **font)  # Apply custom font parameters
-
-plt.rc("legend", framealpha=None)
-plt.rc("legend", edgecolor='black')
-plt.rc("font", family="serif")
+# Utilities
+plt.rcParams.update({
+    "text.usetex": True,
+    "font.size": 20 })
 
 # Define figure size
 figsize = (13, 11)
@@ -77,11 +70,10 @@ figsize = (13, 11)
 # Alto: log2 media e varianza
 fig, ax1 = plt.subplots(figsize=figsize)
 
-line1, = ax1.plot(l, np.log2(del2), label='mean $Q_l$', clip_on=False, markersize=10, marker='o', linewidth=3.5, linestyle='-', color='blue')
-line2, = ax1.plot(l[1:], np.log2(del1[1:]), label='mean $Q_l - Q_{l-1}$', clip_on=False, markersize=10, marker='x', linewidth=3.5, linestyle='--', color='blue')
-ax1.set_xlabel('Level $\ell$', fontsize=35)
-#ax1.set_ylabel(r'$\log_2||\mathrm{mean}||_\infty$', fontsize=35, color='blue')
-ax1.set_ylabel(r'$\left \|  \mathbb{E} \, [\cdot] \right \|_{L^1} , \; \log_2$', fontsize=35, color='blue')
+ax1.plot(l, np.log2(del2), label=r'$\mathrm{mean} \, Q_l$', clip_on=False, markersize=15, marker='o', linewidth=3.5, linestyle='-', color='blue')
+ax1.plot(l[1:], np.log2(del1[1:]), label=r'$\mathrm{mean} \, $Q_l - Q_{l-1}$', clip_on=False, markersize=15, marker='v', linewidth=3.5, linestyle='--', color='blue')
+ax1.set_xlabel(r'$\mathrm{Level} \, \ell$', fontsize=35)
+ax1.set_ylabel(r'$\left \| \mathrm{E} \, [\cdot] \right \|_{L^1} , \; \log_2$', fontsize=35, color='blue')
 ax1.tick_params(axis='y', labelcolor='blue', labelsize=30)
 ax1.tick_params(axis='x', labelsize=30)
 ax1.grid(True)
@@ -89,10 +81,10 @@ ax1.set_xticks(range(max(l) + 1))
 ax1.set_xlim([0, max(l)])
 
 ax2 = ax1.twinx()
-line3, = ax2.plot(l, np.log2(var2), label='variance $Q_l$', clip_on=False, markersize=10, marker='o', linewidth=3.5, linestyle='-', color='red')
-line4, = ax2.plot(l[1:], np.log2(var1[1:]), label='variance $Q_l - Q_{l-1}$', clip_on=False, markersize=10, marker='x', linewidth=3.5, linestyle='--', color='red')
+ax2.plot(l, np.log2(var2), label=r'$\mathrm{variance} \, Q_l$', clip_on=False, markersize=15, marker='o', linewidth=3.5, linestyle='-', color='red')
+ax2.plot(l[1:], np.log2(var1[1:]), label=r'\mathrm{variance} \, Q_l - Q_{l-1}$', clip_on=False, markersize=15, marker='v', linewidth=3.5, linestyle='--', color='red')
 #ax2.set_ylabel(r'$\log_2 ||\mathrm{variance}||_\infty$', fontsize=35, color='red')
-ax2.set_ylabel(r'$\left \| \mathbb{V} \, [\cdot, \cdot] \right \|_{L^1} , \; \log_2$', fontsize=35, color='red')
+ax2.set_ylabel(r'$\left \| \mathrm{V} \, [\cdot, \cdot] \right \|_{L^1} , \; \log_2$', fontsize=35, color='red')
 ax2.tick_params(axis='y', labelcolor='red', labelsize=30)
 ax2.set_xlim([0, max(l)])
 
@@ -107,20 +99,21 @@ legend_elements = [
 ax1.legend(legend_elements, [r'$\vec{Q}_\ell$', r'$\vec{Q}_\ell - \vec{Q}_{\ell-1}$'],
            handler_map={tuple: HandlerLine2D()}, loc='best', fontsize=35)
 
-plt.savefig('dw_figsix6_12_combined.svg')
+plt.savefig('dw5_summary_12_combined.svg')
 plt.close()
 
 
 # Centro sx: Plot cost per level
 plt.figure(figsize=figsize)
 plt.plot(l, np.log2(cost), 'o-', markersize=10, clip_on=False, linewidth=3.5, color='blue')
-plt.xlabel('Level $\ell$', fontsize=35)
-plt.ylabel(r'$\log_2$ cost per sample', fontsize=35)
+plt.xlabel(r'$\mathrm{Level} \, \ell$', fontsize=35)
+#plt.ylabel(r'$\log_2$ cost per sample', fontsize=35)
+plt.ylabel(r'$\mathrm{Cost} \, \mathrm{per} \, \mathrm{sample}, \: \log_2$', fontsize=35)
 plt.grid(True)
 plt.axis([0,max(l), min(np.log2(cost)), max(np.log2(cost))])
 plt.xticks(range(max(l) + 1), fontsize=30)
 plt.tick_params(labelsize=30)
-plt.savefig('dw_figsix6_3.svg')
+plt.savefig('dw5_summary_3.svg')
 plt.close()
 
 
@@ -131,15 +124,15 @@ plt.rc('axes', prop_cycle=(cycler('color', ['k']) * cycler('linestyle', ['--', '
 epsss = np.array(eps)
 mlmc_costs = np.array(mlmc_cost)
 
-plt.loglog(epsss, mlmc_costs / max(mlmc_costs), 'o--', markersize=10, label='Simulation', linewidth=3.5, color='blue')
-plt.loglog(epsss, epsss**(-2) / max(epsss**(-2)), 'x--', markersize=10, label=r'$\beta$ > $\gamma$', linewidth=3.5, color='red')
-plt.loglog(epsss, epsss**(-2 - (gamma - beta) / alpha) / max(epsss**(-2 - (gamma - beta) / alpha)), 'd--', markersize=10, label=r'$\beta$ < $\gamma$', linewidth=3.5, color='green')
-plt.xlabel('Relative accuracy $\epsilon_r$', fontsize=35)
-plt.ylabel('Cost normalized trend', fontsize=35)
+plt.loglog(epsss, mlmc_costs / max(mlmc_costs), 'o--', markersize=10, label=r'$\mathrm{Simulation}$', linewidth=3.5, color='blue')
+plt.loglog(epsss, epsss**(-2) / max(epsss**(-2)), 'x--', markersize=10, label=r'$\beta > \gamma$', linewidth=3.5, color='red')
+plt.loglog(epsss, epsss**(-2 - (gamma - beta) / alpha) / max(epsss**(-2 - (gamma - beta) / alpha)), 'd--', markersize=10, label=r'$\beta < \gamma$', linewidth=3.5, color='green')
+plt.xlabel(r'$\varepsilon_r$', fontsize=35)
+plt.ylabel(r'$\mathrm{Normalized} \, \mathrm{cost}$', fontsize=35)
 plt.grid(True, which="both")
 plt.tick_params(labelsize=30)
 plt.legend(loc='best', fontsize=35)
-plt.savefig('dw_figsix6_4.svg')
+plt.savefig('dw5_summary_4.svg')
 plt.close()
 
 # basso sx: Plot number of samples per level
@@ -153,10 +146,10 @@ custom_cycler = (cycler('color', ['blue', 'red', 'green','purple']) *      # Col
 # Set the rcParams with the custom cycler
 plt.rcParams['axes.prop_cycle'] = custom_cycler
 for eps_c, ll, n, color in zip(epsss, ls, Ns, colors):
-    plt.semilogy(ll, n, label='$\\varepsilon_r$ = {:.2f}'.format(eps_c), markerfacecolor='none', clip_on=False, linewidth=3.5, markersize=10, color=color)
+    plt.semilogy(ll, n, label='$\\varepsilon_r = {:.2f}$'.format(eps_c), markerfacecolor='none', clip_on=False, linewidth=3.5, markersize=10, color=color)
 
-plt.xlabel('Level $\ell$', fontsize=35)
-plt.ylabel('$N_l$', fontsize=35)
+plt.xlabel(r'$\mathrm{Level} \, \ell$', fontsize=35)
+plt.ylabel(r'$N_l$', fontsize=35)
 plt.legend(loc='best', fontsize=35)
 plt.grid(True, which="both")
 axis = plt.axis()
@@ -164,7 +157,7 @@ plt.axis([0, max([max(x) for x in ls]), axis[2], axis[3]])
 plt.gca().xaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: int(x)))
 plt.xticks(range(max(l) + 1), fontsize=30)
 plt.tick_params(labelsize=30)
-plt.savefig('dw_figsix6_5.svg')
+plt.savefig('dw5_summary_5.svg')
 plt.close()
 
 # basso dx: Plot normalized cost for given accuracy
@@ -172,14 +165,14 @@ plt.figure(figsize=figsize)
 I = np.argsort(eps)
 std_cost = np.array(std_cost)
 mlmc_cost = np.array(mlmc_cost)
-plt.loglog(epsss[I], std_cost[I] / 3600,  'o-',  label='MC', markersize=10, clip_on=False, linewidth=3.5, color='blue')
-plt.loglog(epsss[I], mlmc_cost[I] / 3600, 'o--', label='MLMC', markersize=10,   clip_on=False, linewidth=3.5, color='red')
-plt.xlabel(r'Relative accuracy $\varepsilon_r$', fontsize=35)
-plt.ylabel(r'Cost [$\mathrm{N_{CPU} \cdot hours}$]', fontsize=35)
+plt.loglog(epsss[I], std_cost[I] / 3600,  'o-',  label=r'$\mathrm{MC}$', markersize=10, clip_on=False, linewidth=3.5, color='blue')
+plt.loglog(epsss[I], mlmc_cost[I] / 3600, 'o--', label=r'$\mathrm{MLMC}$', markersize=10,   clip_on=False, linewidth=3.5, color='red')
+plt.xlabel(r'$\varepsilon_r$', fontsize=35)
+plt.ylabel(r'$\mathrm{Cost}, \; [N_{\mathrm{CPU}} \cdot \mathrm{hours}]$', fontsize=35)
 plt.legend(loc='best', fontsize=35)
 plt.grid(True, which="both")
 plt.tick_params(labelsize=30)
 axis = plt.axis()
 plt.axis([min(epsss), max(epsss), axis[2], axis[3]])
-plt.savefig('dw_figsix6_6.svg')
+plt.savefig('dw5_summary_6.svg')
 plt.close()
