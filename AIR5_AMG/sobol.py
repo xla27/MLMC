@@ -69,7 +69,22 @@ def compute_sobol_indices(type, param_values, level, problem, *args):
         model_outputsM.append(M_i)
 
     # finding the coarsest xnode and interpolating over it al the other values
-    xnodes_ref = min(xnodes_list, key=len)
+    xnodes_ref = max(xnodes_list, key=len)
+
+    # moving average on the samples
+    SF = 0.015
+    ws = max(int(len(xnodes_ref) * SF), 1)
+    for i in range(samples):
+        model_outputsN[i]   = moving_average(model_outputsN[i],   ws)
+        model_outputsO[i]   = moving_average(model_outputsO[i],   ws)
+        model_outputsNO[i]  = moving_average(model_outputsNO[i],  ws)
+        model_outputsN2[i]  = moving_average(model_outputsN2[i],  ws)
+        model_outputsO2[i]  = moving_average(model_outputsO2[i],  ws)
+        model_outputsP[i]   = moving_average(model_outputsP[i],   ws)
+        model_outputsTtr[i] = moving_average(model_outputsTtr[i], ws)
+        model_outputsTve[i] = moving_average(model_outputsTve[i], ws)
+        model_outputsM[i]   = moving_average(model_outputsM[i],   ws)
+
 
     for i in range(samples):
         model_outputsN[i]   = interp1d(xnodes_list[i], model_outputsN[i],   kind='linear', fill_value='extrapolate')(xnodes_ref)
@@ -144,3 +159,16 @@ def compute_sobol_indices(type, param_values, level, problem, *args):
                 
     return xnodes_ref, S1N, S1O, S1NO, S1N2, S1O2, S1P, S1Ttr, S1Tve, S1M
     
+
+def moving_average(data, window_size):
+    """
+    Function to perform the moving average.
+
+    data:           np.array of data
+    window_size:    size of the window
+    """
+    pad_left    = window_size // 2
+    pad_right   = window_size - pad_left - 1
+    padded_data = np.pad(data, (pad_left, pad_right), mode='edge')
+    ma_data     = np.convolve(padded_data, np.ones(window_size), 'valid') / window_size
+    return ma_data
