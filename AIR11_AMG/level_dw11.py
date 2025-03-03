@@ -19,98 +19,18 @@ def dw_l(level, N_samples, *args):
     # Start of time recording
     start = time.time()
 
-    # P
-    sums1 = 0  # sum of difference between static Pressure at fine and coarse
-    sums2 = 0  # sum of square of difference between static Pressure at fine and coarse
-    sums5 = 0  # sum of static Pressure at fine 
-    sums6 = 0  # sum of square of static Pressure at fine 
-
-    # ND e-
-    sums1ndelecMinus = 0 # sum of difference between electrons number density at fine and coarse
-    sums2ndelecMinus = 0 # sum of square of difference between electrons number density at fine and coarse
-
-    # ND N+
-    sums1ndNPlus = 0 # sum of difference between atomic nitrogen ions number density at fine and coarse
-    sums2ndNPlus = 0 # sum of square of difference between atomic nitrogen ions number density at fine and coarse
-
-    # ND O+
-    sums1ndOPlus = 0 # sum of difference between atomic oxygen ions number density at fine and coarse
-    sums2ndOPlus = 0 # sum of square of difference between atomic oxygen ions number density at fine and coarse
-
-    # ND NO+
-    sums1ndNOPlus = 0 # sum of difference between nitric oxyde ions number density at fine and coarse
-    sums2ndNOPlus = 0 # sum of square of difference between nitric oxyde ions number density at fine and coarse
-
-    # ND N2+
-    sums1ndN2Plus = 0 # sum of difference between nitrogen ions number density at fine and coarse
-    sums2ndN2Plus = 0 # sum of square of difference between nitrogen ions number density at fine and coarse
-
-    # ND O2+
-    sums1ndO2Plus = 0 # sum of difference between oxygen ions number density at fine and coarse
-    sums2ndO2Plus = 0 # sum of square of difference between oxygen ions number density at fine and coarse
-
-    # e-   
-    sums1elecMinus = 0 # sum of difference between electron mass fraction at fine and coarse
-    sums2elecMinus = 0 # sum of square of difference between electron mass fraction at fine and coarse
-
-    # N+
-    sums1NPlus = 0 # sum of difference between atomic nitrogen ions mass fraction at fine and coarse
-    sums2NPlus = 0 # sum of square of difference between atomic nitrogen ions mass fraction at fine and coarse
-
-    # O+
-    sums1OPlus = 0 # sum of difference between atomic oxygen ions mass fraction at fine and coarse
-    sums2OPlus = 0 # sum of square of difference between atomic oxygen ions mass fraction at fine and coarse
-
-    # NO+
-    sums1NOPlus = 0 # sum of difference between nitric oxyde ions mass fraction at fine and coarse
-    sums2NOPlus = 0 # sum of square of difference between nitric oxyde ions mass fraction at fine and coarse
-
-    # N2+
-    sums1N2Plus = 0 # sum of difference between nitrogen ions mass fraction at fine and coarse
-    sums2N2Plus = 0 # sum of square of difference between nitrogen ions mass fraction at fine and coarse
-
-    # O2+
-    sums1O2Plus = 0 # sum of difference between oxygen ions mass fraction at fine and coarse
-    sums2O2Plus = 0 # sum of square of difference between oxygen ions mass fraction at fine and coarse
-
-    # N
-    sums1N = 0 # sum of difference between atomic Nitrogen mass fraction at fine and coarse
-    sums2N = 0 # sum of square of difference between atomic Nitrogen mass fraction at fine and coarse
-
-    # O
-    sums1O = 0 # sum of difference between atomic Oxygen mass fraction at fine and coarse
-    sums2O = 0 # sum of square of difference between atomic Oxygen mass fraction at fine and coarse
-
-    # NO
-    sums1NO = 0 # sum of difference between Nitric Oxide mass fraction at fine and coarse
-    sums2NO = 0 # sum of square of difference between Nitric Oxide mass fraction at fine and coarse
-
-    # N2
-    sums1N2 = 0 # sum of difference between diatomic Nitrogen mass fraction at fine and coarse
-    sums2N2 = 0 # # sum of square of difference between diatomic Nitrogen mass fraction at fine and coarse
-
-    # O2 
-    sums1O2 = 0 # sum of difference between diatomic Oxygen mass fraction at fine and coarse
-    sums2O2 = 0 # sum of square of difference between diatomic Oxygen mass fraction at fine and coarse
-
-    # Temperatures 
-    sums1Ttr = 0 # sum of difference between translational Temperature at fine and coarse
-    sums2Ttr = 0 # sum of squares of difference between translational Temperature at fine and coarse
-    sums1Tve = 0 # sum of difference between vibrational Temperature at fine and coarse
-    sums2Tve = 0 # sum of squares of difference between vibrational Temperature at fine and coarse 
-
-    # Mach
-    sums1M = 0 # sum of difference between Mach at fine and coarse
-    sums2M = 0 # sum of square of difference between Mach at fine and coarse
-
     # Ranges for aleatoric uncertainties (Freestream values)
     Mmean   = 9.0;   M_max   = 9.5;   M_min   = 8.0 
     Tmean   = 1000;  T_max   = 1050;  T_min   = 850 
     Pmean   = 390;   P_max   = 600;   P_min   = 300
     Bn2mean = 0.79;  Bn2_max = 0.8;   Bn2_min = 0.76
 
-    QoI_coarse = [None] * N_samples
-    QoI_fine   = [None] * N_samples
+    xnodesc_list = []
+    xnodesf_list = []
+    QoI_fine   = [None] * N_samples; QoI_fine_avg   = [None] * N_samples; QoI_fine_interp   = [None] * N_samples
+    QoI_coarse = [None] * N_samples; QoI_coarse_avg = [None] * N_samples; QoI_coarse_interp = [None] * N_samples
+
+    SF = 0.015
 
     # Looping over the samples
     for i in range(N_samples):
@@ -136,8 +56,6 @@ def dw_l(level, N_samples, *args):
         valIns_Bn2 = str(Bn2_inf)
         valIns_Bo2 = str(Bo2_inf)
 
-        SF = 0.0075 
-
         # return of CFD calls [nd_elecMinus, nd_nPlus, nd_oPlus, nd_noPlus, nd_n2Plus, nd_o2Plus, beta_elecMinus, beta_nPlus, beta_oPlus, 
         # beta_noPlus, beta_n2Plus, beta_o2Plus, beta_n, beta_o, beta_no, beta_n2, beta_o2, p_i, Ttr_i, Tve_i, M_i, xnodesf]
 
@@ -147,54 +65,49 @@ def dw_l(level, N_samples, *args):
             (_, baseFolder, workingFolder) = args
             baseFolder2 = baseFolder.replace('AIR11_AMG','AIR11')
             args2 = (nproc, baseFolder2, workingFolder)
-            QoI_fine[i] = cfd_call('FINE', valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, level, i, *args2)
-            
+            QoI_fine[i] = list(cfd_call('FINE', valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, level, i, *args2))
+            xnodesf = QoI_fine[i][-1]
+
             # No call to CFD with coearse mesh, coarse results set to zero as it is the starting level
             xnodesc = QoI_fine[i][-1]
-            QoI_coarse[i] = [[0.] * len(xnodesc) for i in range(0,9)]
+            QoI_coarse[i] = [[0.] * len(xnodesc) for i in range(0,21)]
             QoI_coarse[i].append(xnodesc)
 
         else:
 
             # Call to CFD with fine mesh
             QoI_fine[i] = list(cfd_call_amg('FINE',valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, level, i, *args))
+            xnodesf = QoI_fine[i][-1]
 
             # Call to CFD with coarse mesh
             QoI_coarse[i] = list(cfd_call_amg('COARSE', valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, level, i, *args))
-    
-    # Extracting the reference xnodes for the coarse level as the xnodes component of COARSE samples with the lowest number of elements
-    xnodesc_list = [QoI_coarse[i][-1] for i in range(N_samples)]
+            xnodesc = QoI_coarse[i][-1]
 
-    xnodesc_ref = min(xnodesc_list, key=len)
+        xnodesc_list.append(xnodesc)
+        xnodesf_list.append(xnodesf)
 
-    # windows size for moving average
+    # finding the smallest xnodesc
+    lengths      = np.array([len(xnodes) for xnodes in xnodesc_list])
+    xnodesc_ref  = xnodesc_list[np.argmin(lengths)]
+
+    # moving average and interpolation
     ws = max(int(len(xnodesc_ref) * SF), 1)
 
-    QoI_coarse_interp = np.zeros((N_samples, 21, len(xnodesc_ref)))
-    QoI_fine_interp   = np.zeros((N_samples, 21, len(xnodesc_ref)))
-
-    # Interpolating the coarse and fine on the reference coarse and doing the moving average of the samples
     for i in range(N_samples):
+        QoI_coarse_avg[i] = [moving_average(QoI_coarse[i][qoi], ws) for qoi in range(21)]
+        QoI_fine_avg[i]   = [moving_average(QoI_fine[i][qoi],   ws) for qoi in range(21)]
 
-        for j in range(0,21):
+        if level == 0:
+            QoI_coarse_interp[i] = QoI_coarse_avg[i]
+            QoI_fine_interp[i]   = QoI_fine_avg[i]
 
-            if level >= 2:  # the interpolation is needed for both coarse and fine on reference xnodesc
+        if level == 1:
+            QoI_coarse_interp[i] = QoI_coarse_avg[i]
+            QoI_fine_interp[i]   = [interp1d(xnodesf_list[i], QoI_fine_avg[i][qoi], kind='linear', )(xnodesc_ref) for qoi in range(21)]
+        else:
+            QoI_coarse_interp[i] = [interp1d(xnodesc_list[i], QoI_coarse_avg[i][qoi], kind='linear', )(xnodesc_ref) for qoi in range(21)]
+            QoI_fine_interp[i]   = [interp1d(xnodesf_list[i], QoI_fine_avg[i][qoi],   kind='linear', )(xnodesc_ref) for qoi in range(21)]
 
-                QoI_coarse_interp[i,j,:] = interp1d(QoI_coarse[i][-1], QoI_coarse[i][j], kind='linear', fill_value='extrapolate')(xnodesc_ref)
-                QoI_fine_interp[i,j,:]   = interp1d(QoI_fine[i][-1],   QoI_fine[i][j],   kind='linear', fill_value='extrapolate')(xnodesc_ref)
-
-            elif level == 1: # the interpolation is needed for fine on reference xnodesc
-
-                QoI_coarse_interp[i,j,:] = np.array(QoI_coarse[i][j])
-                QoI_fine_interp[i,j,:]   = interp1d(QoI_fine[i][-1], QoI_fine[i][j], kind='linear', fill_value='extrapolate')(xnodesc_ref)
-
-            elif level == 0:
-
-                QoI_fine_interp[i,j,:] = np.array(QoI_fine[i][j])
-
-            # moving average
-            QoI_coarse_interp[i,j,:] = moving_average(QoI_coarse_interp[i,j,:], ws)
-            QoI_fine_interp[i,j,:]   = moving_average(QoI_fine_interp[i,j,:],   ws)
 
 
     # RESULTS UPDATE
