@@ -28,7 +28,7 @@ class HandlerLine2D(HandlerTuple):
         return [l1, l2]
 
 # Define the filename of the pickled figure object
-plot_filename = 'plot_summary.pkl'  
+plot_filename = 'plot_summary05.pkl'  
 
 with open(plot_filename, 'rb') as f:
     plot_data = pickle.load(f)
@@ -38,22 +38,22 @@ del2 = plot_data['del2']
 var1 = plot_data['var1']
 var2 = plot_data['var2']
 cost = plot_data['cost']
-l = plot_data['l']; l = [int(x) for x in l];
-epss = plot_data['epss']
-mlmc_cost = plot_data['mlmc_cost']
-std_cost = plot_data['std_cost']
-Ns = plot_data['Ns']
-ls = plot_data['ls']
+l = plot_data['l']; l = [int(x) for x in l]
+# epss = plot_data['epss']
+# mlmc_cost = plot_data['mlmc_cost']
+# std_cost = plot_data['std_cost']
+# Ns = plot_data['Ns']
+# ls = plot_data['ls']
 alpha = plot_data['alpha']
 beta = plot_data['beta']
 gamma = plot_data['gamma'] 
 
 
-eps = [0.05]  # Define epss values
-mlmc_cost = [6.543e+05]  # Define mlmc_cost values
-std_cost = [1.588e+06]  # Define std_cost values
-Ns = [[352, 39, 23]]  # Number of samples values
-ls = [[0, 1, 2]]  # List of lists for ls
+eps = [0.02, 0.03, 0.04, 0.05]  # Define epss values
+mlmc_cost = [7.299e+06, 1.746e+06, 8.992e+05, 6.543e+05]  # Define mlmc_cost values
+std_cost = [4.308e+07, 4.356e+06, 2.589e+06, 1.588e+06]  # Define std_cost values
+Ns = [[2373, 292, 171, 89], [950, 99, 67], [499, 58, 28], [352, 39, 23]]  # Number of samples values
+ls = [[0, 1, 2, 3], [0, 1, 2], [0, 1, 2], [0, 1, 2]]  # List of lists for ls
 
 epss_array = np.array(plot_data['epss']) # Convert 'epss' to a numpy array
 del22 = np.array(del2)
@@ -84,7 +84,7 @@ ax2 = ax1.twinx()
 ax2.plot(l, np.log2(var2), label=r'$\mathrm{variance} \, Q_l$', clip_on=False, markersize=15, marker='o', linewidth=3.5, linestyle='-', color='red')
 ax2.plot(l[1:], np.log2(var1[1:]), label=r'\mathrm{variance} \, Q_l - Q_{l-1}$', clip_on=False, markersize=15, marker='v', linewidth=3.5, linestyle='--', color='red')
 #ax2.set_ylabel(r'$\log_2 ||\mathrm{variance}||_\infty$', fontsize=35, color='red')
-ax2.set_ylabel(r'$\left \| \mathrm{V} \, [\cdot, \cdot] \right \|_{L^1} , \; \log_2$', fontsize=35, color='red')
+ax2.set_ylabel(r'$\left \| \mathrm{V} \, [\cdot] \right \|_{L^1} , \; \log_2$', fontsize=35, color='red')
 ax2.tick_params(axis='y', labelcolor='red', labelsize=30)
 ax2.set_xlim([0, max(l)])
 

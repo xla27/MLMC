@@ -34,8 +34,7 @@ plt.rcParams.update({
     "font.size": 20 })
 shaded_color = [0.6, 0.8, 1]
 
-epsstring = '0_7088'
-eps_folder = 'eps_0_05/'
+eps_folder = 'eps02/'
 
 # Data from Garbacz et al.
 file_path = 'data_garbacz.csv'
