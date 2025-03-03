@@ -1,5 +1,7 @@
+import os, shutil
 import numpy as np
 from scipy.interpolate import interp1d
+from scipy.integrate import trapz
 import matplotlib.pyplot as plt
 import pickle
 
@@ -135,27 +137,27 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
                     # if x_ref is smaller, this x_ref becomes the new reference and I interpolate the previous sums
                     elif len(x_ref) < len(cellnodes[l]):
 
-                        cellsom1P[l]             = interp1d(cellnodes[l], cellsom1P[l],             kind='linear', fill_value='extrapolate')(x_ref); cellsom2P[l]             = interp1d(x_ref, cellsom2P[l],             kind='linear', fill_value='extrapolate')(x_ref)
-                        cellsom1_nd_elecMinus[l] = interp1d(cellnodes[l], cellsom1_nd_elecMinus[l], kind='linear', fill_value='extrapolate')(x_ref); cellsom2_nd_elecMinus[l] = interp1d(x_ref, cellsom2_nd_elecMinus[l], kind='linear', fill_value='extrapolate')(x_ref)
-                        cellsom1_nd_nPlus[l]     = interp1d(cellnodes[l], cellsom1_nd_nPlus[l],     kind='linear', fill_value='extrapolate')(x_ref); cellsom2_nd_nPlus[l]     = interp1d(x_ref, cellsom2_nd_nPlus[l],     kind='linear', fill_value='extrapolate')(x_ref)
-                        cellsom1_nd_oPlus[l]     = interp1d(cellnodes[l], cellsom1_nd_oPlus[l],     kind='linear', fill_value='extrapolate')(x_ref); cellsom2_nd_oPlus[l]     = interp1d(x_ref, cellsom2_nd_oPlus[l],     kind='linear', fill_value='extrapolate')(x_ref)
-                        cellsom1_nd_noPlus[l]    = interp1d(cellnodes[l], cellsom1_nd_noPlus[l],    kind='linear', fill_value='extrapolate')(x_ref); cellsom2_nd_noPlus[l]    = interp1d(x_ref, cellsom2_nd_noPlus[l],    kind='linear', fill_value='extrapolate')(x_ref)
-                        cellsom1_nd_n2Plus[l]    = interp1d(cellnodes[l], cellsom1_nd_n2Plus[l],    kind='linear', fill_value='extrapolate')(x_ref); cellsom2_nd_n2Plus[l]    = interp1d(x_ref, cellsom2_nd_nPlus[l],     kind='linear', fill_value='extrapolate')(x_ref)
-                        cellsom1_nd_o2Plus[l]    = interp1d(cellnodes[l], cellsom1_nd_o2Plus[l],    kind='linear', fill_value='extrapolate')(x_ref); cellsom2_nd_o2Plus[l]    = interp1d(x_ref, cellsom2_nd_o2Plus[l],    kind='linear', fill_value='extrapolate')(x_ref)
-                        cellsom1elecMinus[l]     = interp1d(cellnodes[l], cellsom1elecMinus[l],     kind='linear', fill_value='extrapolate')(x_ref); cellsom2elecMinus[l]     = interp1d(x_ref, cellsom2elecMinus[l],     kind='linear', fill_value='extrapolate')(x_ref)
-                        cellsom1NPlus[l]         = interp1d(cellnodes[l], cellsom1NPlus[l],         kind='linear', fill_value='extrapolate')(x_ref); cellsom2NPlus[l]         = interp1d(x_ref, cellsom2NPlus[l],         kind='linear', fill_value='extrapolate')(x_ref)
-                        cellsom1OPlus[l]         = interp1d(cellnodes[l], cellsom1OPlus[l],         kind='linear', fill_value='extrapolate')(x_ref); cellsom2OPlus[l]         = interp1d(x_ref, cellsom2OPlus[l],         kind='linear', fill_value='extrapolate')(x_ref)
-                        cellsom1NOPlus[l]        = interp1d(cellnodes[l], cellsom1NOPlus[l],        kind='linear', fill_value='extrapolate')(x_ref); cellsom2NOPlus[l]        = interp1d(x_ref, cellsom2NOPlus[l],        kind='linear', fill_value='extrapolate')(x_ref)
-                        cellsom1N2Plus[l]        = interp1d(cellnodes[l], cellsom1N2Plus[l],        kind='linear', fill_value='extrapolate')(x_ref); cellsom2N2Plus[l]        = interp1d(x_ref, cellsom2N2Plus[l],        kind='linear', fill_value='extrapolate')(x_ref)
-                        cellsom1O2Plus[l]        = interp1d(cellnodes[l], cellsom1O2Plus[l],        kind='linear', fill_value='extrapolate')(x_ref); cellsom2O2Plus[l]        = interp1d(x_ref, cellsom2O2Plus[l],        kind='linear', fill_value='extrapolate')(x_ref)
-                        cellsom1N[l]             = interp1d(cellnodes[l], cellsom1N[l],             kind='linear', fill_value='extrapolate')(x_ref); cellsom2N[l]             = interp1d(x_ref, cellsom2N[l],             kind='linear', fill_value='extrapolate')(x_ref)
-                        cellsom1O[l]             = interp1d(cellnodes[l], cellsom1O[l],             kind='linear', fill_value='extrapolate')(x_ref); cellsom2O[l]             = interp1d(x_ref, cellsom2O[l],             kind='linear', fill_value='extrapolate')(x_ref)
-                        cellsom1NO[l]            = interp1d(cellnodes[l], cellsom1NO[l],            kind='linear', fill_value='extrapolate')(x_ref); cellsom2NO[l]            = interp1d(x_ref, cellsom2NO[l],            kind='linear', fill_value='extrapolate')(x_ref)
-                        cellsom1N2[l]            = interp1d(cellnodes[l], cellsom1N2[l],            kind='linear', fill_value='extrapolate')(x_ref); cellsom2N2[l]            = interp1d(x_ref, cellsom2N2[l],            kind='linear', fill_value='extrapolate')(x_ref)
-                        cellsom1O2[l]            = interp1d(cellnodes[l], cellsom1O2[l],            kind='linear', fill_value='extrapolate')(x_ref); cellsom2O2[l]            = interp1d(x_ref, cellsom2O2[l],            kind='linear', fill_value='extrapolate')(x_ref)
-                        cellsom1Ttr[l]           = interp1d(cellnodes[l], cellsom1Ttr[l],           kind='linear', fill_value='extrapolate')(x_ref); cellsom2Ttr[l]           = interp1d(x_ref, cellsom2Ttr[l],           kind='linear', fill_value='extrapolate')(x_ref)
-                        cellsom1Tve[l]           = interp1d(cellnodes[l], cellsom1Tve[l],           kind='linear', fill_value='extrapolate')(x_ref); cellsom2Tve[l]           = interp1d(x_ref, cellsom2Tve[l],           kind='linear', fill_value='extrapolate')(x_ref)
-                        cellsom1M[l]             = interp1d(cellnodes[l], cellsom1M[l],             kind='linear', fill_value='extrapolate')(x_ref); cellsom2M[l]             = interp1d(x_ref, cellsom2M[l],             kind='linear', fill_value='extrapolate')(x_ref)
+                        cellsom1P[l]             = interp1d(cellnodes[l], cellsom1P[l],             kind='linear', fill_value='extrapolate')(x_ref); cellsom2P[l]             = interp1d(cellnodes[l], cellsom2P[l],             kind='linear', fill_value='extrapolate')(x_ref)
+                        cellsom1_nd_elecMinus[l] = interp1d(cellnodes[l], cellsom1_nd_elecMinus[l], kind='linear', fill_value='extrapolate')(x_ref); cellsom2_nd_elecMinus[l] = interp1d(cellnodes[l], cellsom2_nd_elecMinus[l], kind='linear', fill_value='extrapolate')(x_ref)
+                        cellsom1_nd_nPlus[l]     = interp1d(cellnodes[l], cellsom1_nd_nPlus[l],     kind='linear', fill_value='extrapolate')(x_ref); cellsom2_nd_nPlus[l]     = interp1d(cellnodes[l], cellsom2_nd_nPlus[l],     kind='linear', fill_value='extrapolate')(x_ref)
+                        cellsom1_nd_oPlus[l]     = interp1d(cellnodes[l], cellsom1_nd_oPlus[l],     kind='linear', fill_value='extrapolate')(x_ref); cellsom2_nd_oPlus[l]     = interp1d(cellnodes[l], cellsom2_nd_oPlus[l],     kind='linear', fill_value='extrapolate')(x_ref)
+                        cellsom1_nd_noPlus[l]    = interp1d(cellnodes[l], cellsom1_nd_noPlus[l],    kind='linear', fill_value='extrapolate')(x_ref); cellsom2_nd_noPlus[l]    = interp1d(cellnodes[l], cellsom2_nd_noPlus[l],    kind='linear', fill_value='extrapolate')(x_ref)
+                        cellsom1_nd_n2Plus[l]    = interp1d(cellnodes[l], cellsom1_nd_n2Plus[l],    kind='linear', fill_value='extrapolate')(x_ref); cellsom2_nd_n2Plus[l]    = interp1d(cellnodes[l], cellsom2_nd_nPlus[l],     kind='linear', fill_value='extrapolate')(x_ref)
+                        cellsom1_nd_o2Plus[l]    = interp1d(cellnodes[l], cellsom1_nd_o2Plus[l],    kind='linear', fill_value='extrapolate')(x_ref); cellsom2_nd_o2Plus[l]    = interp1d(cellnodes[l], cellsom2_nd_o2Plus[l],    kind='linear', fill_value='extrapolate')(x_ref)
+                        cellsom1elecMinus[l]     = interp1d(cellnodes[l], cellsom1elecMinus[l],     kind='linear', fill_value='extrapolate')(x_ref); cellsom2elecMinus[l]     = interp1d(cellnodes[l], cellsom2elecMinus[l],     kind='linear', fill_value='extrapolate')(x_ref)
+                        cellsom1NPlus[l]         = interp1d(cellnodes[l], cellsom1NPlus[l],         kind='linear', fill_value='extrapolate')(x_ref); cellsom2NPlus[l]         = interp1d(cellnodes[l], cellsom2NPlus[l],         kind='linear', fill_value='extrapolate')(x_ref)
+                        cellsom1OPlus[l]         = interp1d(cellnodes[l], cellsom1OPlus[l],         kind='linear', fill_value='extrapolate')(x_ref); cellsom2OPlus[l]         = interp1d(cellnodes[l], cellsom2OPlus[l],         kind='linear', fill_value='extrapolate')(x_ref)
+                        cellsom1NOPlus[l]        = interp1d(cellnodes[l], cellsom1NOPlus[l],        kind='linear', fill_value='extrapolate')(x_ref); cellsom2NOPlus[l]        = interp1d(cellnodes[l], cellsom2NOPlus[l],        kind='linear', fill_value='extrapolate')(x_ref)
+                        cellsom1N2Plus[l]        = interp1d(cellnodes[l], cellsom1N2Plus[l],        kind='linear', fill_value='extrapolate')(x_ref); cellsom2N2Plus[l]        = interp1d(cellnodes[l], cellsom2N2Plus[l],        kind='linear', fill_value='extrapolate')(x_ref)
+                        cellsom1O2Plus[l]        = interp1d(cellnodes[l], cellsom1O2Plus[l],        kind='linear', fill_value='extrapolate')(x_ref); cellsom2O2Plus[l]        = interp1d(cellnodes[l], cellsom2O2Plus[l],        kind='linear', fill_value='extrapolate')(x_ref)
+                        cellsom1N[l]             = interp1d(cellnodes[l], cellsom1N[l],             kind='linear', fill_value='extrapolate')(x_ref); cellsom2N[l]             = interp1d(cellnodes[l], cellsom2N[l],             kind='linear', fill_value='extrapolate')(x_ref)
+                        cellsom1O[l]             = interp1d(cellnodes[l], cellsom1O[l],             kind='linear', fill_value='extrapolate')(x_ref); cellsom2O[l]             = interp1d(cellnodes[l], cellsom2O[l],             kind='linear', fill_value='extrapolate')(x_ref)
+                        cellsom1NO[l]            = interp1d(cellnodes[l], cellsom1NO[l],            kind='linear', fill_value='extrapolate')(x_ref); cellsom2NO[l]            = interp1d(cellnodes[l], cellsom2NO[l],            kind='linear', fill_value='extrapolate')(x_ref)
+                        cellsom1N2[l]            = interp1d(cellnodes[l], cellsom1N2[l],            kind='linear', fill_value='extrapolate')(x_ref); cellsom2N2[l]            = interp1d(cellnodes[l], cellsom2N2[l],            kind='linear', fill_value='extrapolate')(x_ref)
+                        cellsom1O2[l]            = interp1d(cellnodes[l], cellsom1O2[l],            kind='linear', fill_value='extrapolate')(x_ref); cellsom2O2[l]            = interp1d(cellnodes[l], cellsom2O2[l],            kind='linear', fill_value='extrapolate')(x_ref)
+                        cellsom1Ttr[l]           = interp1d(cellnodes[l], cellsom1Ttr[l],           kind='linear', fill_value='extrapolate')(x_ref); cellsom2Ttr[l]           = interp1d(cellnodes[l], cellsom2Ttr[l],           kind='linear', fill_value='extrapolate')(x_ref)
+                        cellsom1Tve[l]           = interp1d(cellnodes[l], cellsom1Tve[l],           kind='linear', fill_value='extrapolate')(x_ref); cellsom2Tve[l]           = interp1d(cellnodes[l], cellsom2Tve[l],           kind='linear', fill_value='extrapolate')(x_ref)
+                        cellsom1M[l]             = interp1d(cellnodes[l], cellsom1M[l],             kind='linear', fill_value='extrapolate')(x_ref); cellsom2M[l]             = interp1d(cellnodes[l], cellsom2M[l],             kind='linear', fill_value='extrapolate')(x_ref)
 
                         cellnodes[l] = x_ref # the new coarse x becomes the reference
                     
@@ -338,9 +340,11 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
         CS1M_matrix             = np.transpose(np.array(interpolated_cellsom1M));               CS2M_matrix             = np.transpose(np.array(interpolated_cellsom2M))
 
         # Compute absolute average, variance and cost
-        ml = np.abs(np.max(CS1P_matrix / Nl, axis=0)) # L-infinity norm of the average of each level
-        Vl = np.maximum(0, np.max(CS2P_matrix / Nl - (CS1P_matrix / Nl)**2, axis=0))
-        Cl = costl / Nl
+        # ml = np.abs(np.max(CS1P_matrix / Nl, axis=0)) # L-infinity norm of the average of each level
+        # Vl = np.maximum(0, np.max(CS2P_matrix / Nl - (CS1P_matrix / Nl)**2, axis=0))
+        ml_check = np.array([Lpnorm(coarsest_grid, CS1P_matrix[:,l]/Nl[l], 1) for l in range(len(Nl))])
+        Vl_check = np.array([Lpnorm(coarsest_grid, (CS2P_matrix[:,l]/Nl[l] - (CS1P_matrix[:,l]/Nl[l])**2), 1) for l in range(len(Nl))])
+        Cl_check = costl / Nl
 
         ml_vec = CS1P_matrix / Nl
         Vl_vec = CS2P_matrix / Nl - ml_vec**2
@@ -428,7 +432,7 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
         VlM_vec[VlM_vec < 0] = 0
 
         # Set optimal number of additional samples
-        Ns = np.ceil(np.sqrt(Vl / Cl) * np.sum(np.sqrt(Vl * Cl)) / ((1 - theta) * eps**2))
+        Ns = np.ceil(np.sqrt(Vl_check / Cl_check) * np.sum(np.sqrt(Vl_check * Cl_check)) / ((1 - theta) * eps**2))
         dNl = np.maximum(0, Ns - Nl)
 
         dNl_str = str(dNl)
@@ -437,7 +441,7 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
         # If (almost) converged, estimate remaining error and decide whether a new level is required
         if np.sum(dNl > 0.01 * Nl) == 0:
 
-            rem = ml[L] / (2**alpha - 1)
+            rem = ml_check[L] / (2**alpha - 1)
 
             if rem > np.sqrt(theta) * eps:
 
@@ -449,9 +453,9 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
                     L += 1
 
                     # appending asymptotic estimates of Vl, Cl from weak convergence conditions to compute a preliminar Ns
-                    Vl = np.append(Vl, Vl[-1] / 2**beta)
+                    Vl_check = np.append(Vl_check, Vl_check[-1] / 2**beta)
                     Vl_vec = np.append(Vl_vec, (Vl_vec[:, L-1] / (2 ** beta)).reshape(-1, 1), axis=1)
-                    Cl = np.append(Cl, Cl[-1] * 2**gamma)
+                    Cl_check = np.append(Cl_check, Cl_check[-1] * 2**gamma)
 
                     Nl = np.append(Nl, 0.0)
                     
@@ -483,7 +487,7 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
                     costl = np.append(costl, 0)
 
                     # computing initial optimal samples number for new level
-                    Ns = np.ceil(np.sqrt(Vl / Cl) * np.sum(np.sqrt(Vl * Cl)) / ((1 - theta) * eps**2))
+                    Ns = np.ceil(np.sqrt(Vl_check / Cl_check) * np.sum(np.sqrt(Vl_check * Cl_check)) / ((1 - theta) * eps**2))
 
                     dNl = np.maximum(0, Ns - Nl)
 
@@ -596,6 +600,13 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
     upper_boundM = sum_mlM + np.sqrt(np.abs(sum_VlM))
     lower_boundM = sum_mlM - np.sqrt(np.abs(sum_VlM))    
     
+    # Plot saving
+    (_, _, workingFolder) = args
+    plotFolder = os.path.join(workingFolder, 'Plots')
+
+    if not os.path.exists(plotFolder):
+        os.mkdir(plotFolder)
+
     # Plot 1: normalized mean pressure, 1sigma uncertainty region
     shaded_color = [0.6, 0.8, 1]
     ax = plt.gca()  
@@ -1004,7 +1015,7 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
     plt.cla()
     plt.clf()       
     
-    return P, Nl, Cl
+    return P, Nl, Cl_check
 
 
 def screening(mlmc_l, L, N, logfile, *args):
@@ -1033,7 +1044,7 @@ def screening(mlmc_l, L, N, logfile, *args):
         sums1 = 0; sums2 = 0; sums5 = 0; sums6 = 0
         cst = 0
         
-        _, sums1_j, sums2_j, sums5_j, sums6_j, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, cst_j = mlmc_l(l, int(N / 1), *args)
+        xnodes, sums1_j, sums2_j, sums5_j, sums6_j, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, cst_j = mlmc_l(l, int(N / 1), *args)
 
         sums1 += sums1_j / N
         sums2 += sums2_j / N
@@ -1042,10 +1053,10 @@ def screening(mlmc_l, L, N, logfile, *args):
         cst += cst_j / N
 
         cost.append(cst)
-        del1.append(np.linalg.norm(sums1, np.inf))  # Ave(Pf-Pc)
-        del2.append(np.linalg.norm(sums5, np.inf))  # Ave(Pf)
-        var1.append(np.linalg.norm((sums2 - sums1 ** 2), np.inf))  # Var(Pf-Pc)
-        var2.append(np.linalg.norm((sums6 - sums5 ** 2), np.inf))  # Var(Pf)
+        del1.append(Lpnorm(xnodes, sums1, 1))  # Ave(Pf-Pc)
+        del2.append(Lpnorm(xnodes, sums5, 1))  # Ave(Pf)
+        var1.append(Lpnorm(xnodes, (sums2 - sums1 ** 2), 1))  # Var(Pf-Pc)
+        var2.append(Lpnorm(xnodes, (sums6 - sums5 ** 2), 1))  # Var(Pf)
         var2[-1] = max(var2[-1], 1e-10)  
 
         write(logfile, "%2d  %11.4e %11.4e  %.3e  %.3e %.2e \n" % \
@@ -1060,3 +1071,6 @@ def screening(mlmc_l, L, N, logfile, *args):
 
     return del1, del2, var1, var2, cost, alpha, beta, gamma
 
+
+def Lpnorm(x, f, p):
+    return trapz(np.abs(f)**p, x)**(1/p)
