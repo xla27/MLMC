@@ -93,7 +93,7 @@ def cfd_call(type, valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, l, i, *
             beta_o2Plus    = data_surf['MassFrac_5'].tolist()
             
             beta_n  = data_surf['MassFrac_6'].tolist()
-            beta_o  = data_surf['NassFrac_7'].tolist()
+            beta_o  = data_surf['MassFrac_7'].tolist()
             beta_no = data_surf['MassFrac_8'].tolist()
             beta_n2 = data_surf['MassFrac_9'].tolist()
             beta_o2 = data_surf['MassFrac_10'].tolist()
