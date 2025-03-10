@@ -111,6 +111,8 @@ def dw_l(level, N_samples, *args):
 
 
     # RESULTS UPDATE
+    QoI_coarse_interp = np.array(QoI_coarse_interp)
+    QoI_fine_interp   = np.array(QoI_fine_interp)
 
     # P
     sums1 = np.sum( QoI_fine_interp[:,17,:] - QoI_coarse_interp[:,17,:], axis=0)
