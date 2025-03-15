@@ -129,4 +129,9 @@ def csv2dict(filename, fieldnames, delimiter=','):
                 for key in fieldnames:
                     data[key] = np.append(data[key], float(item.get(key)))
 
+    # sorting accoridng to "x"
+    sorted_indexes = np.argsort(data["x"])
+    for key in fieldnames:
+        data[key] = data[key][sorted_indexes]
+
     return data

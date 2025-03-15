@@ -119,6 +119,10 @@ def cfd_call(type, valIns_M, valIns_T, valIns_P, valIns_Bn2, valIns_Bo2, l, i, *
             xnodesf = data_surf['x'].tolist()
 
             os.chdir(workingFolder)  # Return to the starting directory
+            
+            if type == 'COARSE':
+                shutil.rmtree(os.path.join(destinationSubfolder, 'adap'))
+            
             return nd_elecMinus, nd_nPlus, nd_oPlus, nd_noPlus, nd_n2Plus, nd_o2Plus, beta_elecMinus, beta_nPlus, beta_oPlus, beta_noPlus, beta_n2Plus, beta_o2Plus, beta_n, beta_o, beta_no, beta_n2, beta_o2, p_i, Ttr_i, Tve_i, M_i, xnodesf
 
 
@@ -138,5 +142,10 @@ def csv2dict(filename, fieldnames, delimiter=','):
             else:
                 for key in fieldnames:
                     data[key] = np.append(data[key], float(item.get(key)))
+    
+    # sorting accoridng to "x"
+    sorted_indexes = np.argsort(data["x"])
+    for key in fieldnames:
+        data[key] = data[key][sorted_indexes]
 
     return data
