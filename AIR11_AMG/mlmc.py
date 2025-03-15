@@ -106,6 +106,8 @@ def mlmc(mlmc_l, N0, eps, Lmin, Lmax, alpha0, beta0, gamma0, Nlfile, *args):
                     cellsom1Ttr[l]           = sums1Ttr;            cellsom2Ttr[l]           = sums2Ttr
                     cellsom1Tve[l]           = sums1Tve;            cellsom2Tve[l]           = sums2Tve
                     cellsom1M[l]             = sums1M;              cellsom2M[l]             = sums2M
+
+                    cellnodes[l] = x_ref
                     
                 else:
 
