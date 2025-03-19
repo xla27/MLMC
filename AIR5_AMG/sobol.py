@@ -68,96 +68,39 @@ def compute_sobol_indices(type, param_values, level, problem, *args):
         model_outputsTve.append(Tve_i)
         model_outputsM.append(M_i)
 
+    model_outputs = [model_outputsN, model_outputsO, model_outputsNO, model_outputsN2, model_outputsO2, model_outputsP, model_outputsTtr, model_outputsTve, model_outputsM]
+
     # finding the coarsest xnode and interpolating over it al the other values
     xnodes_ref = max(xnodes_list, key=len)
 
     # moving average on the samples
     SF = 0.015
     ws = max(int(len(xnodes_ref) * SF), 1)
-    for i in range(samples):
-        model_outputsN[i]   = moving_average(model_outputsN[i],   ws)
-        model_outputsO[i]   = moving_average(model_outputsO[i],   ws)
-        model_outputsNO[i]  = moving_average(model_outputsNO[i],  ws)
-        model_outputsN2[i]  = moving_average(model_outputsN2[i],  ws)
-        model_outputsO2[i]  = moving_average(model_outputsO2[i],  ws)
-        model_outputsP[i]   = moving_average(model_outputsP[i],   ws)
-        model_outputsTtr[i] = moving_average(model_outputsTtr[i], ws)
-        model_outputsTve[i] = moving_average(model_outputsTve[i], ws)
-        model_outputsM[i]   = moving_average(model_outputsM[i],   ws)
+    for qoi in range(9):
+        for smp in range(samples):
+            model_outputs[qoi][smp] = moving_average(model_outputs[qoi][smp], ws)
 
+    # interpolating wall quantities to a common xref
+    model_outputs_interp = np.zeros((9, samples, len(xnodes_ref)))
 
-    for i in range(samples):
-        model_outputsN[i]   = interp1d(xnodes_list[i], model_outputsN[i],   kind='linear', fill_value='extrapolate')(xnodes_ref)
-        model_outputsO[i]   = interp1d(xnodes_list[i], model_outputsO[i],   kind='linear', fill_value='extrapolate')(xnodes_ref)
-        model_outputsNO[i]  = interp1d(xnodes_list[i], model_outputsNO[i],  kind='linear', fill_value='extrapolate')(xnodes_ref)
-        model_outputsN2[i]  = interp1d(xnodes_list[i], model_outputsN2[i],  kind='linear', fill_value='extrapolate')(xnodes_ref)
-        model_outputsO2[i]  = interp1d(xnodes_list[i], model_outputsO2[i],  kind='linear', fill_value='extrapolate')(xnodes_ref)
-        model_outputsP[i]   = interp1d(xnodes_list[i], model_outputsP[i],   kind='linear', fill_value='extrapolate')(xnodes_ref)
-        model_outputsTtr[i] = interp1d(xnodes_list[i], model_outputsTtr[i], kind='linear', fill_value='extrapolate')(xnodes_ref)
-        model_outputsTve[i] = interp1d(xnodes_list[i], model_outputsTve[i], kind='linear', fill_value='extrapolate')(xnodes_ref)
-        model_outputsM[i]   = interp1d(xnodes_list[i], model_outputsM[i],   kind='linear', fill_value='extrapolate')(xnodes_ref)
-
-    model_outputsN   = np.array(model_outputsN)
-    model_outputsO   = np.array(model_outputsO)
-    model_outputsNO  = np.array(model_outputsNO)
-    model_outputsN2  = np.array(model_outputsN2)
-    model_outputsO2  = np.array(model_outputsO2)
-    model_outputsP   = np.array(model_outputsP)
-    model_outputsTtr = np.array(model_outputsTtr)
-    model_outputsTve = np.array(model_outputsTve)
-    model_outputsM   = np.array(model_outputsM)
+    for qoi in range(9):
+        for smp in range(samples):
+            if level!= 0 or (level == 1 and type == 'COARSE'):
+                model_outputs_interp[qoi, smp, :] = model_outputs[qoi][smp]
+            else:
+                model_outputs_interp[qoi, smp, :] = interp1d(xnodes_list[smp], model_outputs[qoi][smp], kind='linear', fill_value='extrapolate')(xnodes_ref)
 
     # Compute Sobol indices for each x point (wall point)
-    S1N   = np.zeros((4, len(xnodes_ref)))    # sobol indices with N as QoI
-    S1O   = np.zeros((4, len(xnodes_ref)))    # sobol indices with O as QoI
-    S1NO  = np.zeros((4, len(xnodes_ref)))    # sobol indices with NO as QoI
-    S1N2  = np.zeros((4, len(xnodes_ref)))    # sobol indices with N2 as QoI
-    S1O2  = np.zeros((4, len(xnodes_ref)))    # sobol indices with O2 as QoI
-    S1P   = np.zeros((4, len(xnodes_ref)))  # sobol indices with P as QoI
-    S1Ttr = np.zeros((4, len(xnodes_ref)))  # sobol indices with Ttr as QoI
-    S1Tve = np.zeros((4, len(xnodes_ref)))  # sobol indices with Tve as QoI
-    S1M   = np.zeros((4, len(xnodes_ref)))  # sobol indices with M as QoI
+    S1 = np.zeros((9, len(xnodes_ref), x))   
     
     # Compute the Sobol' indices wrt the other model_outputs (now there is not just one QoI)
-    for j in range(len(xnodes_ref)):
-
-        # computation of S related to N
-        Si_N = sobol.analyze(problem, model_outputsN[:, j], calc_second_order=False) 
-        S1N[:,j] = Si_N['S1']
-        
-        # computation of S related to O
-        Si_O = sobol.analyze(problem, model_outputsO[:, j], calc_second_order=False) 
-        S1O[:,j] = Si_O['S1']
-        
-        # computation of S related to NO
-        Si_NO = sobol.analyze(problem, model_outputsNO[:, j], calc_second_order=False) 
-        S1NO[:,j] = Si_NO['S1']
-        
-        # computation of S related to N2
-        Si_N2 = sobol.analyze(problem, model_outputsN2[:, j], calc_second_order=False) 
-        S1N2[:,j] = Si_N2['S1']
-        
-        # computation of S related to O2
-        Si_O2 = sobol.analyze(problem, model_outputsO2[:, j], calc_second_order=False) 
-        S1O2[:,j] = Si_O2['S1']
-        
-        # computation of S related to P 
-        Si_P = sobol.analyze(problem, model_outputsP[:, j], calc_second_order=False) 
-        S1P[:,j] = Si_P['S1']
-        
-        # computation of S related to Ttr
-        Si_Ttr = sobol.analyze(problem, model_outputsTtr[:, j], calc_second_order=False) 
-        S1Ttr[:,j] = Si_Ttr['S1']
-
-        # computation of S related to Tve
-        Si_Tve = sobol.analyze(problem, model_outputsTve[:, j], calc_second_order=False) 
-        S1Tve[:,j] = Si_Tve['S1']
-
-        # computation of S related to M
-        Si_M = sobol.analyze(problem, model_outputsM[:, j], calc_second_order=False) 
-        S1M[:,j] = Si_M['S1']
+    for qoi in range(9):
+        for x in range(len(xnodes_ref)):
+            
+            Sx = sobol.analyze(problem, model_outputs_interp[qoi, :, x], calc_second_order=False) 
+            S1[qoi, x, :] = Sx['S1']
                 
-    return xnodes_ref, S1N, S1O, S1NO, S1N2, S1O2, S1P, S1Ttr, S1Tve, S1M
+    return xnodes_ref, S1
     
 
 def moving_average(data, window_size):
