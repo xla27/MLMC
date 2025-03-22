@@ -147,23 +147,28 @@ def compute_sobol_indices(level, problem):
                 model_outputs_c_interp[smp, qoi, :] = interp1d(xnodes_c[smp], model_outputs_c[qoi][smp], kind='linear', fill_value='extrapolate')(xref_c)
                 model_outputs_f_interp[smp, qoi, :] = interp1d(xnodes_f[smp], model_outputs_f[qoi][smp], kind='linear', fill_value='extrapolate')(xref_f)
 
-    # Sobol indices
-    SOBOL_c = np.zeros((9, len(xref_c), 4))
-    SOBOL_f = np.zeros((9, len(xref_f), 4))
+    # Sobol indices 
+    # N.B. the level indices are multiplied for the level variance,
+    # the normalization process will take place considering the whole multi-level variance
+    # as done in Qian et al.
+    SOBOL_c = np.zeros((9, len(xref_c), 5))
+    SOBOL_f = np.zeros((9, len(xref_f), 5))
 
     for qoi in range(9):
 
         if level != 0:
             for xc in range(len(xref_c)):
                 S_c = sobol.analyze(problem,  model_outputs_c_interp[:, qoi, xc], calc_second_order=False)
-                SOBOL_c[qoi, xc, :] = S_c['S1']
+                SOBOL_c[qoi, xc, :-1] = S_c['S1'] * np.var(model_outputs_c_interp[:, qoi, xc])
+                SOBOL_c[qoi, xc,  -1] = np.var(model_outputs_c_interp[:, qoi, xc])
 
         for xf in range(len(xref_f)):
             S_f = sobol.analyze(problem,  model_outputs_f_interp[:, qoi, xf], calc_second_order=False)
-            SOBOL_f[qoi, xf, :] = S_f['S1']
+            SOBOL_f[qoi, xf, :-1] = S_f['S1'] * np.var(model_outputs_f_interp[:, qoi, xf])
+            SOBOL_f[qoi, xf,  -1] = np.var(model_outputs_f_interp[:, qoi, xf])
 
     for qoi in range(9):
-        for dof in range(4):
+        for dof in range(5):
             SOBOL_f[qoi, :, dof] = denoise_tv_chambolle(SOBOL_f[qoi, :, dof], weight=1.0)
             SOBOL_c[qoi, :, dof] = denoise_tv_chambolle(SOBOL_c[qoi, :, dof], weight=1.0)
 
@@ -181,15 +186,6 @@ def dump_csv(xref_0, SOBOL_total):
 
     x = xref
     S = SOBOL_total
-
-    # transformation
-    for qoi in range(9):
-        for j in range(len(x)):
-            S[qoi, j, :] = np.abs(S[qoi, j, :])
-            summation = np.sum(S[qoi, j, :])
-            if summation > 1.0:
-                for k in range(4):
-                    S[qoi, j, k] = S[qoi, j, k] / (summation)
 
     # dump
     for qoi in range(9):
@@ -227,26 +223,34 @@ def main():
 
         xref_f, SOBOL_f, xref_c, SOBOL_c = compute_sobol_indices(level, problem)
 
-        # interpolating the fine and coarse SOBOL to ref0
-        SOBOL_c_interp = np.zeros((9, len(xref_f), 4))
-        SOBOL_diff     = np.zeros((9, len(xref_f), 4))
+        # interpolating the coarse SOBOL to fine 
+        SOBOL_c_interp = np.zeros((9, len(xref_f), 5))
+        SOBOL_diff     = np.zeros((9, len(xref_f), 5))
 
         for qoi in range(9):
-            for dof in range(4):
+            for dof in range(5):
                 SOBOL_c_interp[qoi, :, dof] = interp1d(xref_c, SOBOL_c[qoi, :, dof], kind='linear', fill_value='extrapolate')(xref_f)
                 SOBOL_diff[qoi, :, dof]     = SOBOL_f[qoi, :, dof] - SOBOL_c_interp[qoi, :, dof]
 
 
         # adding the correction to the total indices
-        SOBOL_total_interp = np.zeros((9, len(xref_f), 4))
+        SOBOL_total_interp = np.zeros((9, len(xref_f), 5))
         for qoi in range(9):
-            for dof in range(4):
+            for dof in range(5):
                 SOBOL_total_interp[qoi, :, dof] = interp1d(xref_0, SOBOL_total[qoi, :, dof], kind='linear', fill_value='extrapolate')(xref_f)
                 SOBOL_total_interp[qoi, :, dof] += SOBOL_diff[qoi, :, dof]
 
         # updating the cycle
         SOBOL_total = SOBOL_total_interp
         xref_0      = xref_f
+
+    # normalizing for the total multi-level variance to get SOBOL indices
+    for qoi in range(9):
+        for dof in range(4):
+            SOBOL_total[qoi, :, dof] = SOBOL_total[qoi, :, dof] / SOBOL_total[qoi, :, -1] 
+
+    # discarding the variance entry for plot
+    SOBOL_total = SOBOL_total[:, :, :-1]
 
     # file dump
     print('FILE DUMP')
