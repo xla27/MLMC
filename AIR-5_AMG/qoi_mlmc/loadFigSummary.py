@@ -96,7 +96,7 @@ legend_elements = [
 ]
 
 
-ax1.legend(legend_elements, [r'$\vec{Q}_\ell$', r'$\vec{Q}_\ell - \vec{Q}_{\ell-1}$'],
+ax1.legend(legend_elements, [r'$Q_\ell$', r'$Q_\ell - Q_{\ell-1}$'],
            handler_map={tuple: HandlerLine2D()}, loc='best', fontsize=35)
 
 plt.savefig('dw5_summary_12_combined.svg')
