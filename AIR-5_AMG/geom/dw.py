@@ -144,7 +144,7 @@ add_angle_arc(ax, points["Point 3"], 0.06, 0, np.degrees(defl_angle2), r'$\varth
 # Add the legend
 handles, labels = plt.gca().get_legend_handles_labels()
 by_label = dict(zip(labels, handles))
-plt.legend(by_label.values(), by_label.keys(), fontsize=24, loc='upper left', bbox_to_anchor=(-0.01, 1.01))
+plt.legend(by_label.values(), by_label.keys(), fontsize=24, loc='upper left', bbox_to_anchor=(-0.01, 1.01), framealpha=1.0)
 
 # Set the axes limits
 ax.set_xlim(-0.185, 0.5)
