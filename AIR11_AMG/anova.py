@@ -23,7 +23,7 @@ def anova(problem, lev, sample_sizes, *varargin):
         
         # Coarser grid computations
         param_valuesc = saltelli.sample(problem, sample_sizes[level], calc_second_order=False)
-        x_vecc, S1_c = compute_sobol_indices('FINE', param_valuesc, level, problem, *varargin)
+        x_vecc, S1_c = compute_sobol_indices('COARSE', param_valuesc, level, problem, *varargin)
 
         S1_c_interp = np.zeros((21, len(x_vecf), 4))
         S1_diff     = np.zeros((21, len(x_vecf), 4))
