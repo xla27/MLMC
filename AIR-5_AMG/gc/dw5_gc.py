@@ -86,7 +86,7 @@ ax.plot(x4, p4, linewidth=3, color='orange', linestyle='-', label='$L4$')
 
 
 
-ax.set_xlabel(r'$x, \; m$')  # Use set_xlabel and set_ylabel instead of plt.xlabel and plt.ylabel
+ax.set_xlabel(r'$x, \; \mathrm{m}$')  # Use set_xlabel and set_ylabel instead of plt.xlabel and plt.ylabel
 ax.set_ylabel(r'$\frac{P}{P_\infty}$')  # Use set_xlabel and set_ylabel instead of plt.xlabel and plt.ylabel
 #ax.tick_params(labelsize=30)
 handles, labels = plt.gca().get_legend_handles_labels()
@@ -155,4 +155,4 @@ save_name = 'dw_GC.svg'
 plt.savefig(save_name, bbox_inches='tight')
 
 # Show the plot
-plt.show()
+#plt.show()
