@@ -34,7 +34,7 @@ plt.rcParams.update({
     "font.size": 20 })
 shaded_color = [0.6, 0.8, 1]
 
-eps_folder = 'eps02/'
+eps_folder = 'eps04/'
 
 # Data from Garbacz et al.
 file_path = 'data_garbacz.csv'
@@ -51,12 +51,12 @@ loaded_grid, curves = load_csv(file_path)
 
 plt.figure(figsize=(13, 11))
 ax = plt.gca()  # Get the current axis
-ax.fill_between(loaded_grid,  curves[0], curves[1], color=shaded_color, alpha=0.7, edgecolor='none', label=r'$\sigma$')# \left[ \frac{P}{P_\infty} \right]$')
+ax.fill_between(loaded_grid,  curves[0], curves[1], color=shaded_color, alpha=0.7, edgecolor='none', label=r'$\mu \pm \sigma$')# \left[ \frac{P}{P_\infty} \right]$')
 ax.plot(loaded_grid, curves[2], linewidth=3, color='red', label=r'$\mu$') #\left[ \frac{P}{P_\infty} \right]$')
 ax.plot(x_garb, p_garb[0], 'd', label=r'$\mathrm{Garbacz} \, \mathrm{et} \, \mathrm{al}.$',markersize=10, linestyle='None', markerfacecolor='white', markeredgecolor='black', markeredgewidth=1.5)
 
 ax.set_xlabel(r'$x, \; \mathrm{m} $', fontsize=35)  # Use set_xlabel and set_ylabel instead of plt.xlabel and plt.ylabel
-ax.set_ylabel(r'$\frac{P}{P_\infty}, \; -$', fontsize=35)  # Use set_xlabel and set_ylabel instead of plt.xlabel and plt.ylabel
+ax.set_ylabel(r'$\frac{P}{P_\infty}$', fontsize=35)  # Use set_xlabel and set_ylabel instead of plt.xlabel and plt.ylabel
 
 # ax.plot(x_newP, diffcurves[2], linewidth=3, label='Error to [21]', color='gray')
 # ax.fill_between(x_newP, diffcurves[0], diffcurves[1], color='gray', alpha=0.2)
@@ -85,17 +85,17 @@ loaded_gridO2, curvesO2 = load_csv(file_path)
 
 plt.figure(figsize=(13, 11))
 ax = plt.gca()
-ax.fill_between(loaded_gridN2, curvesN2[0], curvesN2[1], color='green', alpha=0.2, edgecolor='none', label=r'$\sigma \left[ Y_{N_2} \right]$')
-ax.plot(loaded_gridN2, curvesN2[2], linewidth=3, color='green', label=r'$\mu \left[ Y_{N_2} \right]$')
+ax.fill_between(loaded_gridN2, curvesN2[0], curvesN2[1], color='green', alpha=0.2, edgecolor='none', label=r'$N_2: \mu \pm \sigma$')
+ax.plot(loaded_gridN2, curvesN2[2], linewidth=3, color='green', label=r'$N_2: \mu $')
 
-ax.fill_between(loaded_gridO2, curvesO2[0], curvesO2[1], color=shaded_color, alpha=0.7, edgecolor='none', label=r'$\sigma \left[ Y_{O_2} \right]$')
-ax.plot(loaded_gridO2, curvesO2[2], linewidth=3, color='blue', label=r'$\mu \left[ Y_{O_2} \right]$')
+ax.fill_between(loaded_gridO2, curvesO2[0], curvesO2[1], color=shaded_color, alpha=0.7, edgecolor='none', label=r'$O_2: \mu \pm \sigma$')
+ax.plot(loaded_gridO2, curvesO2[2], linewidth=3, color='blue', label=r'$O_2: \mu$')
 
 # ax.plot(x_newO2, diffcurves[2], linewidth=3, label=r'Error to [21] on $YO2$', color='gray')
 # ax.fill_between(x_newO2, diffcurves[0], diffcurves[1], color='gray', alpha=0.2)
 
 ax.set_xlabel(r'$x, \; \mathrm{m} $', fontsize=35)
-ax.set_ylabel(r'$Y, \; - $', fontsize=35)
+ax.set_ylabel(r'$Y$', fontsize=35)
 ax.tick_params(labelsize=30)
 handles, labels = plt.gca().get_legend_handles_labels()
 # order = [0,1, 3, 4, 2]
@@ -125,15 +125,15 @@ loaded_gridNO, curvesNO = load_csv(file_path)
 plt.figure(figsize=(13, 11))
 ax = plt.gca()  # Get the current axis
 
-ax.fill_between(loaded_gridN, curvesN[0], curvesN[1], color=shaded_color, alpha=0.7, edgecolor='none', label=r'$\sigma \left[ Y_N \right]$')
-ax.plot(loaded_gridN, curvesN[2], linewidth=3, color='blue', label=r'$\mu \left[ Y_N \right]$')
+ax.fill_between(loaded_gridN, curvesN[0], curvesN[1], color=shaded_color, alpha=0.7, edgecolor='none', label=r'$N: \mu \pm \sigma$')
+ax.plot(loaded_gridN, curvesN[2], linewidth=3, color='blue', label=r'$N: \mu$')
 
-ax.fill_between(loaded_gridO, curvesO[0], curvesO[1], color='green', alpha=0.2, edgecolor='none', label=r'$\sigma \left[ Y_O \right]$')
-ax.plot(loaded_gridO, curvesO[2], linewidth=3, color='green', label=r'$\mu \left[ Y_O \right]$')
+ax.fill_between(loaded_gridO, curvesO[0], curvesO[1], color='green', alpha=0.2, edgecolor='none', label=r'$O: \mu \pm \sigma$')
+ax.plot(loaded_gridO, curvesO[2], linewidth=3, color='green', label=r'$O: \mu $')
 
 
-ax.fill_between(loaded_gridNO, curvesNO[0], curvesNO[1], color='orange', alpha=0.2, edgecolor='none', label=r'$\sigma \left[ Y_{NO} \right]$')
-ax.plot(loaded_gridNO, curvesNO[2], linewidth=3, color='orange', label=r'$\mu \left[ Y_{NO} \right]$')
+ax.fill_between(loaded_gridNO, curvesNO[0], curvesNO[1], color='orange', alpha=0.2, edgecolor='none', label=r'$NO: \mu \pm \sigma$')
+ax.plot(loaded_gridNO, curvesNO[2], linewidth=3, color='orange', label=r'$NO: \mu$')
 
 
 # ax.plot(x_newNO, diffcurvesNO[2], linewidth=3, label=r'Error to [21] on $YNO$', color='gray')
@@ -141,7 +141,7 @@ ax.plot(loaded_gridNO, curvesNO[2], linewidth=3, color='orange', label=r'$\mu \l
 
 
 ax.set_xlabel(r'$x, \; \mathrm{m} $', fontsize=35)
-ax.set_ylabel(r'$Y, \; - $', fontsize=35)
+ax.set_ylabel(r'$Y$', fontsize=35)
 ax.tick_params(labelsize=30)
 handles, labels = plt.gca().get_legend_handles_labels()
 # order = [0, 1, 2, 4, 5, 6, 3]
@@ -166,7 +166,7 @@ loaded_gridTtr, curvesTtr = load_csv(file_path)
 plt.figure(figsize=(13, 11))
 ax = plt.gca()  # Get the current axis
 
-ax.fill_between(loaded_gridTtr, curvesTtr[0], curvesTtr[1], color=shaded_color, alpha=0.7, edgecolor='none', label=r'$\sigma$')# \left[ \frac{T_{tr}}{T_{tr_\infty}} \right]$')
+ax.fill_between(loaded_gridTtr, curvesTtr[0], curvesTtr[1], color=shaded_color, alpha=0.7, edgecolor='none', label=r'$\mu \pm \sigma$')# \left[ \frac{T_{tr}}{T_{tr_\infty}} \right]$')
 ax.plot(loaded_gridTtr, curvesTtr[2], linewidth=3, color='red', label=r'$\mu$')# \left[ \frac{T_{tr}}{T_{tr_\infty}} \right]$')
 
 # ax.plot(x_newTtr, diffcurvesTtr[2], linewidth=3, label=r'Error to [21]', color='gray')
@@ -174,7 +174,7 @@ ax.plot(loaded_gridTtr, curvesTtr[2], linewidth=3, color='red', label=r'$\mu$')#
 
 
 ax.set_xlabel(r'$x, \; \mathrm{m} $', fontsize=35)  # Use set_xlabel and set_ylabel instead of plt.xlabel and plt.ylabel
-ax.set_ylabel(r'$\frac{T_{tr}}{T_{tr_\infty}}, \; - $', fontsize=35) # Use set_xlabel and set_ylabel instead of plt.xlabel and plt.ylabel
+ax.set_ylabel(r'$\frac{T_{tr}}{T_{tr,\infty}}$', fontsize=35) # Use set_xlabel and set_ylabel instead of plt.xlabel and plt.ylabel
 ax.tick_params(labelsize=30)
 handles, labels = plt.gca().get_legend_handles_labels()
 # order = [0, 2, 1]
@@ -197,7 +197,7 @@ loaded_gridTve, curvesTve= load_csv(file_path)
 plt.figure(figsize=(13, 11))
 ax = plt.gca()  # Get the current axis
 
-ax.fill_between(loaded_gridTve, curvesTve[0], curvesTve[1], color=shaded_color, alpha=0.7, edgecolor='none', label=r'$\sigma$')# \left[ \frac{T_{ve}}{T_{ve_\infty}} \right]$')
+ax.fill_between(loaded_gridTve, curvesTve[0], curvesTve[1], color=shaded_color, alpha=0.7, edgecolor='none', label=r'$\mu \pm \sigma$')# \left[ \frac{T_{ve}}{T_{ve_\infty}} \right]$')
 
 ax.plot(loaded_gridTve, curvesTve[2], linewidth=3, color='red', label=r'$\mu$')# \left[ \frac{T_{ve}}{T_{ve_\infty}} \right]$')
 
@@ -207,7 +207,7 @@ ax.plot(loaded_gridTve, curvesTve[2], linewidth=3, color='red', label=r'$\mu$')#
 
 
 ax.set_xlabel(r'$x, \; \mathrm{m} $', fontsize=35)  # Use set_xlabel and set_ylabel instead of plt.xlabel and plt.ylabel
-ax.set_ylabel(r'$\frac{T_{ve}}{T_{{ve}_\infty}}, \; - $', fontsize=35)  # Use set_xlabel and set_ylabel instead of plt.xlabel and plt.ylabel
+ax.set_ylabel(r'$\frac{T_{ve}}{T_{ve,\infty}}$', fontsize=35)  # Use set_xlabel and set_ylabel instead of plt.xlabel and plt.ylabel
 ax.tick_params(labelsize=30)
 handles, labels = plt.gca().get_legend_handles_labels()
 # order = [0, 2, 1]
@@ -230,7 +230,7 @@ loaded_gridM,curvesM= load_csv(file_path)
 plt.figure(figsize=(13, 11))
 ax = plt.gca()  # Get the current axis
 
-ax.fill_between(loaded_gridM, curvesM[0], curvesM[1], color=shaded_color, alpha=0.7, edgecolor='none', label=r'$\sigma$')# \left[ \frac{M}{M_\infty} \right]$')
+ax.fill_between(loaded_gridM, curvesM[0], curvesM[1], color=shaded_color, alpha=0.7, edgecolor='none', label=r'$\mu \pm \sigma$')# \left[ \frac{M}{M_\infty} \right]$')
 ax.plot(loaded_gridM, curvesM[2], linewidth=3, color='red', label=r'$\mu$')# \left[ \frac{M}{M_\infty} \right]$')
 
 # ax.plot(x_newM, diffcurvesM[2], linewidth=3, label=r'Error to [21]', color='gray')
@@ -238,7 +238,7 @@ ax.plot(loaded_gridM, curvesM[2], linewidth=3, color='red', label=r'$\mu$')# \le
 
 
 ax.set_xlabel(r'$x, \; \mathrm{m} $', fontsize=35)  # Use set_xlabel and set_ylabel instead of plt.xlabel and plt.ylabel
-ax.set_ylabel(r'$\frac{M}{M_\infty}, \; -$', fontsize=35)  # Use set_xlabel and set_ylabel instead of plt.xlabel and plt.ylabel
+ax.set_ylabel(r'$\frac{M}{M_\infty}$', fontsize=35)  # Use set_xlabel and set_ylabel instead of plt.xlabel and plt.ylabel
 ax.tick_params(labelsize=30)
 handles, labels = plt.gca().get_legend_handles_labels()
 # order = [0, 2, 1]
