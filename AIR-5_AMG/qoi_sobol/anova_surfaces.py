@@ -118,7 +118,7 @@ def compute_sobol_indices(level, problem):
         xnodes_c, *model_outputs_c = level_surfaces('level2_surf/coarse_v2')
 
     # smoothing the wall quantities
-    SF = 0.015
+    SF = 0.02
     xref_c = max(xnodes_c, key=len)
     xref_f = max(xnodes_f, key=len)
     N_smp = len(xnodes_c)
@@ -158,19 +158,25 @@ def compute_sobol_indices(level, problem):
 
         if level != 0:
             for xc in range(len(xref_c)):
+                mean = np.mean(model_outputs_c_interp[:int(N_smp/6), qoi, xc])
+                var  = 1 / (int(N_smp/6) - 1) * np.sum((model_outputs_c_interp[:int(N_smp/6), qoi, xc] - mean)**2)
+
                 S_c = sobol.analyze(problem,  model_outputs_c_interp[:, qoi, xc], calc_second_order=False)
-                SOBOL_c[qoi, xc, :-1] = S_c['S1'] * np.var(model_outputs_c_interp[:, qoi, xc])
-                SOBOL_c[qoi, xc,  -1] = np.var(model_outputs_c_interp[:, qoi, xc])
+                SOBOL_c[qoi, xc, :-1] = S_c['S1'] * var
+                SOBOL_c[qoi, xc,  -1] = var
 
         for xf in range(len(xref_f)):
-            S_f = sobol.analyze(problem,  model_outputs_f_interp[:, qoi, xf], calc_second_order=False)
-            SOBOL_f[qoi, xf, :-1] = S_f['S1'] * np.var(model_outputs_f_interp[:, qoi, xf])
-            SOBOL_f[qoi, xf,  -1] = np.var(model_outputs_f_interp[:, qoi, xf])
+            mean = np.mean(model_outputs_f_interp[:int(N_smp/6), qoi, xf])
+            var  = 1 / (int(N_smp/6) - 1) * np.sum((model_outputs_f_interp[:int(N_smp/6), qoi, xf] - mean)**2)
 
-    for qoi in range(9):
-        for dof in range(5):
-            SOBOL_f[qoi, :, dof] = denoise_tv_chambolle(SOBOL_f[qoi, :, dof], weight=1.0)
-            SOBOL_c[qoi, :, dof] = denoise_tv_chambolle(SOBOL_c[qoi, :, dof], weight=1.0)
+            S_f = sobol.analyze(problem,  model_outputs_f_interp[:, qoi, xf], calc_second_order=False)
+            SOBOL_f[qoi, xf, :-1] = S_f['S1'] * var
+            SOBOL_f[qoi, xf,  -1] = var
+
+    # for qoi in range(9):
+    #     for dof in range(5):
+    #         SOBOL_f[qoi, :, dof] = denoise_tv_chambolle(SOBOL_f[qoi, :, dof], weight=1.0)
+    #         SOBOL_c[qoi, :, dof] = denoise_tv_chambolle(SOBOL_c[qoi, :, dof], weight=1.0)
 
     return xref_f, SOBOL_f, xref_c, SOBOL_c
 
@@ -186,6 +192,12 @@ def dump_csv(xref_0, SOBOL_total):
 
     x = xref
     S = SOBOL_total
+
+    for qoi in range(9):
+        for j in range(len(x)):
+            S[qoi, j, :] = np.where(S[qoi, j, :] >= 0.0, S[qoi, j, :], 0.0)   
+            if sum(S[qoi, j, :]) > 1.0:
+                S[qoi, j, :] = S[qoi, j, :] / sum(S[qoi, j, :])
 
     # dump
     for qoi in range(9):
@@ -224,30 +236,37 @@ def main():
         xref_f, SOBOL_f, xref_c, SOBOL_c = compute_sobol_indices(level, problem)
 
         # interpolating the coarse SOBOL to fine 
-        SOBOL_c_interp = np.zeros((9, len(xref_f), 5))
-        SOBOL_diff     = np.zeros((9, len(xref_f), 5))
+        # SOBOL_c_interp = np.zeros((9, len(xref_f), 5))
+        # SOBOL_diff     = np.zeros((9, len(xref_f), 5))
+        SOBOL_f_interp = np.zeros((9, len(xref_c), 5))
+        SOBOL_diff     = np.zeros((9, len(xref_c), 5))
 
         for qoi in range(9):
             for dof in range(5):
-                SOBOL_c_interp[qoi, :, dof] = interp1d(xref_c, SOBOL_c[qoi, :, dof], kind='linear', fill_value='extrapolate')(xref_f)
-                SOBOL_diff[qoi, :, dof]     = SOBOL_f[qoi, :, dof] - SOBOL_c_interp[qoi, :, dof]
-
+                # SOBOL_c_interp[qoi, :, dof] = interp1d(xref_c, SOBOL_c[qoi, :, dof], kind='linear', fill_value='extrapolate')(xref_f)
+                # SOBOL_diff[qoi, :, dof]     = SOBOL_f[qoi, :, dof] - SOBOL_c_interp[qoi, :, dof]
+                SOBOL_f_interp[qoi, :, dof] = interp1d(xref_f, SOBOL_f[qoi, :, dof], kind='linear', fill_value='extrapolate')(xref_c)
+                SOBOL_diff[qoi, :, dof]     = SOBOL_f_interp[qoi, :, dof] - SOBOL_c[qoi, :, dof]
 
         # adding the correction to the total indices
-        SOBOL_total_interp = np.zeros((9, len(xref_f), 5))
+        # SOBOL_total_interp = np.zeros((9, len(xref_f), 5))
+        SOBOL_diff_interp = np.zeros((9, len(xref_0), 5))
         for qoi in range(9):
             for dof in range(5):
-                SOBOL_total_interp[qoi, :, dof] = interp1d(xref_0, SOBOL_total[qoi, :, dof], kind='linear', fill_value='extrapolate')(xref_f)
-                SOBOL_total_interp[qoi, :, dof] += SOBOL_diff[qoi, :, dof]
+                # SOBOL_total_interp[qoi, :, dof] = interp1d(xref_0, SOBOL_total[qoi, :, dof], kind='linear', fill_value='extrapolate')(xref_f)
+                # SOBOL_total_interp[qoi, :, dof] += SOBOL_diff[qoi, :, dof]
+                SOBOL_diff_interp[qoi, :, dof] = interp1d(xref_c, SOBOL_diff[qoi, :, dof], kind='linear', fill_value='extrapolate')(xref_0)
+                SOBOL_total[qoi, :, dof] += SOBOL_diff_interp[qoi, :, dof]
 
-        # updating the cycle
-        SOBOL_total = SOBOL_total_interp
-        xref_0      = xref_f
+        # # updating the cycle
+        # SOBOL_total = SOBOL_total_interp
+        # xref_0      = xref_f
 
     # normalizing for the total multi-level variance to get SOBOL indices
     for qoi in range(9):
         for dof in range(4):
             SOBOL_total[qoi, :, dof] = SOBOL_total[qoi, :, dof] / SOBOL_total[qoi, :, -1] 
+            SOBOL_total[qoi, :, dof] = denoise_tv_chambolle(SOBOL_total[qoi, :, dof], weight=0.6)
 
     # discarding the variance entry for plot
     SOBOL_total = SOBOL_total[:, :, :-1]
