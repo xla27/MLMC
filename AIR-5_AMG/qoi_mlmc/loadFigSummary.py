@@ -91,8 +91,8 @@ ax2.set_xlim([0, max(l)])
 legend_elements = [
     (Line2D([0], [0], color='blue', lw=3.5, linestyle='-', marker='o'), 
      Line2D([0], [0], color='red', lw=3.5, linestyle='-', marker='o')),
-    (Line2D([0], [0], color='blue', lw=3.5, linestyle='--', marker='x'), 
-     Line2D([0], [0], color='red', lw=3.5, linestyle='--', marker='x'))
+    (Line2D([0], [0], color='blue', lw=3.5, linestyle='--', marker='v'), 
+     Line2D([0], [0], color='red', lw=3.5, linestyle='--', marker='v'))
 ]
 
 
