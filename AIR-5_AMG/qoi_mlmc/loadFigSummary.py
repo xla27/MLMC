@@ -131,7 +131,9 @@ plt.xlabel(r'$\varepsilon_r$', fontsize=35)
 plt.ylabel(r'$\mathrm{Normalized} \, \mathrm{cost}$', fontsize=35)
 plt.grid(True, which="both")
 plt.tick_params(labelsize=30)
-plt.legend(loc='best', fontsize=35)
+axis = plt.axis()
+plt.axis([min(epsss), max(epsss), axis[2], axis[3]])
+plt.legend(loc='best', fontsize=35, framealpha=1.0)
 plt.savefig('dw5_summary_4.svg')
 plt.close()
 
@@ -141,20 +143,19 @@ colors = ['blue', 'red', 'green','purple']
 custom_cycler = (cycler('color', ['blue', 'red', 'green','purple']) *      # Colors for each plot 
                  cycler('marker', ['o', 'x', 'd','*']) *              # Markers for each plot
                  cycler('markersize', [10, 10, 10, 10]) *             # Marker sizes for each plot
-                 cycler('linewidth', [3.5, 3.5, 3.5, 3.5]))            # Linewidths for each plot
+                 cycler('linewidth', [3, 3, 3, 3]))            # Linewidths for each plot
 
 # Set the rcParams with the custom cycler
 plt.rcParams['axes.prop_cycle'] = custom_cycler
 for eps_c, ll, n, color in zip(epsss, ls, Ns, colors):
-    plt.semilogy(ll, n, label='$\\varepsilon_r = {:.2f}$'.format(eps_c), markerfacecolor='none', clip_on=False, linewidth=3.5, markersize=10, color=color)
+    plt.semilogy(ll, n, label='$\\varepsilon_r = {:.2f}$'.format(eps_c), markerfacecolor=color, clip_on=False, linewidth=3, markersize=10, color=color)
 
 plt.xlabel(r'$\mathrm{Level} \, \ell$', fontsize=35)
 plt.ylabel(r'$N_l$', fontsize=35)
-plt.legend(loc='best', fontsize=35)
+plt.legend(loc='best', fontsize=35, framealpha=1.0)
 plt.grid(True, which="both")
 axis = plt.axis()
 plt.axis([0, max([max(x) for x in ls]), axis[2], axis[3]])
-plt.gca().xaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: int(x)))
 plt.xticks(range(max(l) + 1), fontsize=30)
 plt.tick_params(labelsize=30)
 plt.savefig('dw5_summary_5.svg')
@@ -169,7 +170,7 @@ plt.loglog(epsss[I], std_cost[I] / 3600,  'o-',  label=r'$\mathrm{MC}$', markers
 plt.loglog(epsss[I], mlmc_cost[I] / 3600, 'o--', label=r'$\mathrm{MLMC}$', markersize=10,   clip_on=False, linewidth=3.5, color='red')
 plt.xlabel(r'$\varepsilon_r$', fontsize=35)
 plt.ylabel(r'$\mathrm{Cost}, \; [N_{\mathrm{CPU}} \cdot \mathrm{hours}]$', fontsize=35)
-plt.legend(loc='best', fontsize=35)
+plt.legend(loc='best', fontsize=35, framealpha=1.0)
 plt.grid(True, which="both")
 plt.tick_params(labelsize=30)
 axis = plt.axis()
