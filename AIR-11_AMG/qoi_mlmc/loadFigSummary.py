@@ -109,7 +109,7 @@ legend_elements = [
 ax1.legend(legend_elements, [r'$Q_\ell$', r'$Q_\ell - Q_{\ell-1}$'],
            handler_map={tuple: HandlerLine2D()}, loc='best', fontsize=35)
 
-plt.savefig('dw5_summary_12_combined.svg')
+plt.savefig('dw11_summary_12_combined.svg')
 plt.close()
 
 
@@ -123,7 +123,7 @@ plt.grid(True)
 plt.axis([0,max(l), min(np.log2(cost)), max(np.log2(cost))])
 plt.xticks(range(max(l) + 1), fontsize=30)
 plt.tick_params(labelsize=30)
-plt.savefig('dw5_summary_3.svg')
+plt.savefig('dw11_summary_3.svg')
 plt.close()
 
 
@@ -144,7 +144,7 @@ plt.tick_params(labelsize=30)
 axis = plt.axis()
 plt.axis([min(epsss), max(epsss), axis[2], axis[3]])
 plt.legend(loc='best', fontsize=35, framealpha=1.0)
-plt.savefig('dw5_summary_4.svg')
+plt.savefig('dw11_summary_4.svg')
 plt.close()
 
 # basso sx: Plot number of samples per level
@@ -168,7 +168,7 @@ axis = plt.axis()
 plt.axis([0, max([max(x) for x in ls]), axis[2], axis[3]])
 plt.xticks(range(max(l) + 1), fontsize=30)
 plt.tick_params(labelsize=30)
-plt.savefig('dw5_summary_5.svg')
+plt.savefig('dw11_summary_5.svg')
 plt.close()
 
 # basso dx: Plot normalized cost for given accuracy
@@ -185,5 +185,5 @@ plt.grid(True, which="both")
 plt.tick_params(labelsize=30)
 axis = plt.axis()
 plt.axis([min(epsss), max(epsss), axis[2], axis[3]])
-plt.savefig('dw5_summary_6.svg')
+plt.savefig('dw11_summary_6.svg')
 plt.close()
