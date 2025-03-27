@@ -3,8 +3,8 @@ import numpy as np
 from scipy.interpolate import interp1d
 from SALib.analyze import sobol
 
-from AIR5_AMG import cfd_call_amg
-from AIR5     import cfd_call
+from AIR11_AMG import cfd_call_amg
+from AIR11     import cfd_call
 
 
 # Function to perform Sobol analysis on a given level (fine or coarse)
