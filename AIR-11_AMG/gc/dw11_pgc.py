@@ -49,9 +49,9 @@ def process_csv(csv_filename):
     
     # Post-processing
     SF = 0.015
-    ws = max(int(len(p_i) * SF), 1);
-    p_i = moving_average(p_i, ws);
-    p_i = total_variation_denoising(p_i, weight=0.6);
+    ws = max(int(len(p_i) * SF), 1)
+    p_i = moving_average(p_i, ws)
+    p_i = total_variation_denoising(p_i, weight=0.6)
     
     return xnodesf, p_i
 
@@ -83,7 +83,7 @@ ax.plot(x4, p4, linewidth=3, color='orange', linestyle='-', label='$L4$')
 
 
 
-ax.set_xlabel(r'$x, \; m$')  # Use set_xlabel and set_ylabel instead of plt.xlabel and plt.ylabel
+ax.set_xlabel(r'$x, \; \mathrm{m}$')  # Use set_xlabel and set_ylabel instead of plt.xlabel and plt.ylabel
 ax.set_ylabel(r'$\frac{P}{P_\infty}$')  # Use set_xlabel and set_ylabel instead of plt.xlabel and plt.ylabel
 handles, labels = plt.gca().get_legend_handles_labels()
 order = [0,1,2,3,4]
