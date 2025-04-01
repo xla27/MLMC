@@ -34,7 +34,7 @@ plt.rcParams.update({
     "font.size": 20 })
 shaded_color = [0.6, 0.8, 1]
 
-eps_folder = 'eps04/'
+eps_folder = 'eps05/'
 
 # Data from Garbacz et al.
 file_path = 'data_garbacz.csv'
@@ -85,11 +85,11 @@ loaded_gridO2, curvesO2 = load_csv(file_path)
 
 plt.figure(figsize=(13, 11))
 ax = plt.gca()
-ax.fill_between(loaded_gridN2, curvesN2[0], curvesN2[1], color='green', alpha=0.2, edgecolor='none', label=r'$N_2: \mu \pm \sigma$')
-ax.plot(loaded_gridN2, curvesN2[2], linewidth=3, color='green', label=r'$N_2: \mu $')
+ax.fill_between(loaded_gridN2, curvesN2[0], curvesN2[1], color='green', alpha=0.2, edgecolor='none', label=r'$\mathrm{N}_2: \mu \pm \sigma$')
+ax.plot(loaded_gridN2, curvesN2[2], linewidth=3, color='green', label=r'$\mathrm{N}_2: \mu $')
 
-ax.fill_between(loaded_gridO2, curvesO2[0], curvesO2[1], color=shaded_color, alpha=0.7, edgecolor='none', label=r'$O_2: \mu \pm \sigma$')
-ax.plot(loaded_gridO2, curvesO2[2], linewidth=3, color='blue', label=r'$O_2: \mu$')
+ax.fill_between(loaded_gridO2, curvesO2[0], curvesO2[1], color=shaded_color, alpha=0.7, edgecolor='none', label=r'$\mathrm{O}_2: \mu \pm \sigma$')
+ax.plot(loaded_gridO2, curvesO2[2], linewidth=3, color='blue', label=r'$\mathrm{O}_2: \mu$')
 
 # ax.plot(x_newO2, diffcurves[2], linewidth=3, label=r'Error to [21] on $YO2$', color='gray')
 # ax.fill_between(x_newO2, diffcurves[0], diffcurves[1], color='gray', alpha=0.2)
@@ -125,15 +125,15 @@ loaded_gridNO, curvesNO = load_csv(file_path)
 plt.figure(figsize=(13, 11))
 ax = plt.gca()  # Get the current axis
 
-ax.fill_between(loaded_gridN, curvesN[0], curvesN[1], color=shaded_color, alpha=0.7, edgecolor='none', label=r'$N: \mu \pm \sigma$')
-ax.plot(loaded_gridN, curvesN[2], linewidth=3, color='blue', label=r'$N: \mu$')
+ax.fill_between(loaded_gridN, curvesN[0], curvesN[1], color=shaded_color, alpha=0.7, edgecolor='none', label=r'$\mathrm{N}: \mu \pm \sigma$')
+ax.plot(loaded_gridN, curvesN[2], linewidth=3, color='blue', label=r'$\mathrm{N}: \mu$')
 
-ax.fill_between(loaded_gridO, curvesO[0], curvesO[1], color='green', alpha=0.2, edgecolor='none', label=r'$O: \mu \pm \sigma$')
-ax.plot(loaded_gridO, curvesO[2], linewidth=3, color='green', label=r'$O: \mu $')
+ax.fill_between(loaded_gridO, curvesO[0], curvesO[1], color='green', alpha=0.2, edgecolor='none', label=r'$\mathrm{O}: \mu \pm \sigma$')
+ax.plot(loaded_gridO, curvesO[2], linewidth=3, color='green', label=r'$\mathrm{O}: \mu $')
 
 
-ax.fill_between(loaded_gridNO, curvesNO[0], curvesNO[1], color='orange', alpha=0.2, edgecolor='none', label=r'$NO: \mu \pm \sigma$')
-ax.plot(loaded_gridNO, curvesNO[2], linewidth=3, color='orange', label=r'$NO: \mu$')
+ax.fill_between(loaded_gridNO, curvesNO[0], curvesNO[1], color='orange', alpha=0.2, edgecolor='none', label=r'$\mathrm{NO}: \mu \pm \sigma$')
+ax.plot(loaded_gridNO, curvesNO[2], linewidth=3, color='orange', label=r'$\mathrm{NO}: \mu$')
 
 
 # ax.plot(x_newNO, diffcurvesNO[2], linewidth=3, label=r'Error to [21] on $YNO$', color='gray')
