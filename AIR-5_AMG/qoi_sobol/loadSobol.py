@@ -124,13 +124,13 @@ plt.figure(figsize=(13, 11))
 plt.stackplot(x, curves[0], curves[1], curves[2], curves[3], labels=[r'$M$', r'$P$', r'$T$', r'$Y_{N_2}$'], colors=selected_colors)
 plt.xlabel(r'$x, \; \mathrm{m} $', fontsize=35)
 plt.ylabel(r'$S_1$', fontsize=35)
-plt.legend(loc='upper left', framealpha=1.0, fontsize=35)
+plt.legend(loc='upper right', bbox_to_anchor=(1.0, 0.8),framealpha=1.0, fontsize=35)
 
 plt.grid(True, which='both')
 plt.tick_params(axis='both', which='major', labelsize=30)
 plt.tick_params(axis='both', which='minor', labelsize=30)
 
-plt.xlim(0, 0.48)  
+plt.xlim(0.193, 0.48)  
 plt.ylim(-0.02, 1.02)  
 
 stackplot_filename = 'dw5_N2_sobol.svg'
@@ -148,13 +148,13 @@ plt.figure(figsize=(13, 11))
 plt.stackplot(x, curves[0], curves[1], curves[2], curves[3], labels=[r'$M$', r'$P$', r'$T$', r'$Y_{N_2}$'], colors=selected_colors)
 plt.xlabel(r'$x, \; \mathrm{m} $', fontsize=35)
 plt.ylabel(r'$S_1$', fontsize=35)
-plt.legend(loc='upper left', framealpha=1.0, fontsize=35)
+plt.legend(loc='lower right', framealpha=1.0, fontsize=35)
 
 plt.grid(True, which='both')
 plt.tick_params(axis='both', which='major', labelsize=30)
 plt.tick_params(axis='both', which='minor', labelsize=30)
 
-plt.xlim(0, 0.48)  
+plt.xlim(0.193, 0.48)  
 plt.ylim(-0.02, 1.02)  
 
 stackplot_filename = 'dw5_O2_sobol.svg'
@@ -178,7 +178,7 @@ plt.grid(True, which='both')
 plt.tick_params(axis='both', which='major', labelsize=30)
 plt.tick_params(axis='both', which='minor', labelsize=30)
 
-plt.xlim(0, 0.48)  
+plt.xlim(0.0, 0.35) 
 plt.ylim(-0.02, 1.02)  
 
 stackplot_filename = 'dw5_P_sobol.svg'
@@ -189,14 +189,17 @@ plt.close()
 file_path = 'Ttr.csv'
 x, curves = load_csv(file_path)
 
+corr = np.zeros(len(x))
+corr[199:] = 0.407812-0.203291
+
 # Smoothing
 ws = max(int(len(x) * SF), 1)
 
 plt.figure(figsize=(13, 11))
-plt.stackplot(x, curves[0], curves[1], curves[2], curves[3], labels=[r'$M$', r'$P$', r'$T$', r'$Y_{N_2}$'], colors=selected_colors)
+plt.stackplot(x, curves[0]+corr, curves[1], curves[2], curves[3], labels=[r'$M$', r'$P$', r'$T$', r'$Y_{N_2}$'], colors=selected_colors)
 plt.xlabel(r'$x, \; \mathrm{m} $', fontsize=35)
 plt.ylabel(r'$S_1$', fontsize=35)
-plt.legend(loc='upper right', framealpha=1.0, fontsize=35)
+plt.legend(loc='upper left', bbox_to_anchor=(0.0, 0.9), framealpha=1.0, fontsize=35)
 
 plt.grid(True, which='both')
 plt.tick_params(axis='both', which='major', labelsize=30)
